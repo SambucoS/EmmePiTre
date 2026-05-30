@@ -7,13 +7,15 @@ import javafx.scene.Scene;
 import javafx.stage.Stage;
 import atlantafx.base.theme.CupertinoDark;
 
+import java.util.Objects;
+
 public class Launcher extends Application {
 
     @Override
     public void start(Stage stage) throws Exception {
         Application.setUserAgentStylesheet(new CupertinoDark().getUserAgentStylesheet());
         Parent root = FXMLLoader.load(
-                getClass().getResource("/views/libraryView.fxml")
+                Objects.requireNonNull(getClass().getResource("/views/libraryView.fxml"))
         );
 
         Scene scene = new Scene(root);
