@@ -1,132 +1,54 @@
 package controllers;
 
-import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.scene.control.Alert;
-import javafx.scene.control.Alert.AlertType;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.stage.Stage;
 import models.Track;
 import services.LibraryService;
 
+import java.util.List;
 public class AddTrackController {
 
-    @FXML private TextField txtPathname;
-    @FXML private TextField txtName;
-    @FXML private TextField txtArtist;
-    @FXML private TextField txtAlbum;
-    @FXML private TextField txtGenre;
-    @FXML private TextField txtYear;
-    @FXML private TextField txtDuration;
-    @FXML private CheckBox chkFavourite;
-    @FXML private CheckBox chkExplicit;
-    @FXML private Button btnCancel;
-    @FXML private Button btnSave;
+    @FXML private TextField nameField;
+    @FXML private TextField artistField;
+    @FXML private TextField genreField;
+    @FXML private TextField yearField;
+    @FXML private TextField durationField;
+    @FXML private CheckBox favouriteCheck;
+    @FXML private CheckBox explicitCheck;
 
-    private Track trackArrived = null;
-    private boolean saveClicked = false;
-    public LibraryService service = new LibraryService();
-    @FXML
-    public void initialize() {
-
-    }
-
-    public boolean isSaveClicked() {
-        return saveClicked;
-    }
-
-    public Track getTrack() {
-        return trackArrived;
-    }
+    private Track createdTrack;
 
     @FXML
-    void handleSave(ActionEvent event) {
-        if (isInputValid()) {
-            // Estraiamo i dati stringa e booleani
-            String pathname = txtPathname.getText();
-            String name = txtName.getText();
-            String artist = txtArtist.getText();
-            String album = txtAlbum.getText();
-            String genre = txtGenre.getText();
-            boolean favourite = chkFavourite.isSelected();
-            boolean explicit = chkExplicit.isSelected();
+    private void onSave() {
+        createdTrack = new Track(
+                null,
+                nameField.getText(),
+                artistField.getText(),
+                genreField.getText(),
+                Integer.parseInt(yearField.getText()),
+                favouriteCheck.isSelected(),
+                explicitCheck.isSelected(),
+                Integer.parseInt(durationField.getText())
+        );
 
-            // Convertiamo i dati numerici (sappiamo che sono validi grazie a isInputValid)
-            int year = Integer.parseInt(txtYear.getText());
-            int duration = Integer.parseInt(txtDuration.getText());
-
-            // Creiamo il nuovo oggetto Track usando il costruttore completo
-            trackArrived = new Track(pathname, name, artist, album, genre, year, favourite, explicit, duration);
-
-            saveClicked = true;
-            service.addTrack(trackArrived);
-            // Chiudiamo la finestra modale
-            closeStage();
-        }
+        // chiudi finestra
+        close();
     }
 
     @FXML
-    void handleCancel(ActionEvent event) {
-        // Chiude semplicemente la modale senza salvare nulla
-        closeStage();
+    private void onCancel() {
+        createdTrack = null;
+        close();
     }
 
-    private void closeStage() {
-        Stage stage = (Stage) btnCancel.getScene().getWindow();
+    private void close() {
+        Stage stage = (Stage) nameField.getScene().getWindow();
         stage.close();
     }
 
-    /**
-     * Valida l'input dell'utente nei campi di testo.
-     */
-    private boolean isInputValid() {
-        String errorMessage = "";
-
-        if (txtPathname.getText() == null || txtPathname.getText().isBlank()) {
-            errorMessage += "Percorso file non valido!\n";
-        }
-        if (txtName.getText() == null || txtName.getText().isBlank()) {
-            errorMessage += "Titolo non valido!\n";
-        }
-        if (txtArtist.getText() == null || txtArtist.getText().isBlank()) {
-            errorMessage += "Artista non valido!\n";
-        }
-
-        // Validazione Anno
-        if (txtYear.getText() == null || txtYear.getText().isBlank()) {
-            errorMessage += "Anno non valido!\n";
-        } else {
-            try {
-                Integer.parseInt(txtYear.getText());
-            } catch (NumberFormatException e) {
-                errorMessage += "L'anno deve essere un numero intero!\n";
-            }
-        }
-
-        // Validazione Durata
-        if (txtDuration.getText() == null || txtDuration.getText().isBlank()) {
-            errorMessage += "Durata non valida!\n";
-        } else {
-            try {
-                Integer.parseInt(txtDuration.getText());
-            } catch (NumberFormatException e) {
-                errorMessage += "La durata deve essere un numero intero (in secondi)!\n";
-            }
-        }
-
-        // Se non ci sono errori, l'input è valido
-        if (errorMessage.length() == 0) {
-            return true;
-        } else {
-            // Mostra una finestra di avviso in caso di errore
-            Alert alert = new Alert(AlertType.ERROR);
-            alert.setTitle("Campi non validi");
-            alert.setHeaderText("Per favore, correggi i campi errati");
-            alert.setContentText(errorMessage);
-            alert.showAndWait();
-            return false;
-        }
+    public Track getCreatedTrack() {
+        return createdTrack;
     }
 }
