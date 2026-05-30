@@ -3,6 +3,7 @@ package controllers;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.layout.HBox;
 import models.Track;
 import services.LibraryService;
 
@@ -11,6 +12,8 @@ import java.util.List;
 public class LibraryViewController {
 
     private final LibraryService service = new LibraryService();
+    public Label titleBar;
+    public HBox mainBar;
 
     @FXML private TableView<Track> trackList;
     @FXML private TableColumn<Track, String> titleColumn;
