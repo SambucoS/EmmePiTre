@@ -9,6 +9,8 @@ module emmepitre.com.emmepitre {
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
     requires com.almasb.fxgl.all;
+    requires com.fasterxml.jackson.core;
+    requires com.fasterxml.jackson.databind;
 
     opens emmepitre.com.emmepitre to javafx.fxml;
     exports emmepitre.com.emmepitre;
