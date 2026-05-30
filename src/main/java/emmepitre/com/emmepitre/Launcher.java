@@ -12,7 +12,7 @@ public class Launcher extends Application {
     public void start(Stage stage) throws Exception {
 
         Parent root = FXMLLoader.load(
-                getClass().getResource("/library-view.fxml")
+                getClass().getResource("/views/libraryView.fxml")
         );
 
         Scene scene = new Scene(root);
