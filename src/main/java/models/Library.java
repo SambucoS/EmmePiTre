@@ -19,7 +19,7 @@ public class Library {
 
     public static Library getInstance() {
         if (instance == null) {
-            new Library();
+            instance = new Library();
         }
         return instance;
     }
