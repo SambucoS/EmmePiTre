@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.LibraryController">
+
+    <!-- TOP BAR -->
+    <top>
+        <HBox spacing="10" style="-fx-padding: 10;">
+            <Label text="Music Library" style="-fx-font-size: 18px; -fx-font-weight: bold;"/>
+        </HBox>
+    </top>
+
+    <!-- CENTER TABLE -->
+    <center>
+        <TableView fx:id="trackTable">
+
+            <columns>
+
+                <TableColumn fx:id="nameColumn" text="Name" prefWidth="150"/>
+                <TableColumn fx:id="artistColumn" text="Artist" prefWidth="150"/>
+                <TableColumn fx:id="genreColumn" text="Genre" prefWidth="100"/>
+                <TableColumn fx:id="yearColumn" text="Year" prefWidth="80"/>
+                <TableColumn fx:id="durationColumn" text="Duration" prefWidth="100"/>
+                <TableColumn fx:id="favouriteColumn" text="Fav" prefWidth="60"/>
+                <TableColumn fx:id="explicitColumn" text="Explicit" prefWidth="80"/>
+
+            </columns>
+
+        </TableView>
+    </center>
+
+    <!-- BOTTOM CONTROLS -->
+    <bottom>
+        <HBox spacing="10" style="-fx-padding: 10;">
+            <Button text="Load Library" onAction="#onLoadLibrary"/>
+            <Button text="Add Track" onAction="#onAddTrack"/>
+            <Button text="Remove Track" onAction="#onRemoveTrack"/>
+        </HBox>
+    </bottom>
+
+</BorderPane>

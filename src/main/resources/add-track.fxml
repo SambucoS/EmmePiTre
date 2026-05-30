@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controllers.AddTrackController"
+      spacing="10"
+      style="-fx-padding: 15;">
+
+    <Label text="Add New Track" style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+
+    <TextField fx:id="nameField" promptText="Name"/>
+    <TextField fx:id="artistField" promptText="Artist"/>
+    <TextField fx:id="genreField" promptText="Genre"/>
+    <TextField fx:id="yearField" promptText="Year"/>
+    <TextField fx:id="durationField" promptText="Duration"/>
+
+    <CheckBox fx:id="favouriteCheck" text="Favourite"/>
+    <CheckBox fx:id="explicitCheck" text="Explicit"/>
+
+    <HBox spacing="10">
+        <Button text="Cancel" onAction="#onCancel"/>
+        <Button text="Save" onAction="#onSave"/>
+    </HBox>
+
+</VBox>
