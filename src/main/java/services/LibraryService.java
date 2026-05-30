@@ -32,7 +32,8 @@ public class LibraryService implements TrackList {
                 return;
             }
 
-            cache = mapper.readValue(file, new TypeReference<List<Track>>() {});
+            cache = mapper.readValue(file, new TypeReference<>() {
+            });
         } catch (Exception e) {
             cache = new ArrayList<>();
         }

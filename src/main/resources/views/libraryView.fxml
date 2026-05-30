@@ -11,60 +11,53 @@
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.LibraryViewController">
+<AnchorPane prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.LibraryViewController">
 
-    <children>
+    <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity"
+          minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" AnchorPane.topAnchor="0.0">
 
-        <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" AnchorPane.topAnchor="0.0">
+        <HBox fx:id="mainBar" prefHeight="25.0" prefWidth="200.0">
 
-            <children>
+            <Label fx:id="titleBar" alignment="CENTER" prefHeight="36.0" prefWidth="219.0" text="EmmePiTre"
+                   wrapText="true">
 
-                <HBox fx:id="mainBar" prefHeight="25.0" prefWidth="200.0">
+                <font>
 
-                    <children>
+                    <Font name="System Bold Italic" size="25.0"/>
 
-                        <Label fx:id="titleBar" alignment="CENTER" prefHeight="36.0" prefWidth="219.0" text="EmmePiTre" wrapText="true">
+                </font>
 
-                            <font>
+            </Label>
 
-                                <Font name="System Bold Italic" size="25.0" />
+            <Region prefHeight="36.0" prefWidth="100.0" HBox.hgrow="ALWAYS"/>
 
-                            </font>
+            <TextField fx:id="researchBar" prefHeight="35.0" prefWidth="178.0"
+                       promptText="What vibes are we looking for?"/>
 
-                        </Label>
+            <Button fx:id="addButton" mnemonicParsing="false" prefHeight="46.0" prefWidth="79.0"
+                    text="Add a Track" onMouseClicked="#onAddTrack"/>
 
-                        <Region prefHeight="36.0" prefWidth="100.0" HBox.hgrow="ALWAYS" />
+        </HBox>
 
-                        <TextField fx:id="researchBar" prefHeight="35.0" prefWidth="178.0" promptText="What vibes are we looking for?" />
+        <TableView fx:id="trackList" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
 
-                        <Button fx:id="addButton" mnemonicParsing="false" prefHeight="46.0" prefWidth="79.0" text="Add a Track" onMouseClicked="#onAddTrack" />
+            <columns>
 
-                    </children>
+                <TableColumn fx:id="titleColumn" prefWidth="75.0" text="Title"/>
 
-                </HBox>
+                <TableColumn fx:id="authorColumn" prefWidth="75.0" text="Author"/>
 
-                <TableView fx:id="trackList" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
+                <TableColumn fx:id="albumColumn" prefWidth="75.0" text="Album"/>
 
-                    <columns>
+                <TableColumn fx:id="genreColumn" prefWidth="75.0" text="Genre"/>
 
-                        <TableColumn fx:id="titleColumn" prefWidth="75.0" text="Title" />
+                <TableColumn fx:id="lengthColumn" prefWidth="75.0" text="Length"/>
 
-                        <TableColumn fx:id="authorColumn" prefWidth="75.0" text="Author" />
+            </columns>
 
-                        <TableColumn fx:id="albumColumn" prefWidth="75.0" text="Album" />
+        </TableView>
 
-                        <TableColumn fx:id="genreColumn" prefWidth="75.0" text="Genre" />
-
-                        <TableColumn fx:id="lengthColumn" prefWidth="75.0" text="Length" />
-
-                    </columns>
-
-                </TableView>
-
-            </children>
-
-        </VBox>
-
-    </children>
+    </VBox>
 
 </AnchorPane>
