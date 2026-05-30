@@ -1,4 +1,6 @@
 package interfaces;
+import models.Track;
+
 
 public interface TrackList {
     void addTrack(Track t);
