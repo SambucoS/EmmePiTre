@@ -32,13 +32,14 @@ public class LibraryService implements TrackList {
                 return;
             }
 
-            cache = mapper.readValue(file, new TypeReference<List<Track>>() {});
+            cache = mapper.readValue(file, new TypeReference<>() {
+            });
         } catch (Exception e) {
             cache = new ArrayList<>();
         }
     }
 
-    private void saveToFile() {
+    public void saveToFile() {
         try {
             mapper.writerWithDefaultPrettyPrinter()
                     .writeValue(new File(FILE_PATH), cache);
