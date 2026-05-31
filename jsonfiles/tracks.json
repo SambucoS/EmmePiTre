@@ -1,302 +1,311 @@
-[
-  {
-    "pathname": null,
-    "name": "Blinding Lights",
-    "artist": "The Weeknd",
-    "genre": "Pop",
-    "year": 2019,
-    "favourite": true,
-    "explicit": false,
-    "duration": 200
-  },
-  {
-    "pathname": null,
-    "name": "Shape of You",
-    "artist": "Ed Sheeran",
-    "genre": "Pop",
-    "year": 2017,
-    "favourite": true,
-    "explicit": false,
-    "duration": 233
-  },
-  {
-    "pathname": null,
-    "name": "Lose Yourself",
-    "artist": "Eminem",
-    "genre": "Hip Hop",
-    "year": 2002,
-    "favourite": true,
-    "explicit": true,
-    "duration": 326
-  },
-  {
-    "pathname": null,
-    "name": "Bohemian Rhapsody",
-    "artist": "Queen",
-    "genre": "Rock",
-    "year": 1975,
-    "favourite": true,
-    "explicit": false,
-    "duration": 354
-  },
-  {
-    "pathname": null,
-    "name": "Bad Guy",
-    "artist": "Billie Eilish",
-    "genre": "Pop",
-    "year": 2019,
-    "favourite": false,
-    "explicit": true,
-    "duration": 194
-  },
-  {
-    "pathname": null,
-    "name": "Smells Like Teen Spirit",
-    "artist": "Nirvana",
-    "genre": "Rock",
-    "year": 1991,
-    "favourite": false,
-    "explicit": true,
-    "duration": 301
-  },
-  {
-    "pathname": null,
-    "name": "Uptown Funk",
-    "artist": "Mark Ronson ft. Bruno Mars",
-    "genre": "Funk",
-    "year": 2014,
-    "favourite": true,
-    "explicit": false,
-    "duration": 270
-  },
-  {
-    "pathname": null,
-    "name": "Rolling in the Deep",
-    "artist": "Adele",
-    "genre": "Pop",
-    "year": 2010,
-    "favourite": false,
-    "explicit": false,
-    "duration": 228
-  },
-  {
-    "pathname": null,
-    "name": "God's Plan",
-    "artist": "Drake",
-    "genre": "Hip Hop",
-    "year": 2018,
-    "favourite": false,
-    "explicit": true,
-    "duration": 198
-  },
-  {
-    "pathname": null,
-    "name": "Someone Like You",
-    "artist": "Adele",
-    "genre": "Pop",
-    "year": 2011,
-    "favourite": true,
-    "explicit": false,
-    "duration": 285
-  },
-  {
-    "pathname": null,
-    "name": "Hotel California",
-    "artist": "Eagles",
-    "genre": "Rock",
-    "year": 1976,
-    "favourite": false,
-    "explicit": false,
-    "duration": 391
-  },
-  {
-    "pathname": null,
-    "name": "HUMBLE.",
-    "artist": "Kendrick Lamar",
-    "genre": "Hip Hop",
-    "year": 2017,
-    "favourite": true,
-    "explicit": true,
-    "duration": 177
-  },
-  {
-    "pathname": null,
-    "name": "Levitating",
-    "artist": "Dua Lipa",
-    "genre": "Pop",
-    "year": 2020,
-    "favourite": false,
-    "explicit": false,
-    "duration": 203
-  },
-  {
-    "pathname": null,
-    "name": "Thunderstruck",
-    "artist": "AC/DC",
-    "genre": "Rock",
-    "year": 1990,
-    "favourite": false,
-    "explicit": false,
-    "duration": 292
-  },
-  {
-    "pathname": null,
-    "name": "Radioactive",
-    "artist": "Imagine Dragons",
-    "genre": "Alternative",
-    "year": 2012,
-    "favourite": true,
-    "explicit": false,
-    "duration": 186
-  },
-  {
-    "pathname": null,
-    "name": "Despacito",
-    "artist": "Luis Fonsi ft. Daddy Yankee",
-    "genre": "Latin",
-    "year": 2017,
-    "favourite": false,
-    "explicit": false,
-    "duration": 229
-  },
-  {
-    "pathname": null,
-    "name": "Stairway to Heaven",
-    "artist": "Led Zeppelin",
-    "genre": "Rock",
-    "year": 1971,
-    "favourite": true,
-    "explicit": false,
-    "duration": 482
-  },
-  {
-    "pathname": null,
-    "name": "Sicko Mode",
-    "artist": "Travis Scott",
-    "genre": "Hip Hop",
-    "year": 2018,
-    "favourite": false,
-    "explicit": true,
-    "duration": 312
-  },
-  {
-    "pathname": null,
-    "name": "Stay",
-    "artist": "The Kid LAROI & Justin Bieber",
-    "genre": "Pop",
-    "year": 2021,
-    "favourite": false,
-    "explicit": false,
-    "duration": 141
-  },
-  {
-    "pathname": null,
-    "name": "Wake Me Up",
-    "artist": "Avicii",
-    "genre": "EDM",
-    "year": 2013,
-    "favourite": true,
-    "explicit": false,
-    "duration": 247
-  },
-  {
-    "pathname": null,
-    "name": "Believer",
-    "artist": "Imagine Dragons",
-    "genre": "Alternative",
-    "year": 2017,
-    "favourite": false,
-    "explicit": false,
-    "duration": 204
-  },
-  {
-    "pathname": null,
-    "name": "Old Town Road",
-    "artist": "Lil Nas X",
-    "genre": "Country Rap",
-    "year": 2019,
-    "favourite": false,
-    "explicit": true,
-    "duration": 157
-  },
-  {
-    "pathname": null,
-    "name": "Lose Control",
-    "artist": "Meduza",
-    "genre": "EDM",
-    "year": 2019,
-    "favourite": false,
-    "explicit": false,
-    "duration": 165
-  },
-  {
-    "pathname": null,
-    "name": "Firework",
-    "artist": "Katy Perry",
-    "genre": "Pop",
-    "year": 2010,
-    "favourite": true,
-    "explicit": false,
-    "duration": 228
-  },
-  {
-    "pathname": null,
-    "name": "In the End",
-    "artist": "Linkin Park",
-    "genre": "Rock",
-    "year": 2000,
-    "favourite": true,
-    "explicit": false,
-    "duration": 216
-  },
-  {
-    "pathname": null,
-    "name": "Numb",
-    "artist": "Linkin Park",
-    "genre": "Rock",
-    "year": 2003,
-    "favourite": false,
-    "explicit": false,
-    "duration": 187
-  },
-  {
-    "pathname": null,
-    "name": "Crazy in Love",
-    "artist": "Beyoncé ft. Jay-Z",
-    "genre": "R&B",
-    "year": 2003,
-    "favourite": false,
-    "explicit": true,
-    "duration": 236
-  },
-  {
-    "pathname": null,
-    "name": "Perfect",
-    "artist": "Ed Sheeran",
-    "genre": "Pop",
-    "year": 2017,
-    "favourite": true,
-    "explicit": false,
-    "duration": 263
-  },
-  {
-    "pathname": null,
-    "name": "Viva La Vida",
-    "artist": "Coldplay",
-    "genre": "Alternative",
-    "year": 2008,
-    "favourite": false,
-    "explicit": false,
-    "duration": 242
-  },
-  {
-    "pathname": null,
-    "name": "Seven Nation Army",
-    "artist": "The White Stripes",
-    "genre": "Rock",
-    "year": 2003,
-    "favourite": false,
-    "explicit": false,
-    "duration": 231
-  }
-]
+[ {
+  "pathname" : null,
+  "name" : "Blinding Lights",
+  "artist" : "The Weeknd",
+  "album" : null,
+  "genre" : "Pop",
+  "year" : 2019,
+  "favourite" : true,
+  "explicit" : false,
+  "duration" : 200
+}, {
+  "pathname" : null,
+  "name" : "Shape of You",
+  "artist" : "Ed Sheeran",
+  "album" : null,
+  "genre" : "Pop",
+  "year" : 2017,
+  "favourite" : true,
+  "explicit" : false,
+  "duration" : 233
+}, {
+  "pathname" : null,
+  "name" : "Lose Yourself",
+  "artist" : "Eminem",
+  "album" : null,
+  "genre" : "Hip Hop",
+  "year" : 2002,
+  "favourite" : true,
+  "explicit" : true,
+  "duration" : 326
+}, {
+  "pathname" : null,
+  "name" : "Bohemian Rhapsody",
+  "artist" : "Queen",
+  "album" : null,
+  "genre" : "Rock",
+  "year" : 1975,
+  "favourite" : true,
+  "explicit" : false,
+  "duration" : 354
+}, {
+  "pathname" : null,
+  "name" : "Bad Guy",
+  "artist" : "Billie Eilish",
+  "album" : null,
+  "genre" : "Pop",
+  "year" : 2019,
+  "favourite" : true,
+  "explicit" : true,
+  "duration" : 194
+}, {
+  "pathname" : null,
+  "name" : "Smells Like Teen Spirit",
+  "artist" : "Nirvana",
+  "album" : null,
+  "genre" : "Rock",
+  "year" : 1991,
+  "favourite" : false,
+  "explicit" : true,
+  "duration" : 301
+}, {
+  "pathname" : null,
+  "name" : "Uptown Funk",
+  "artist" : "Mark Ronson ft. Bruno Mars",
+  "album" : null,
+  "genre" : "Funk",
+  "year" : 2014,
+  "favourite" : true,
+  "explicit" : false,
+  "duration" : 270
+}, {
+  "pathname" : null,
+  "name" : "Rolling in the Deep",
+  "artist" : "Adele",
+  "album" : null,
+  "genre" : "Pop",
+  "year" : 2010,
+  "favourite" : false,
+  "explicit" : false,
+  "duration" : 228
+}, {
+  "pathname" : null,
+  "name" : "God's Plan",
+  "artist" : "Drake",
+  "album" : null,
+  "genre" : "Hip Hop",
+  "year" : 2018,
+  "favourite" : false,
+  "explicit" : true,
+  "duration" : 198
+}, {
+  "pathname" : null,
+  "name" : "Someone Like You",
+  "artist" : "Adele",
+  "album" : null,
+  "genre" : "Pop",
+  "year" : 2011,
+  "favourite" : true,
+  "explicit" : false,
+  "duration" : 285
+}, {
+  "pathname" : null,
+  "name" : "Hotel California",
+  "artist" : "Eagles",
+  "album" : null,
+  "genre" : "Rock",
+  "year" : 1976,
+  "favourite" : false,
+  "explicit" : false,
+  "duration" : 391
+}, {
+  "pathname" : null,
+  "name" : "HUMBLE.",
+  "artist" : "Kendrick Lamar",
+  "album" : null,
+  "genre" : "Hip Hop",
+  "year" : 2017,
+  "favourite" : true,
+  "explicit" : true,
+  "duration" : 177
+}, {
+  "pathname" : null,
+  "name" : "Levitating",
+  "artist" : "Dua Lipa",
+  "album" : null,
+  "genre" : "Pop",
+  "year" : 2020,
+  "favourite" : false,
+  "explicit" : false,
+  "duration" : 203
+}, {
+  "pathname" : null,
+  "name" : "Thunderstruck",
+  "artist" : "AC/DC",
+  "album" : null,
+  "genre" : "Rock",
+  "year" : 1990,
+  "favourite" : false,
+  "explicit" : false,
+  "duration" : 292
+}, {
+  "pathname" : null,
+  "name" : "Radioactive",
+  "artist" : "Imagine Dragons",
+  "album" : null,
+  "genre" : "Alternative",
+  "year" : 2012,
+  "favourite" : true,
+  "explicit" : false,
+  "duration" : 186
+}, {
+  "pathname" : null,
+  "name" : "Despacito",
+  "artist" : "Luis Fonsi ft. Daddy Yankee",
+  "album" : null,
+  "genre" : "Latin",
+  "year" : 2017,
+  "favourite" : false,
+  "explicit" : false,
+  "duration" : 229
+}, {
+  "pathname" : null,
+  "name" : "Stairway to Heaven",
+  "artist" : "Led Zeppelin",
+  "album" : null,
+  "genre" : "Rock",
+  "year" : 1971,
+  "favourite" : true,
+  "explicit" : false,
+  "duration" : 482
+}, {
+  "pathname" : null,
+  "name" : "Sicko Mode",
+  "artist" : "Travis Scott",
+  "album" : null,
+  "genre" : "Hip Hop",
+  "year" : 2018,
+  "favourite" : false,
+  "explicit" : true,
+  "duration" : 312
+}, {
+  "pathname" : null,
+  "name" : "Stay",
+  "artist" : "The Kid LAROI & Justin Bieber",
+  "album" : null,
+  "genre" : "Pop",
+  "year" : 2021,
+  "favourite" : false,
+  "explicit" : false,
+  "duration" : 141
+}, {
+  "pathname" : null,
+  "name" : "Wake Me Up",
+  "artist" : "Avicii",
+  "album" : null,
+  "genre" : "EDM",
+  "year" : 2013,
+  "favourite" : true,
+  "explicit" : false,
+  "duration" : 247
+}, {
+  "pathname" : null,
+  "name" : "Believer",
+  "artist" : "Imagine Dragons",
+  "album" : null,
+  "genre" : "Alternative",
+  "year" : 2017,
+  "favourite" : false,
+  "explicit" : false,
+  "duration" : 204
+}, {
+  "pathname" : null,
+  "name" : "Old Town Road",
+  "artist" : "Lil Nas X",
+  "album" : null,
+  "genre" : "Country Rap",
+  "year" : 2019,
+  "favourite" : false,
+  "explicit" : true,
+  "duration" : 157
+}, {
+  "pathname" : null,
+  "name" : "Lose Control",
+  "artist" : "Meduza",
+  "album" : null,
+  "genre" : "EDM",
+  "year" : 2019,
+  "favourite" : false,
+  "explicit" : false,
+  "duration" : 165
+}, {
+  "pathname" : null,
+  "name" : "Firework",
+  "artist" : "Katy Perry",
+  "album" : null,
+  "genre" : "Pop",
+  "year" : 2010,
+  "favourite" : true,
+  "explicit" : false,
+  "duration" : 228
+}, {
+  "pathname" : null,
+  "name" : "In the End",
+  "artist" : "Linkin Park",
+  "album" : null,
+  "genre" : "Rock",
+  "year" : 2000,
+  "favourite" : true,
+  "explicit" : false,
+  "duration" : 216
+}, {
+  "pathname" : null,
+  "name" : "Numb",
+  "artist" : "Linkin Park",
+  "album" : null,
+  "genre" : "Rock",
+  "year" : 2003,
+  "favourite" : false,
+  "explicit" : false,
+  "duration" : 187
+}, {
+  "pathname" : null,
+  "name" : "Crazy in Love",
+  "artist" : "Beyoncé ft. Jay-Z",
+  "album" : null,
+  "genre" : "R&B",
+  "year" : 2003,
+  "favourite" : false,
+  "explicit" : true,
+  "duration" : 236
+}, {
+  "pathname" : null,
+  "name" : "Perfect",
+  "artist" : "Ed Sheeran",
+  "album" : null,
+  "genre" : "Pop",
+  "year" : 2017,
+  "favourite" : true,
+  "explicit" : false,
+  "duration" : 263
+}, {
+  "pathname" : null,
+  "name" : "Viva La Vida",
+  "artist" : "Coldplay",
+  "album" : null,
+  "genre" : "Alternative",
+  "year" : 2008,
+  "favourite" : false,
+  "explicit" : false,
+  "duration" : 242
+}, {
+  "pathname" : null,
+  "name" : "Seven Nation Army",
+  "artist" : "The White Stripes",
+  "album" : null,
+  "genre" : "Rock",
+  "year" : 2003,
+  "favourite" : false,
+  "explicit" : false,
+  "duration" : 231
+}, {
+  "pathname" : "adasd",
+  "name" : "asdada",
+  "artist" : "adad",
+  "album" : "asdad",
+  "genre" : "sadasd",
+  "year" : 1232,
+  "favourite" : true,
+  "explicit" : true,
+  "duration" : 2131
+} ]
