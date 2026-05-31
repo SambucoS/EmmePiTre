@@ -308,4 +308,14 @@
   "favourite" : true,
   "explicit" : true,
   "duration" : 2131
+}, {
+  "pathname" : "null",
+  "name" : "To the Wilder",
+  "artist" : "Woodkid",
+  "album" : "Death Stranding 2: On the Beach",
+  "genre" : "Epic - Pop",
+  "year" : 2025,
+  "favourite" : true,
+  "explicit" : false,
+  "duration" : 300
 } ]
