@@ -38,7 +38,7 @@ public class LibraryService implements TrackList {
         }
     }
 
-    private void saveToFile() {
+    public void saveToFile() {
         try {
             mapper.writerWithDefaultPrettyPrinter()
                     .writeValue(new File(FILE_PATH), cache);

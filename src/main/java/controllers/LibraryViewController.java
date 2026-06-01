@@ -144,9 +144,9 @@ public class LibraryViewController implements LibraryObserver {
     public void onLoadLibrary() {
         // Popoliamo il Singleton globale solo se è attualmente vuoto (evita duplicazioni al refresh)
         if (Library.getInstance().getTracks().isEmpty()) {
-            Library.getInstance().addTrack(new Track("C:/music/song1.mp3", "Canzone Figa", "Artista Famoso", "Pop", 2023, true, true, 215));
-            Library.getInstance().addTrack(new Track("C:/music/song2.mp3", "Brano Pulito", "Artista Indie", "Lo-fi", 2024, false, false, 180));
-            Library.getInstance().addTrack(new Track("C:/music/song3.mp3", "Classico Greve", "Rapper Serio", "Rap", 1999, true, false, 240));
+            Library.getInstance().addTrack(new Track("C:/music/song1.mp3", "Canzone Figa", "Artista Famoso","Album", "Pop", 2023, true, true, 215));
+            Library.getInstance().addTrack(new Track("C:/music/song2.mp3", "Brano Pulito", "Artista Indie","Album", "Lo-fi", 2024, false, false, 180));
+            Library.getInstance().addTrack(new Track("C:/music/song3.mp3", "Classico Greve", "Rapper Serio","Album", "Rap", 1999, true, false, 240));
         } else {
             trackList.getItems().setAll(Library.getInstance().getTracks());
         }
@@ -157,7 +157,7 @@ public class LibraryViewController implements LibraryObserver {
         // Cliccando sul bottone "Add a Track", simuliamo l'aggiunta di un brano nel Modello globale.
         // Grazie all'Observer Pattern, vedrai la riga aggiungersi da sola nella tabella!
         int nextId = Library.getInstance().getTracks().size() + 1;
-        Track tracciaSimulata = new Track("path/test.mp3", "Nuova Hit " + nextId, "Mainstream Artist", "Dance", 2026, false, true, 195);
+        Track tracciaSimulata = new Track("path/test.mp3", "Nuova Hit " + nextId, "Mainstream Artist","Album", "Dance", 2026, false, true, 195);
 
         Library.getInstance().addTrack(tracciaSimulata);
     }
