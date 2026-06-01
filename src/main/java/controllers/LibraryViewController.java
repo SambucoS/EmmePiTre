@@ -14,6 +14,8 @@ import javafx.stage.Stage;
 import models.Library;
 import models.Track;
 
+import java.io.IOException;
+
 public class LibraryViewController implements LibraryObserver {
 
     public Label titleBar;
@@ -208,13 +210,32 @@ public class LibraryViewController implements LibraryObserver {
     }
 
     @FXML
-    public void onAddTrack() {
+    public void onAddTrack() throws IOException {
         // Cliccando sul bottone "Add a Track", simuliamo l'aggiunta di un brano nel Modello globale.
         // Grazie all'Observer Pattern, vedrai la riga aggiungersi da sola nella tabella!
-        int nextId = Library.getInstance().getTracks().size() + 1;
-        Track tracciaSimulata = new Track("path/test.mp3", "Nuova Hit " + nextId, "Mainstream Artist", "Album","Dance", 2026, false, true, 195);
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/addTrackModal.fxml"));
+        Parent root = null;
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
-        Library.getInstance().addTrack(tracciaSimulata);
+        // B. Recuperiamo il controller e impostiamo il contesto (true = da Libreria)
+        AddTrackController dialogController = loader.getController();
+
+        // C. Prepariamo la finestra (Stage)
+        Stage dialogStage = new Stage();
+        dialogStage.setTitle("Form Aggiunta");
+        dialogStage.initModality(Modality.APPLICATION_MODAL); // Rende la finestra bloccante
+        dialogStage.setResizable(false); // Blocca il ridimensionamento
+
+        // D. Impostiamo la scena con le dimensioni fisse 400x120
+        Scene scene = new Scene(root, 600, 300);
+        dialogStage.setScene(scene);
+
+        // E. Mostriamo il modale e mettiamo "in pausa" questo codice finché non viene chiuso
+        dialogStage.showAndWait();
     }
 
     @FXML
@@ -261,7 +282,7 @@ public class LibraryViewController implements LibraryObserver {
                 dialogStage.setResizable(false); // Blocca il ridimensionamento
 
                 // D. Impostiamo la scena con le dimensioni fisse 400x120
-                Scene scene = new Scene(root, 400, 150);
+                Scene scene = new Scene(root, 600, 150);
                 dialogStage.setScene(scene);
 
                 // E. Mostriamo il modale e mettiamo "in pausa" questo codice finché non viene chiuso

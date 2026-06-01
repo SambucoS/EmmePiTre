@@ -268,24 +268,4 @@
   "favourite" : false,
   "explicit" : true,
   "duration" : 236
-}, {
-  "pathname" : null,
-  "name" : "Perfect",
-  "artist" : "Ed Sheeran",
-  "album" : null,
-  "genre" : "Pop",
-  "year" : 2017,
-  "favourite" : true,
-  "explicit" : false,
-  "duration" : 263
-}, {
-  "pathname" : null,
-  "name" : "Viva La Vida",
-  "artist" : "Coldplay",
-  "album" : null,
-  "genre" : "Alternative",
-  "year" : 2008,
-  "favourite" : false,
-  "explicit" : false,
-  "duration" : 242
 } ]
