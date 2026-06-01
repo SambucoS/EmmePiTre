@@ -83,7 +83,7 @@ public class Playlist implements TrackList {
                 '}';
     }
 
-    // Due playlist sono uguali se hanno lo stesso nome
+    // Definisce quando due playlist sono considerate uguali: due playlist sono uguali se hanno lo stesso nome
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
