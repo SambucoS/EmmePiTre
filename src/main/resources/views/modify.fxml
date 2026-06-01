@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.text.Font?>
+
+<AnchorPane xmlns="http://javafx.com/javafx"
+            xmlns:fx="http://javafx.com/fxml"
+            fx:controller="controllers.ModifyController"
+            prefHeight="450.0" prefWidth="600.0">
+    <children>
+        <VBox spacing="20.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
+            <padding>
+                <Insets bottom="25.0" left="25.0" right="25.0" top="25.0" />
+            </padding>
+            <children>
+
+                <Label text="Modifica Dati Traccia" textFill="#2c3e50">
+                    <font>
+                        <Font name="System Bold" size="18.0" />
+                    </font>
+                </Label>
+
+                <GridPane vgap="12.0" VBox.vgrow="ALWAYS">
+                    <columnConstraints>
+                        <ColumnConstraints hgrow="SOMETIMES" maxWidth="180.0" minWidth="10.0" prefWidth="140.0" />
+                        <ColumnConstraints hgrow="SOMETIMES" minWidth="10.0" prefWidth="410.0" />
+                    </columnConstraints>
+                    <rowConstraints>
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                        <RowConstraints minHeight="10.0" prefHeight="30.0" vgrow="SOMETIMES" />
+                    </rowConstraints>
+                    <children>
+                        <Label text="Titolo / Nome:" GridPane.columnIndex="0" GridPane.rowIndex="0" />
+                        <TextField fx:id="txtName" promptText="Nome del brano..." GridPane.columnIndex="1" GridPane.rowIndex="0" />
+
+                        <Label text="Artista:" GridPane.columnIndex="0" GridPane.rowIndex="1" />
+                        <TextField fx:id="txtArtist" promptText="Nome dell'artista..." GridPane.columnIndex="1" GridPane.rowIndex="1" />
+
+                        <Label text="Album:" GridPane.columnIndex="0" GridPane.rowIndex="2" />
+                        <TextField fx:id="txtAlbum" promptText="Nome dell'album..." GridPane.columnIndex="1" GridPane.rowIndex="2" />
+
+                        <Label text="Genere:" GridPane.columnIndex="0" GridPane.rowIndex="3" />
+                        <ComboBox fx:id="cmbGenre" maxWidth="1.7976931348623157E308" promptText="Seleziona genere..." GridPane.columnIndex="1" GridPane.rowIndex="3" />
+
+                        <Label text="Anno:" GridPane.columnIndex="0" GridPane.rowIndex="4" />
+                        <TextField fx:id="txtYear" promptText="Es. 2026" GridPane.columnIndex="1" GridPane.rowIndex="4" />
+
+                        <Label text="Durata (secondi):" GridPane.columnIndex="0" GridPane.rowIndex="5" />
+                        <TextField fx:id="txtDuration" promptText="Es. 180" GridPane.columnIndex="1" GridPane.rowIndex="5" />
+
+                        <Label text="Opzioni:" GridPane.columnIndex="0" GridPane.rowIndex="6" />
+                        <HBox spacing="20.0" alignment="CENTER_LEFT" GridPane.columnIndex="1" GridPane.rowIndex="6">
+                            <children>
+                                <CheckBox fx:id="chkFavourite" mnemonicParsing="false" text="Aggiungi ai Preferiti" />
+                                <CheckBox fx:id="chkExplicit" mnemonicParsing="false" text="Contenuto Esplicito" />
+                            </children>
+                        </HBox>
+                    </children>
+                </GridPane>
+
+                <HBox alignment="CENTER_RIGHT" spacing="15.0">
+                    <children>
+                        <Button fx:id="btnAnnulla" cancelButton="true" mnemonicParsing="false" onAction="#handleAnnulla" prefWidth="100.0" text="Annulla" />
+                        <Button fx:id="btnSalva" defaultButton="true" mnemonicParsing="false" onAction="#handleSalva" prefWidth="100.0" text="Salva" />
+                    </children>
+                </HBox>
+
+            </children>
+        </VBox>
+    </children>
+</AnchorPane>
