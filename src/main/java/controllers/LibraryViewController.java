@@ -1,12 +1,17 @@
 package controllers;
 
 import javafx.fxml.FXML;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
+import javafx.stage.Stage;
 import models.Track;
 import services.LibraryService;
 
+import java.io.IOException;
 import java.util.List;
 
 public class LibraryViewController {
@@ -68,6 +73,42 @@ public class LibraryViewController {
         if (selected != null) {
             service.removeTrack(selected);
             trackList.getItems().setAll(service.getTracks());
+        }
+    }
+
+    public Track getTrack() {
+        Track selected = trackList.getSelectionModel().getSelectedItem();
+
+        if (selected == null) {
+            System.out.println("Nessuna traccia selezionata");
+            return null;
+        }
+
+        return selected;
+    }
+
+    @FXML
+    public void modifyTrack() {
+        Track selected = getTrack();
+
+        if (selected == null) {
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/modify.fxml"));
+            Parent root = loader.load();
+
+            ModifyController controller = loader.getController();
+            controller.setTrack(selected);
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Modify Track");
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
         }
     }
 }
