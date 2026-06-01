@@ -1,5 +1,6 @@
 package services;
 
+
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import interfaces.TrackList;
@@ -34,7 +35,9 @@ public class LibraryService implements TrackList {
 
             cache = mapper.readValue(file, new TypeReference<>() {
             });
+            System.out.println("=== Traccia aggiunta alla libreria ===");
         } catch (Exception e) {
+            System.out.println(" ====== ECCEZIONE =======");
             cache = new ArrayList<>();
         }
     }

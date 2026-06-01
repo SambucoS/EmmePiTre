@@ -5,6 +5,7 @@ public class Track {
     private String pathname;
     private String name;
     private String artist;
+    private String album;
     private String genre;
     private int year;
     private boolean favourite;
@@ -15,11 +16,12 @@ public class Track {
     public Track() {}
 
     // Full constructor
-    public Track(String pathname, String name, String artist, String genre,
+    public Track(String pathname, String name, String artist, String album, String genre,
                  int year, boolean favourite, boolean explicit, int duration) {
         this.pathname = pathname;
         this.name = name;
         this.artist = artist;
+        this.album = album;
         this.genre = genre;
         this.year = year;
         this.favourite = favourite;
@@ -50,6 +52,13 @@ public class Track {
 
     public void setArtist(String artist) {
         this.artist = artist;
+    }
+
+    public String getAlbum(){
+        return this.album;
+    }
+    public void setAlbum(String album) {
+        this.album = album;
     }
 
     public String getGenre() {
@@ -92,6 +101,18 @@ public class Track {
         this.duration = duration;
     }
 
+    // viene usato Objects.equals(...) per gestire automaticamente i null
+    public boolean equals(Track t) {
+        return this.year == t.year &&
+                this.favourite == t.favourite &&
+                this.explicit == t.explicit &&
+                this.duration == t.duration &&
+                java.util.Objects.equals(this.name, t.name) &&
+                java.util.Objects.equals(this.artist, t.artist) &&
+                java.util.Objects.equals(this.album, t.album) &&
+                java.util.Objects.equals(this.genre, t.genre);
+
+    }
     @Override
     public String toString() {
         return "Track{" +
