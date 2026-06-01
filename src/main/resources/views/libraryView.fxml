@@ -39,6 +39,7 @@
 
                 <TableColumn fx:id="genreColumn" prefWidth="75.0" text="Genre" />
                 <TableColumn fx:id="lengthColumn" prefWidth="75.0" text="Length" />
+                <TableColumn fx:id="actionsColumn" maxWidth="40.0" minWidth="40.0" prefWidth="40.0" resizable="false" />
             </columns>
             <columnResizePolicy>
                 <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
