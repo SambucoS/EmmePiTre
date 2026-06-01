@@ -1,11 +1,12 @@
 package models;
 
 import interfaces.LibraryObserver;
+import interfaces.TrackList;
 import services.LibraryService;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Library {
+public class Library implements TrackList{
 
     private static Library instance;
     private final LibraryService database;
@@ -44,23 +45,30 @@ public class Library {
     // =========================================================
     // METODI CRUD (Task 1.2.4)
     // =========================================================
+    @Override
     public void addTrack(Track track) {
         database.addTrack(track);
 
         this.sync();         // <-- Task 1.2.4: Richiamo della funzione di sincronizzazione
         notifyObservers();   // <-- Task 1.2.5: Notifica alla GUI
     }
-
+    @Override
     public void removeTrack(Track track) {
         database.removeTrack(track);
 
         this.sync();         // <-- Task 1.2.4: Richiamo della funzione di sincronizzazione
         notifyObservers();   // <-- Task 1.2.5: Notifica alla GUI
     }
-
+    @Override
     public List<Track> getTracks() {
         return database.getTracks();
     }
+
+    @Override
+    public int getSize() {
+        return database.getSize();
+    }
+
     // =========================================================
     // GESTIONE LABEL
     // =========================================================

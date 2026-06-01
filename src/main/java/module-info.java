@@ -25,11 +25,6 @@ module EmmePiTre {
     exports emmepitre.com.emmepitre;
     opens emmepitre.com.emmepitre to javafx.graphics, javafx.fxml;
 
-    exports controllers;
-    exports models;
-    exports interfaces;
-    exports services;
-
     // Apertura dei pacchetti per permettere a JavaFX di iniettare i nodi FXML
     opens controllers to javafx.fxml;
     // Se Jackson deve leggere/scrivere i tuoi modelli

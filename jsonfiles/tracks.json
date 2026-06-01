@@ -26,7 +26,7 @@
   "genre" : "Hip Hop",
   "year" : 2002,
   "favourite" : true,
-  "explicit" : false,
+  "explicit" : true,
   "duration" : 326
 }, {
   "pathname" : null,
@@ -55,7 +55,7 @@
   "album" : null,
   "genre" : "Rock",
   "year" : 1991,
-  "favourite" : true,
+  "favourite" : false,
   "explicit" : true,
   "duration" : 301
 }, {
@@ -268,44 +268,4 @@
   "favourite" : false,
   "explicit" : true,
   "duration" : 236
-}, {
-  "pathname" : null,
-  "name" : "Perfect",
-  "artist" : "Ed Sheeran",
-  "album" : null,
-  "genre" : "Pop",
-  "year" : 2017,
-  "favourite" : true,
-  "explicit" : false,
-  "duration" : 263
-}, {
-  "pathname" : null,
-  "name" : "Viva La Vida",
-  "artist" : "Coldplay",
-  "album" : null,
-  "genre" : "Alternative",
-  "year" : 2008,
-  "favourite" : false,
-  "explicit" : false,
-  "duration" : 242
-}, {
-  "pathname" : null,
-  "name" : "Seven Nation Army",
-  "artist" : "The White Stripes",
-  "album" : null,
-  "genre" : "Rock",
-  "year" : 2003,
-  "favourite" : false,
-  "explicit" : false,
-  "duration" : 231
-}, {
-  "pathname" : "path/test.mp3",
-  "name" : "Nuova Hit 31",
-  "artist" : "Mainstream Artist",
-  "album" : "Album",
-  "genre" : "Dance",
-  "year" : 2026,
-  "favourite" : false,
-  "explicit" : true,
-  "duration" : 195
 } ]

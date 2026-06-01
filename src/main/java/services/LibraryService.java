@@ -57,6 +57,7 @@ public class LibraryService implements TrackList {
     public void addTrack(Track t) {
         cache.add(t);
         saveToFile();
+
     }
 
     @Override
