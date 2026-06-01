@@ -11,22 +11,14 @@ public class Launcher extends Application {
     @Override
     public void start(Stage primaryStage) {
         try {
-            // 1. Carica il file FXML della modale
-            // Nota: Assicurati che il percorso rifletta la posizione reale del tuo FXML
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/addTrackModal.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/createPlaylist.fxml"));
             VBox root = loader.load();
 
-            // 2. Crea la scena con il nodo radice caricato
             Scene scene = new Scene(root);
 
-            // 3. Configura lo stage (la finestra)
-            primaryStage.setTitle("Test Modale - Aggiungi Traccia");
+            primaryStage.setTitle("Test Modale - Crea Playlist");
             primaryStage.setScene(scene);
-
-            // Impedisce il ridimensionamento della finestra per mantenere il form pulito
             primaryStage.setResizable(false);
-
-            // 4. Mostra la finestra
             primaryStage.show();
 
         } catch (Exception e) {
@@ -36,7 +28,6 @@ public class Launcher extends Application {
     }
 
     public static void main(String[] args) {
-        // Avvia l'applicazione JavaFX
         launch(args);
     }
 }
