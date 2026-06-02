@@ -47,11 +47,11 @@ public class PlaylistManager {
 
     public void removeTrackFromPlaylist(Track track, Playlist playlist) {
         if (playlist == null) {
-            throw new IllegalArgumentException("La playlist non può essere null.");
+            throw new IllegalArgumentException("Seleziona una playlist.");
         }
 
         if (track == null) {
-            throw new IllegalArgumentException("La traccia non può essere null.");
+            throw new IllegalArgumentException("Seleziona una traccia da rimuovere.");
         }
 
         if (!playlist.containsTrack(track)) {
