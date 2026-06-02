@@ -102,17 +102,44 @@ public class Track {
     }
 
     // viene usato Objects.equals(...) per gestire automaticamente i null
-    public boolean equals(Track t) {
+    @Override
+    public boolean equals(Object obj) {
+        if (this == obj) {
+            return true;
+        }
+
+        if (!(obj instanceof Track)) {
+            return false;
+        }
+
+        Track t = (Track) obj;
+
         return this.year == t.year &&
                 this.favourite == t.favourite &&
                 this.explicit == t.explicit &&
                 this.duration == t.duration &&
+                java.util.Objects.equals(this.pathname, t.pathname) &&
                 java.util.Objects.equals(this.name, t.name) &&
                 java.util.Objects.equals(this.artist, t.artist) &&
                 java.util.Objects.equals(this.album, t.album) &&
                 java.util.Objects.equals(this.genre, t.genre);
-
     }
+
+    @Override
+    public int hashCode() {
+        return java.util.Objects.hash(
+                pathname,
+                name,
+                artist,
+                album,
+                genre,
+                year,
+                favourite,
+                explicit,
+                duration
+        );
+    }
+
     @Override
     public String toString() {
         return "Track{" +
