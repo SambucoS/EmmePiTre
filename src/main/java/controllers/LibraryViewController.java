@@ -151,6 +151,11 @@ public class LibraryViewController implements LibraryObserver {
                 if (event.getButton() == javafx.scene.input.MouseButton.SECONDARY && !row.isEmpty()) {
                     rowMenu.show(row, event.getScreenX(), event.getScreenY());
                 }
+                // Aggiunta doppioclick
+                else if (event.getButton() == javafx.scene.input.MouseButton.PRIMARY && event.getClickCount() == 2) {
+                    Track selectedTrack = row.getItem();
+                    openPlayerView(selectedTrack);
+                }
             });
 
             return row;
@@ -307,4 +312,43 @@ public class LibraryViewController implements LibraryObserver {
         contextMenu.getItems().addAll(editItem, deleteItem);
         return contextMenu;
     }
+    private void openPlayerView(Track track) {
+        try {
+            // 1. Carichiamo il file FXML del Player
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/playerView.fxml"));
+            Parent root = loader.load();
+
+            // 2. Recuperiamo il controller del Player e gli passiamo la traccia corrente
+            PlayerController playerController = loader.getController();
+            playerController.setTrack(track); // Questo metodo dovrai crearlo nel PlayerViewController
+
+            // 3. Prepariamo la nuova finestra (Stage)
+            Stage playerStage = new Stage();
+            playerStage.setTitle("Riproduzione: " + track.getName());
+
+            // Scegli l'approccio che preferisci:
+            // Opzione A: Finestra indipendente (L'utente può navigare sia nella libreria che nel player contemporaneamente)
+            playerStage.initModality(Modality.NONE);
+
+            // Opzione B: Finestra bloccante (Scomoda per un player, ma blocca la libreria finché non chiudi)
+            // playerStage.initModality(Modality.APPLICATION_MODAL);
+
+            // 4. Impostiamo la scena (Adatta le dimensioni al look del tuo player)
+            Scene scene = new Scene(root, 600, 100);
+            playerStage.setScene(scene);
+
+            // 5. Mostriamo la finestra del player
+            playerStage.show();
+
+            System.out.println("Player avviato per: " + track.getName());
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.err.println("Errore durante il caricamento di playerView.fxml: " + e.getMessage());
+
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Impossibile aprire il Player Musicale.", ButtonType.OK);
+            alert.showAndWait();
+        }
+    }
+
 }
