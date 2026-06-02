@@ -18,16 +18,12 @@ module EmmePiTre {
     requires net.synedra.validatorfx;
     requires org.kordamp.ikonli.javafx;
     requires org.kordamp.bootstrapfx.core;
+    requires atlantafx.base;
 
     opens models to javafx.base, com.fasterxml.jackson.databind;
     // Esportazioni e Aperture per il Launcher
     exports emmepitre.com.emmepitre;
     opens emmepitre.com.emmepitre to javafx.graphics, javafx.fxml;
-
-    exports controllers;
-    exports models;
-    exports interfaces;
-    exports services;
 
     // Apertura dei pacchetti per permettere a JavaFX di iniettare i nodi FXML
     opens controllers to javafx.fxml;

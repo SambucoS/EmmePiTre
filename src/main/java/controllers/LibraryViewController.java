@@ -1,114 +1,335 @@
 package controllers;
 
+import interfaces.LibraryObserver;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Cursor;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
+import javafx.stage.Modality;
 import javafx.stage.Stage;
+import models.Library;
 import models.Track;
-import services.LibraryService;
 
 import java.io.IOException;
-import java.util.List;
 
-public class LibraryViewController {
+public class LibraryViewController implements LibraryObserver {
 
-    private final LibraryService service = new LibraryService();
     public Label titleBar;
     public HBox mainBar;
 
     @FXML private TableView<Track> trackList;
+    @FXML private TableColumn<Track, Boolean> favouriteColumn;
     @FXML private TableColumn<Track, String> titleColumn;
+    @FXML private TableColumn<Track, Boolean> explicitColumn;
     @FXML private TableColumn<Track, String> authorColumn;
     @FXML private TableColumn<Track, String> albumColumn;
+    @FXML private TableColumn<Track, Integer> yearColumn;
     @FXML private TableColumn<Track, String> genreColumn;
     @FXML private TableColumn<Track, Integer> lengthColumn;
-
+    @FXML private TableColumn<Track, Void> actionsColumn;
     @FXML private TextField researchBar;
     @FXML private Button addButton;
 
     @FXML
     public void initialize() {
-        // Colleghiamo le colonne ai nomi delle variabili in models.Track
-        titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
-        authorColumn.setCellValueFactory(new PropertyValueFactory<>("author"));
-        albumColumn.setCellValueFactory(new PropertyValueFactory<>("album"));
-        genreColumn.setCellValueFactory(new PropertyValueFactory<>("genre"));
-        lengthColumn.setCellValueFactory(new PropertyValueFactory<>("length"));
+        // 1. Stile della barra di selezione (Grigio elegante, testo nero)
+        trackList.setStyle(
+                "-fx-selection-bar: #e0e0e0; " +
+                        "-fx-selection-bar-text: #000000; " +
+                        "-fx-selection-bar-non-focused: #f0f0f0;"
+        );
 
-        // Deleghiamo l'azione del bottone al metodo segnaposto
-        if (addButton != null) {
-            addButton.setOnAction(event -> onAddTrack());
-        }
+        // 2. Correzione PropertyValueFactory (Tutti uniformati al POJO del tuo compagno)
+        favouriteColumn.setCellValueFactory(new PropertyValueFactory<>("favourite"));
+        titleColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
+        explicitColumn.setCellValueFactory(new PropertyValueFactory<>("explicit"));
+        authorColumn.setCellValueFactory(new PropertyValueFactory<>("artist"));
+
+        // Nota: Questa riga genererà un warning finché il team non aggiungerà 'album' alla classe Track
+        albumColumn.setCellValueFactory(new PropertyValueFactory<>("album"));
+
+        yearColumn.setCellValueFactory(new PropertyValueFactory<>("year"));
+        genreColumn.setCellValueFactory(new PropertyValueFactory<>("genre"));
+        lengthColumn.setCellValueFactory(new PropertyValueFactory<>("duration"));
+
+        // 3. Registrazione del Controller come Observer del Modello (Task 1.2.5)
+        Library.getInstance().addObserver(this);
+
+        // 4. Logica Grafica Interattiva: Colonna Preferiti (Stella)
+        favouriteColumn.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(Boolean isFav, boolean empty) {
+                super.updateItem(isFav, empty);
+                if (empty || getTableRow() == null || getTableRow().getItem() == null) {
+                    setGraphic(null);
+                } else {
+                    Track currentTrack = getTableRow().getItem();
+                    Label starLabel = new Label();
+                    starLabel.setCursor(Cursor.HAND);
+
+                    if (currentTrack.isFavourite()) {
+                        starLabel.setText("★");
+                        starLabel.setStyle("-fx-text-fill: #1DB954; -fx-font-size: 18px;");
+                    } else {
+                        starLabel.setText("☆");
+                        starLabel.setStyle("-fx-text-fill: #888888; -fx-font-size: 18px;");
+                    }
+
+                    starLabel.setOnMouseClicked(event -> {
+                        // Caro Modello, l'utente vuole cambiare il preferito. Pensaci tu!
+                        Library.getInstance().toggleFavourite(currentTrack);
+                    });
+
+                    setGraphic(starLabel);
+                }
+            }
+        });
+
+        // 5. Logica Grafica Interattiva: Colonna Explicit (Badge "E")
+        explicitColumn.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(Boolean isExplicit, boolean empty) {
+                super.updateItem(isExplicit, empty);
+                if (empty || getTableRow() == null || getTableRow().getItem() == null) {
+                    setGraphic(null);
+                } else {
+                    Track currentTrack = getTableRow().getItem();
+                    Label explicitBadge = new Label("E");
+                    explicitBadge.setCursor(Cursor.HAND);
+
+                    String baseStyle = "-fx-background-color: #888888; -fx-text-fill: white; -fx-padding: 1 5 1 5; -fx-background-radius: 3; -fx-font-size: 10px;";
+
+                    if (currentTrack.isExplicit()) {
+                        explicitBadge.setStyle(baseStyle + "-fx-font-weight: bold; -fx-opacity: 1.0;");
+                    } else {
+                        explicitBadge.setStyle(baseStyle + "-fx-font-weight: normal; -fx-opacity: 0.4;");
+                    }
+
+                    explicitBadge.setOnMouseClicked(event -> {
+                        Library.getInstance().toggleExplicit(currentTrack);
+                    });
+
+                    setGraphic(explicitBadge);
+                }
+            }
+        });
+
+        // 6. Formattazione personalizzata della Durata (da secondi a mm:ss)
+        lengthColumn.setCellFactory(column -> new TableCell<>() {
+            @Override
+            protected void updateItem(Integer totalSeconds, boolean empty) {
+                super.updateItem(totalSeconds, empty);
+                if (empty || totalSeconds == null) {
+                    setText(null);
+                } else {
+                    int minutes = totalSeconds / 60;
+                    int seconds = totalSeconds % 60;
+                    setText(String.format("%02d:%02d", minutes, seconds));
+                }
+            }
+        });
+
+        // Caricamento iniziale dei dati finti per il test
+        onLoadLibrary();
+        // =========================================================
+        // MENU A TENDINA (Modifica/Elimina) - Task 1.4
+        // =========================================================
+
+        // A. Configurazione del Click Destro sulla riga intera
+        trackList.setRowFactory(tv -> {
+            TableRow<Track> row = new TableRow<>();
+
+            // Creiamo il menu contestuale associato alla riga
+            ContextMenu rowMenu = createActionMenu(row);
+
+            // Mostra il menu con il click destro solo se la riga non è vuota
+            row.setOnMouseClicked(event -> {
+                if (event.getButton() == javafx.scene.input.MouseButton.SECONDARY && !row.isEmpty()) {
+                    rowMenu.show(row, event.getScreenX(), event.getScreenY());
+                }
+            });
+
+            return row;
+        });
+
+
+        actionsColumn.setCellFactory(column -> new TableCell<Track, Void>() {
+            private final Label dotsLabel = new Label("⋮");
+            {
+                dotsLabel.setCursor(Cursor.HAND);
+                dotsLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #888888; -fx-padding: 0 5 0 5;");
+
+                // Quando clicchi sui tre puntini col tasto sinistro, compare lo stesso menu
+                dotsLabel.setOnMouseClicked(event -> {
+                    if (event.getButton() == javafx.scene.input.MouseButton.PRIMARY) {
+                        TableRow<Track> row = getTableRow();
+                        if (row != null && !row.isEmpty()) {
+                            ContextMenu menu = createActionMenu(row);
+                            // Mostra il menu a tendina posizionato sotto l'icona dei tre puntini
+                            menu.show(dotsLabel, javafx.geometry.Side.BOTTOM, 0, 0);
+                        }
+                    }
+                });
+            }
+            @Override
+            protected void updateItem(Void item, boolean empty) {
+                super.updateItem(item, empty);
+                if (empty || getTableRow() == null || getTableRow().getItem() == null) {
+                    setGraphic(null);
+                } else {
+                    setGraphic(dotsLabel);
+                }
+            }
+        });
     }
 
-    // Task 1.2.1: Aggiunta metodo loadTracks() (o onLoadLibrary)
+    // =========================================================
+    // AGGIORNAMENTO AUTOMATICO OBSERVER (Task 1.2.5)
+    // =========================================================
+    @Override
+    public void onLibraryChanged() {
+        System.out.println("Notifica ricevuta dall'Observer: sto aggiornando la TableView!");
+        trackList.getItems().setAll(Library.getInstance().getTracks());
+        trackList.refresh();
+    }
+
     @FXML
     public void onLoadLibrary() {
-        List<Track> tracks = service.getTracks();
-        trackList.getItems().setAll(tracks);
+            trackList.getItems().setAll(Library.getInstance().getTracks());
     }
 
     @FXML
-    public void onAddTrack() {
-        // METODO SEGNAPOSTO: Chi svilupperà l'AddTrackController scriverà qui la logica.
-        // Per ora, tu mostri solo che il bottone è cablato e funzionante!
-        System.out.println("Il bottone funziona! In attesa che il team implementi la schermata AddTrack...");
+    public void onAddTrack() throws IOException {
+        // Cliccando sul bottone "Add a Track", simuliamo l'aggiunta di un brano nel Modello globale.
+        // Grazie all'Observer Pattern, vedrai la riga aggiungersi da sola nella tabella!
+        FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/addTrackModal.fxml"));
+        Parent root = null;
+        try {
+            root = loader.load();
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
 
-        /* * Esempio di Alert visivo (Opzionale, ma fa molta scena nelle presentazioni)
-         * Alert alert = new Alert(Alert.AlertType.INFORMATION);
-         * alert.setTitle("Lavori in corso");
-         * alert.setHeaderText("Funzionalità in sviluppo");
-         * alert.setContentText("Questa funzione sarà implementata a breve dal team.");
-         * alert.showAndWait();
-         */
+        // B. Recuperiamo il controller e impostiamo il contesto (true = da Libreria)
+        AddTrackController dialogController = loader.getController();
+
+        // C. Prepariamo la finestra (Stage)
+        Stage dialogStage = new Stage();
+        dialogStage.setTitle("Form Aggiunta");
+        dialogStage.initModality(Modality.APPLICATION_MODAL); // Rende la finestra bloccante
+        dialogStage.setResizable(false); // Blocca il ridimensionamento
+
+        // D. Impostiamo la scena con le dimensioni fisse 400x120
+        Scene scene = new Scene(root, 600, 300);
+        dialogStage.setScene(scene);
+
+        // E. Mostriamo il modale e mettiamo "in pausa" questo codice finché non viene chiuso
+        dialogStage.showAndWait();
     }
 
     @FXML
     public void onRemoveTrack() {
         Track selected = trackList.getSelectionModel().getSelectedItem();
         if (selected != null) {
-            service.removeTrack(selected);
-            trackList.getItems().setAll(service.getTracks());
+            // Chiamiamo il metodo di rimozione della Library, l'interfaccia si adeguerà da sola via notifica
+            Library.getInstance().removeTrack(selected);
         }
     }
+    private ContextMenu createActionMenu(TableRow<Track> row) {
+        ContextMenu contextMenu = new ContextMenu();
 
-    public Track getTrack() {
-        Track selected = trackList.getSelectionModel().getSelectedItem();
+        MenuItem editItem = new MenuItem("Modifica traccia");
+        MenuItem deleteItem = new MenuItem("Elimina traccia");
 
-        if (selected == null) {
-            System.out.println("Nessuna traccia selezionata");
-            return null;
-        }
+        // 1. Logica per la MODIFICA (Placeholder)
+        editItem.setOnAction(event -> {
+            Track currentTrack = row.getItem();
+            // Per ora facciamo solo una print, in futuro aprirai il modale di modifica qui
+            System.out.println("Modifica richiesta per la traccia: " + currentTrack.getName());
+        });
 
-        return selected;
+        // 2. Logica per l'ELIMINAZIONE (Apertura Modale)
+        deleteItem.setOnAction(event -> {
+            Track currentTrack = row.getItem();
+
+            // Evidenzia visivamente la riga che stiamo per eliminare
+            trackList.getSelectionModel().select(currentTrack);
+
+            try {
+                // A. Carichiamo il file FXML del modale
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/deleteTrack.fxml"));
+                Parent root = loader.load();
+
+                // B. Recuperiamo il controller e impostiamo il contesto (true = da Libreria)
+                DeleteTrackController dialogController = loader.getController();
+                dialogController.setContext(true);
+
+                // C. Prepariamo la finestra (Stage)
+                Stage dialogStage = new Stage();
+                dialogStage.setTitle("Conferma Eliminazione");
+                dialogStage.initModality(Modality.APPLICATION_MODAL); // Rende la finestra bloccante
+                dialogStage.setResizable(false); // Blocca il ridimensionamento
+
+                // D. Impostiamo la scena con le dimensioni fisse 400x120
+                Scene scene = new Scene(root, 600, 150);
+                dialogStage.setScene(scene);
+
+                // E. Mostriamo il modale e mettiamo "in pausa" questo codice finché non viene chiuso
+                dialogStage.showAndWait();
+
+                // F. Controlliamo cosa ha scelto l'utente
+                if (dialogController.isConfirmed()) {
+                    // Se ha cliccato "Sono sicuro", eliminiamo la traccia dal modello centrale!
+                    // Grazie all'Observer Pattern, la riga sparirà automaticamente dalla TableView
+                    Library.getInstance().removeTrack(currentTrack);
+                    System.out.println("Traccia eliminata definitivamente: " + currentTrack.getName());
+                } else {
+                    System.out.println("Eliminazione annullata.");
+                }
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("Errore durante il caricamento del modale deleteTrack.fxml");
+            }
+        });
+
+        contextMenu.getItems().addAll(editItem, deleteItem);
+        return contextMenu;
     }
 
     @FXML
-    public void modifyTrack() {
-        Track selected = getTrack();
-
-        if (selected == null) {
-            return;
-        }
-
+    public void onCreatePlaylist() {
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/modify.fxml"));
+            // A. Carica il file FXML del modale
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/createPlaylist.fxml"));
             Parent root = loader.load();
 
-            ModifyController controller = loader.getController();
-            controller.setTrack(selected);
+            // B. Prepara la finestra (Stage)
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Nuova Playlist");
+            dialogStage.initModality(Modality.APPLICATION_MODAL); // Blocca la finestra principale
+            dialogStage.setResizable(false);
 
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Modify Track");
-            stage.show();
+            // C. Imposta le dimensioni (regolale se il tuo modale è più grande/piccolo)
+            Scene scene = new Scene(root, 400, 200);
+            dialogStage.setScene(scene);
 
-        } catch (IOException e) {
+            // D. Mostra il modale e attendi la chiusura
+            dialogStage.showAndWait();
+
+            // E. Verifica per il debug: stampa su console le playlist attualmente esistenti
+            System.out.println("--- STATO ATTUALE PLAYLIST ---");
+            models.PlaylistManager.getInstance().getPlaylists().forEach(p ->
+                    System.out.println("- " + p.getName())
+            );
+
+        } catch (Exception e) {
             e.printStackTrace();
+            System.out.println("Errore durante il caricamento di createPlaylist.fxml");
         }
     }
 }

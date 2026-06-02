@@ -1,0 +1,40 @@
+/* Stato normale */
+#btnConfirm {
+    -fx-background-color: #d9534f;
+    -fx-text-fill: white;
+    -fx-font-weight: bold;
+    -fx-background-radius: 5;
+    -fx-border-radius: 5; /* Opzionale, per smussare gli angoli */
+    -fx-border-color: darkslategrey;
+    -fx-background-insets: 1;
+}
+
+/* Quando il mouse ci passa sopra (Hover) */
+#btnConfirm:hover {
+    -fx-background-color: #c9302c; /* Un rosso leggermente più scuro */
+    -fx-cursor: hand; /* Cambia il cursore nella manina */
+}
+
+/* Quando il bottone viene premuto (Armed/Click) */
+#btnConfirm:pressed {
+    -fx-background-color: #ac2925; /* Un rosso ancora più scuro */
+}
+#btnCancel{
+    background-color: lightslategrey;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+    -fx-background-radius: 5;
+    -fx-border-color: darkslategrey;
+    -fx-border-radius: 5; /* Opzionale, per smussare gli angoli */
+
+}
+#btnCancel:hover{
+    background-color: darkgray;
+    -fx-cursor: hand;
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
+#btnCancel:pressed{
+    -fx-focus-color: transparent;
+    -fx-faint-focus-color: transparent;
+}
