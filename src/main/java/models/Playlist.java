@@ -6,15 +6,29 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSetter;
 
 public class Playlist implements TrackList {
 
     private String name;
     private final List<Track> tracks;
 
+    // Costruttore vuoto obbligatorio per la deserializzazione JSON (Jackson)
+    public Playlist() {
+        this.tracks = new ArrayList<>();
+    }
+
     public Playlist(String name) {
         setName(name);
-        this.tracks = new ArrayList<>(); // Crea una lista vuota di tracce. Quindi appena creata, la playlist non contiene ancora nessuna canzone
+        this.tracks = new ArrayList<>(); // Crea una lista vuota di tracce
+    }
+    @JsonSetter("tracks")
+    private void setTracksForJackson(List<Track> loadedTracks) {
+        this.tracks.clear();
+        if (loadedTracks != null) {
+            this.tracks.addAll(loadedTracks);
+        }
     }
 
     // Leggiamo il nome della playlist
@@ -55,7 +69,8 @@ public class Playlist implements TrackList {
     // Restituisce l’elenco delle tracce nella playlist
     @Override
     public List<Track> getTracks() {
-        return Collections.unmodifiableList(tracks); // Chi riceve la lista può leggerla, ma non può modificarla direttamente. incapsulamento
+        // Chi riceve la lista può leggerla, ma non può modificarla direttamente (Incapsulamento)
+        return Collections.unmodifiableList(tracks);
     }
 
     // Restituisce il numero di tracce presenti nella playlist
@@ -69,6 +84,7 @@ public class Playlist implements TrackList {
         return tracks.contains(track);
     }
 
+    @JsonIgnore
     // Restituisce true se la playlist non contiene tracce
     public boolean isEmpty() {
         return tracks.isEmpty();

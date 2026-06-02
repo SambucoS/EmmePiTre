@@ -4,6 +4,7 @@ import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Slider;
+import javafx.scene.control.TableColumn;
 import models.Track;
 
 public class PlayerController {
@@ -27,4 +28,5 @@ public class PlayerController {
             statusButton.setText("Play");
         }
     }
+
 }

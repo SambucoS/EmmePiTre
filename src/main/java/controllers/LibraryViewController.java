@@ -9,105 +9,55 @@ import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
 import javafx.stage.Stage;
 import models.Track;
-import services.LibraryService;
 
 import java.io.IOException;
-import java.util.List;
 
-public class LibraryViewController {
 
-    private final LibraryService service = new LibraryService();
     public Label titleBar;
     public HBox mainBar;
 
-    @FXML private static TableView<Track> trackList;
     @FXML private TableColumn<Track, String> titleColumn;
     @FXML private TableColumn<Track, String> authorColumn;
     @FXML private TableColumn<Track, String> albumColumn;
     @FXML private TableColumn<Track, String> genreColumn;
     @FXML private TableColumn<Track, Integer> lengthColumn;
-
     @FXML private TextField researchBar;
     @FXML private Button addButton;
 
     @FXML
     public void initialize() {
-        // Colleghiamo le colonne ai nomi delle variabili in models.Track
-        titleColumn.setCellValueFactory(new PropertyValueFactory<>("title"));
-        authorColumn.setCellValueFactory(new PropertyValueFactory<>("author"));
         albumColumn.setCellValueFactory(new PropertyValueFactory<>("album"));
         genreColumn.setCellValueFactory(new PropertyValueFactory<>("genre"));
-        lengthColumn.setCellValueFactory(new PropertyValueFactory<>("length"));
 
-        // Deleghiamo l'azione del bottone al metodo segnaposto
-        if (addButton != null) {
-            addButton.setOnAction(event -> onAddTrack());
         }
     }
 
-    // Task 1.2.1: Aggiunta metodo loadTracks() (o onLoadLibrary)
     @FXML
     public void onLoadLibrary() {
-        List<Track> tracks = service.getTracks();
-        trackList.getItems().setAll(tracks);
     }
 
     @FXML
-    public void onAddTrack() {
-        // METODO SEGNAPOSTO: Chi svilupperà l'AddTrackController scriverà qui la logica.
-        // Per ora, tu mostri solo che il bottone è cablato e funzionante!
-        System.out.println("Il bottone funziona! In attesa che il team implementi la schermata AddTrack...");
 
-        /* * Esempio di Alert visivo (Opzionale, ma fa molta scena nelle presentazioni)
-         * Alert alert = new Alert(Alert.AlertType.INFORMATION);
-         * alert.setTitle("Lavori in corso");
-         * alert.setHeaderText("Funzionalità in sviluppo");
-         * alert.setContentText("Questa funzione sarà implementata a breve dal team.");
-         * alert.showAndWait();
-         */
     }
 
     @FXML
     public void onRemoveTrack() {
         Track selected = trackList.getSelectionModel().getSelectedItem();
         if (selected != null) {
-            service.removeTrack(selected);
-            trackList.getItems().setAll(service.getTracks());
         }
     }
 
-    public static Track getTrack() {
-        Track selected = trackList.getSelectionModel().getSelectedItem();
 
-        if (selected == null) {
-            System.out.println("Nessuna traccia selezionata");
-            return null;
         }
 
-        return selected;
     }
 
     @FXML
-    public void modifyTrack() {
-        Track selected = getTrack();
-
-        if (selected == null) {
-            return;
-        }
-
         try {
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/modify.fxml"));
             Parent root = loader.load();
 
-            ModifyController controller = loader.getController();
-            controller.setTrack(selected);
 
-            Stage stage = new Stage();
-            stage.setScene(new Scene(root));
-            stage.setTitle("Modify Track");
-            stage.show();
 
-        } catch (IOException e) {
             e.printStackTrace();
         }
     }

@@ -26,7 +26,7 @@
   "genre" : "Hip Hop",
   "year" : 2002,
   "favourite" : true,
-  "explicit" : false,
+  "explicit" : true,
   "duration" : 326
 }, {
   "pathname" : null,
@@ -55,7 +55,7 @@
   "album" : null,
   "genre" : "Rock",
   "year" : 1991,
-  "favourite" : true,
+  "favourite" : false,
   "explicit" : true,
   "duration" : 301
 }, {
@@ -299,13 +299,23 @@
   "explicit" : false,
   "duration" : 231
 }, {
-  "pathname" : "path/test.mp3",
-  "name" : "Nuova Hit 31",
-  "artist" : "Mainstream Artist",
-  "album" : "Album",
-  "genre" : "Dance",
-  "year" : 2026,
-  "favourite" : false,
+  "pathname" : "adasd",
+  "name" : "asdada",
+  "artist" : "adad",
+  "album" : "asdad",
+  "genre" : "sadasd",
+  "year" : 1232,
+  "favourite" : true,
   "explicit" : true,
-  "duration" : 195
+  "duration" : 2131
+}, {
+  "pathname" : "null",
+  "name" : "To the Wilder",
+  "artist" : "Woodkid",
+  "album" : "Death Stranding 2: On the Beach",
+  "genre" : "Epic - Pop",
+  "year" : 2025,
+  "favourite" : true,
+  "explicit" : false,
+  "duration" : 300
 } ]
