@@ -13,6 +13,7 @@ public class AddTrackController {
     @FXML private TextField nameField;
     @FXML private TextField artistField;
     @FXML private TextField genreField;
+    @FXML private TextField txtAlbum;
     @FXML private TextField yearField;
     @FXML private TextField durationField;
     @FXML private CheckBox favouriteCheck;
@@ -27,7 +28,8 @@ public class AddTrackController {
                 nameField.getText(),
                 artistField.getText(),
                 genreField.getText(),
-                Integer.parseInt(yearField.getText()),
+                txtAlbum.getText(),
+                yearField.getText(),
                 favouriteCheck.isSelected(),
                 explicitCheck.isSelected(),
                 Integer.parseInt(durationField.getText())

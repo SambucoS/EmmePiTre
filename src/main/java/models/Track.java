@@ -17,7 +17,7 @@ public class Track {
 
     // Full constructor
     public Track(String pathname, String name, String artist, String album, String genre,
-                 int year, boolean favourite, boolean explicit, int duration) {
+                 String text, boolean favourite, boolean explicit, int duration) {
         this.pathname = pathname;
         this.name = name;
         this.artist = artist;
