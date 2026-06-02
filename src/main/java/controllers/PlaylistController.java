@@ -1,5 +1,9 @@
 package controllers;
 
+import javafx.scene.Node;
+import javafx.event.ActionEvent;
+import javafx.stage.Stage;
+
 // Import necessario per collegare gli elementi dell'FXML al controller
 import javafx.fxml.FXML;
 
@@ -129,17 +133,20 @@ public class PlaylistController implements Initializable {
      * Svuota il campo di testo e cancella eventuali messaggi.
      */
     @FXML
-    private void handleCancel() {
-
-        // Controllo utile perché playlistNameField esiste solo nella schermata di creazione
+    private void handleCancel(ActionEvent event) {
+        // Pulisce il campo di testo, se presente
         if (playlistNameField != null) {
             playlistNameField.clear();
         }
 
-        // Cancella il messaggio mostrato all'utente
+        // Pulisce eventuali messaggi di errore o conferma
         if (messageLabel != null) {
             messageLabel.setText("");
         }
+
+        // Chiude la finestra/modale corrente
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.close();
     }
 
     /*
