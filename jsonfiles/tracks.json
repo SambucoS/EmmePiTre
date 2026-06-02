@@ -45,7 +45,7 @@
   "album" : null,
   "genre" : "Pop",
   "year" : 2019,
-  "favourite" : false,
+  "favourite" : true,
   "explicit" : true,
   "duration" : 194
 }, {
@@ -55,7 +55,7 @@
   "album" : null,
   "genre" : "Rock",
   "year" : 1991,
-  "favourite" : true,
+  "favourite" : false,
   "explicit" : true,
   "duration" : 301
 }, {
@@ -65,8 +65,8 @@
   "album" : null,
   "genre" : "Funk",
   "year" : 2014,
-  "favourite" : false,
-  "explicit" : true,
+  "favourite" : true,
+  "explicit" : false,
   "duration" : 270
 }, {
   "pathname" : null,
@@ -76,7 +76,7 @@
   "genre" : "Pop",
   "year" : 2010,
   "favourite" : false,
-  "explicit" : true,
+  "explicit" : false,
   "duration" : 228
 }, {
   "pathname" : null,
@@ -85,7 +85,7 @@
   "album" : null,
   "genre" : "Hip Hop",
   "year" : 2018,
-  "favourite" : true,
+  "favourite" : false,
   "explicit" : true,
   "duration" : 198
 }, {
@@ -262,20 +262,60 @@
   "pathname" : null,
   "name" : "Crazy in Love",
   "artist" : "Beyoncé ft. Jay-Z",
-  "album" : "Album",
+  "album" : null,
   "genre" : "R&B",
   "year" : 2003,
   "favourite" : false,
   "explicit" : true,
   "duration" : 236
 }, {
-  "pathname" : "asd",
-  "name" : "dssa",
-  "artist" : "dsa",
-  "album" : "das",
-  "genre" : "sad",
-  "year" : 123,
+  "pathname" : null,
+  "name" : "Perfect",
+  "artist" : "Ed Sheeran",
+  "album" : null,
+  "genre" : "Pop",
+  "year" : 2017,
+  "favourite" : true,
+  "explicit" : false,
+  "duration" : 263
+}, {
+  "pathname" : null,
+  "name" : "Viva La Vida",
+  "artist" : "Coldplay",
+  "album" : null,
+  "genre" : "Alternative",
+  "year" : 2008,
   "favourite" : false,
   "explicit" : false,
-  "duration" : 123
+  "duration" : 242
+}, {
+  "pathname" : null,
+  "name" : "Seven Nation Army",
+  "artist" : "The White Stripes",
+  "album" : null,
+  "genre" : "Rock",
+  "year" : 2003,
+  "favourite" : false,
+  "explicit" : false,
+  "duration" : 231
+}, {
+  "pathname" : "adasd",
+  "name" : "asdada",
+  "artist" : "adad",
+  "album" : "asdad",
+  "genre" : "sadasd",
+  "year" : 1232,
+  "favourite" : true,
+  "explicit" : true,
+  "duration" : 2131
+}, {
+  "pathname" : "null",
+  "name" : "To the Wilder",
+  "artist" : "Woodkid",
+  "album" : "Death Stranding 2: On the Beach",
+  "genre" : "Epic - Pop",
+  "year" : 2025,
+  "favourite" : true,
+  "explicit" : false,
+  "duration" : 300
 } ]

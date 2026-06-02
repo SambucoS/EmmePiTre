@@ -2,41 +2,30 @@ package emmepitre.com.emmepitre;
 
 import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
+import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.layout.VBox;
 import javafx.stage.Stage;
+import atlantafx.base.theme.CupertinoDark;
+
+import java.util.Objects;
 
 public class Launcher extends Application {
 
     @Override
-    public void start(Stage primaryStage) {
-        try {
-            // 1. Carica il file FXML della modale
-            // Nota: Assicurati che il percorso rifletta la posizione reale del tuo FXML
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/deleteTrack.fxml"));
-            VBox root = loader.load();
+    public void start(Stage stage) throws Exception {
+        Application.setUserAgentStylesheet(new CupertinoDark().getUserAgentStylesheet());
+        Parent root = FXMLLoader.load(
+                Objects.requireNonNull(getClass().getResource("/views/libraryView.fxml"))
+        );
 
-            // 2. Crea la scena con il nodo radice caricato
-            Scene scene = new Scene(root);
+        Scene scene = new Scene(root);
 
-            // 3. Configura lo stage (la finestra)
-            primaryStage.setTitle("Test Modale - Aggiungi Traccia");
-            primaryStage.setScene(scene);
-
-            // Impedisce il ridimensionamento della finestra per mantenere il form pulito
-            primaryStage.setResizable(false);
-
-            // 4. Mostra la finestra
-            primaryStage.show();
-
-        } catch (Exception e) {
-            System.err.println("Errore durante l'avvio della modale di test:");
-            e.printStackTrace();
-        }
+        stage.setScene(scene);
+        stage.setTitle("Music Library");
+        stage.show();
     }
 
     public static void main(String[] args) {
-        // Avvia l'applicazione JavaFX
         launch(args);
     }
 }

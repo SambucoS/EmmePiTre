@@ -157,11 +157,11 @@ public class LibraryViewController implements LibraryObserver {
         });
 
 
-        actionsColumn.setCellFactory(column -> new TableCell<Track, Void>() {
+        actionsColumn.setCellFactory(column -> new TableCell<>() {
             private final Label dotsLabel = new Label("⋮");
             {
                 dotsLabel.setCursor(Cursor.HAND);
-                dotsLabel.setStyle("-fx-font-size: 12px; -fx-font-weight: regular; -fx-text-fill: #888888; -fx-padding: 0 5 0 5;");
+                dotsLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #888888; -fx-padding: 0 5 0 5;");
 
                 // Quando clicchi sui tre puntini col tasto sinistro, compare lo stesso menu
                 dotsLabel.setOnMouseClicked(event -> {
@@ -199,7 +199,14 @@ public class LibraryViewController implements LibraryObserver {
 
     @FXML
     public void onLoadLibrary() {
+        // Popoliamo il Singleton globale solo se è attualmente vuoto (evita duplicazioni al refresh)
+        if (Library.getInstance().getTracks().isEmpty()) {
+            Library.getInstance().addTrack(new Track("C:/music/song1.mp3", "Canzone Figa", "Artista Famoso","Album", "Pop", 2023, true, true, 215));
+            Library.getInstance().addTrack(new Track("C:/music/song2.mp3", "Brano Pulito", "Artista Indie", "Album", "Lo-fi", 2024, false, false, 180));
+            Library.getInstance().addTrack(new Track("C:/music/song3.mp3", "Classico Greve", "Rapper Serio", "Album", "Rap", 1999, true, false, 240));
+        } else {
             trackList.getItems().setAll(Library.getInstance().getTracks());
+        }
     }
 
     @FXML
@@ -239,7 +246,20 @@ public class LibraryViewController implements LibraryObserver {
             Library.getInstance().removeTrack(selected);
         }
     }
-    private ContextMenu createActionMenu(TableRow<Track> row) {
+
+    public Track getTrack() {
+        Track selected = trackList.getSelectionModel().getSelectedItem();
+
+        if (selected == null) {
+            System.out.println("Nessuna traccia selezionata");
+            return null;
+        }
+
+        return selected;
+    }
+
+
+        private ContextMenu createActionMenu(TableRow<Track> row) {
         ContextMenu contextMenu = new ContextMenu();
 
         MenuItem editItem = new MenuItem("Modifica traccia");
@@ -248,36 +268,8 @@ public class LibraryViewController implements LibraryObserver {
         // 1. Logica per la MODIFICA (Placeholder)
         editItem.setOnAction(event -> {
             Track currentTrack = row.getItem();
-
-            trackList.getSelectionModel().select(currentTrack);
-
-            try {
-                // A. Carichiamo il file FXML del modale
-                FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/modify.fxml"));
-                Parent root = loader.load();
-
-                // B. Recuperiamo il controller e impostiamo il contesto (true = da Libreria)
-                ModifyController dialogController = loader.getController();
-
-                dialogController.setTrack(currentTrack);
-                // C. Prepariamo la finestra (Stage)
-                Stage dialogStage = new Stage();
-                dialogStage.setTitle("Modifica traccia");
-                dialogStage.initModality(Modality.APPLICATION_MODAL); // Rende la finestra bloccante
-                dialogStage.setResizable(false); // Blocca il ridimensionamento
-
-                // D. Impostiamo la scena con le dimensioni fisse 400x120
-                Scene scene = new Scene(root, 450, 600);
-                dialogStage.setScene(scene);
-
-                // E. Mostriamo il modale e mettiamo "in pausa" questo codice finché non viene chiuso
-                dialogStage.showAndWait();
-
-
-            } catch (Exception e) {
-                e.printStackTrace();
-                System.out.println("Errore durante il caricamento del modale modifyTrack.fxml");
-            }
+            // Per ora facciamo solo una print, in futuro aprirai il modale di modifica qui
+            System.out.println("Modifica richiesta per la traccia: " + currentTrack.getName());
         });
 
         // 2. Logica per l'ELIMINAZIONE (Apertura Modale)
@@ -329,35 +321,30 @@ public class LibraryViewController implements LibraryObserver {
         return contextMenu;
     }
 
+
     @FXML
-    public void onCreatePlaylist() {
+    public void modifyTrack() {
+        Track selected = getTrack();
+
+        if (selected == null) {
+            return;
+        }
+
         try {
-            // A. Carica il file FXML del modale
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/createPlaylist.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/modify.fxml"));
             Parent root = loader.load();
 
-            // B. Prepara la finestra (Stage)
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle("Nuova Playlist");
-            dialogStage.initModality(Modality.APPLICATION_MODAL); // Blocca la finestra principale
-            dialogStage.setResizable(false);
+            ModifyController controller = loader.getController();
+            controller.setTrack(selected);
 
-            // C. Imposta le dimensioni (regolale se il tuo modale è più grande/piccolo)
-            Scene scene = new Scene(root, 400, 200);
-            dialogStage.setScene(scene);
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Modify Track");
+            stage.show();
 
-            // D. Mostra il modale e attendi la chiusura
-            dialogStage.showAndWait();
-
-            // E. Verifica per il debug: stampa su console le playlist attualmente esistenti
-            System.out.println("--- STATO ATTUALE PLAYLIST ---");
-            models.PlaylistManager.getInstance().getPlaylists().forEach(p ->
-                    System.out.println("- " + p.getName())
-            );
-
-        } catch (Exception e) {
+        } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("Errore durante il caricamento di createPlaylist.fxml");
         }
     }
+
 }
