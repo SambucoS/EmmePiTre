@@ -13,7 +13,7 @@ public class Track {
     private int duration; // in seconds
 
     // Empty constructor
-    public Track() {}
+   // public Track() {}
 
     // Full constructor
     public Track(String pathname, String name, String artist, String album, String genre,
