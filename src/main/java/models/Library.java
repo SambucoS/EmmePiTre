@@ -31,9 +31,7 @@ public class Library implements TrackList {
         return instance;
     }
 
-    // =========================================================
-    // GESTIONE OBSERVER (Task 1.2.5)
-    // =========================================================
+    //COMMENTO DI PROVA
     public void addObserver(LibraryObserver observer) {
         this.observers.add(observer);
     }
