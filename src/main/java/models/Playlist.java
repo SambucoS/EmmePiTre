@@ -34,7 +34,7 @@ public class Playlist implements TrackList {
 
     // Aggiunge una traccia alla playlist
     @Override
-    public void addTrack(Track track) {
+    public static void addTrack(Track track) {
         if (track == null) { // Controlliamo che la traccia non sia null
             throw new IllegalArgumentException("La traccia non può essere null.");
         }

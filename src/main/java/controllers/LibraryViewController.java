@@ -20,7 +20,7 @@ public class LibraryViewController {
     public Label titleBar;
     public HBox mainBar;
 
-    @FXML private TableView<Track> trackList;
+    @FXML private static TableView<Track> trackList;
     @FXML private TableColumn<Track, String> titleColumn;
     @FXML private TableColumn<Track, String> authorColumn;
     @FXML private TableColumn<Track, String> albumColumn;
@@ -76,7 +76,7 @@ public class LibraryViewController {
         }
     }
 
-    public Track getTrack() {
+    public static Track getTrack() {
         Track selected = trackList.getSelectionModel().getSelectedItem();
 
         if (selected == null) {
