@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import models.Library;
@@ -33,6 +34,7 @@ public class LibraryViewController implements LibraryObserver {
     @FXML private TableColumn<Track, Void> actionsColumn;
     @FXML private TextField researchBar;
     @FXML private Button addButton;
+    @FXML private StackPane rootPane;
 
     @FXML
     public void initialize() {
@@ -150,6 +152,10 @@ public class LibraryViewController implements LibraryObserver {
             row.setOnMouseClicked(event -> {
                 if (event.getButton() == javafx.scene.input.MouseButton.SECONDARY && !row.isEmpty()) {
                     rowMenu.show(row, event.getScreenX(), event.getScreenY());
+                }
+                else if (event.getButton() == javafx.scene.input.MouseButton.PRIMARY && event.getClickCount() == 2) {
+                    Track selectedTrack = row.getItem();
+                    openPlayerView(selectedTrack);
                 }
             });
 
@@ -332,4 +338,32 @@ public class LibraryViewController implements LibraryObserver {
             System.out.println("Errore durante il caricamento di createPlaylist.fxml");
         }
     }
+    private void openPlayerView(Track track) {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/views/playerView.fxml"));
+
+            Parent playerView = loader.load();
+
+            PlayerController playerController = loader.getController();
+            playerController.setTrack(track);
+
+            // Rimuove il player precedente
+            rootPane.getChildren().clear();
+
+            // Aggiunge il nuovo player
+            rootPane.getChildren().add(playerView);
+
+        } catch (IOException e) {
+            e.printStackTrace();
+
+            Alert alert = new Alert(
+                    Alert.AlertType.ERROR,
+                    "Impossibile aprire il Player Musicale.",
+                    ButtonType.OK);
+
+            alert.showAndWait();
+        }
+    }
+
 }

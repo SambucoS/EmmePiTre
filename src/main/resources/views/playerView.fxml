@@ -7,10 +7,11 @@
 <?import javafx.scene.layout.*?>
 
 <HBox xmlns="http://javafx.com/javafx"
-            xmlns:fx="http://javafx.com/fxml"
-            fx:controller="controllers.PlayerController"
-            prefHeight="400.0" prefWidth="600.0">
-
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controllers.PlayerController"
+      prefHeight="100.0" prefWidth="600.0">
+    <Label fx:id="tnameLbl"></Label>
     <Button fx:id="statusButton" text = "Play" onAction="#handleStatus"></Button>
     <Slider fx:id="progressSlider"></Slider>
+    <Label fx:id="durationLbl"></Label>
 </HBox>
