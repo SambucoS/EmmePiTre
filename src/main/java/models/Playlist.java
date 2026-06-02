@@ -12,9 +12,14 @@ public class Playlist implements TrackList {
     private String name;
     private final List<Track> tracks;
 
+    // Costruttore vuoto obbligatorio per la deserializzazione JSON (Jackson)
+    public Playlist() {
+        this.tracks = new ArrayList<>();
+    }
+
     public Playlist(String name) {
         setName(name);
-        this.tracks = new ArrayList<>(); // Crea una lista vuota di tracce. Quindi appena creata, la playlist non contiene ancora nessuna canzone
+        this.tracks = new ArrayList<>(); // Crea una lista vuota di tracce
     }
 
     // Leggiamo il nome della playlist
@@ -55,7 +60,8 @@ public class Playlist implements TrackList {
     // Restituisce l’elenco delle tracce nella playlist
     @Override
     public List<Track> getTracks() {
-        return Collections.unmodifiableList(tracks); // Chi riceve la lista può leggerla, ma non può modificarla direttamente. incapsulamento
+        // Chi riceve la lista può leggerla, ma non può modificarla direttamente (Incapsulamento)
+        return Collections.unmodifiableList(tracks);
     }
 
     // Restituisce il numero di tracce presenti nella playlist

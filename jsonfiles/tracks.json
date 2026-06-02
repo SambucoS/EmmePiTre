@@ -45,7 +45,7 @@
   "album" : null,
   "genre" : "Pop",
   "year" : 2019,
-  "favourite" : true,
+  "favourite" : false,
   "explicit" : true,
   "duration" : 194
 }, {
@@ -55,7 +55,7 @@
   "album" : null,
   "genre" : "Rock",
   "year" : 1991,
-  "favourite" : false,
+  "favourite" : true,
   "explicit" : true,
   "duration" : 301
 }, {
@@ -65,8 +65,8 @@
   "album" : null,
   "genre" : "Funk",
   "year" : 2014,
-  "favourite" : true,
-  "explicit" : false,
+  "favourite" : false,
+  "explicit" : true,
   "duration" : 270
 }, {
   "pathname" : null,
@@ -76,7 +76,7 @@
   "genre" : "Pop",
   "year" : 2010,
   "favourite" : false,
-  "explicit" : false,
+  "explicit" : true,
   "duration" : 228
 }, {
   "pathname" : null,
@@ -85,7 +85,7 @@
   "album" : null,
   "genre" : "Hip Hop",
   "year" : 2018,
-  "favourite" : false,
+  "favourite" : true,
   "explicit" : true,
   "duration" : 198
 }, {
