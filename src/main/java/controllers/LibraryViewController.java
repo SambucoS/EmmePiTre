@@ -9,7 +9,6 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
-import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import models.Library;
@@ -34,7 +33,6 @@ public class LibraryViewController implements LibraryObserver {
     @FXML private TableColumn<Track, Void> actionsColumn;
     @FXML private TextField researchBar;
     @FXML private Button addButton;
-    @FXML private StackPane rootPane;
 
     @FXML
     public void initialize() {
@@ -153,6 +151,7 @@ public class LibraryViewController implements LibraryObserver {
                 if (event.getButton() == javafx.scene.input.MouseButton.SECONDARY && !row.isEmpty()) {
                     rowMenu.show(row, event.getScreenX(), event.getScreenY());
                 }
+                // Aggiunta doppioclick
                 else if (event.getButton() == javafx.scene.input.MouseButton.PRIMARY && event.getClickCount() == 2) {
                     Track selectedTrack = row.getItem();
                     openPlayerView(selectedTrack);
@@ -163,7 +162,7 @@ public class LibraryViewController implements LibraryObserver {
         });
 
 
-        actionsColumn.setCellFactory(column -> new TableCell<Track, Void>() {
+        actionsColumn.setCellFactory(column -> new TableCell<>() {
             private final Label dotsLabel = new Label("⋮");
             {
                 dotsLabel.setCursor(Cursor.HAND);
@@ -205,7 +204,14 @@ public class LibraryViewController implements LibraryObserver {
 
     @FXML
     public void onLoadLibrary() {
+        // Popoliamo il Singleton globale solo se è attualmente vuoto (evita duplicazioni al refresh)
+        if (Library.getInstance().getTracks().isEmpty()) {
+            Library.getInstance().addTrack(new Track("C:/music/song1.mp3", "Canzone Figa", "Artista Famoso","Album", "Pop", 2023, true, true, 215));
+            Library.getInstance().addTrack(new Track("C:/music/song2.mp3", "Brano Pulito", "Artista Indie", "Album", "Lo-fi", 2024, false, false, 180));
+            Library.getInstance().addTrack(new Track("C:/music/song3.mp3", "Classico Greve", "Rapper Serio", "Album", "Rap", 1999, true, false, 240));
+        } else {
             trackList.getItems().setAll(Library.getInstance().getTracks());
+        }
     }
 
     @FXML
@@ -306,62 +312,41 @@ public class LibraryViewController implements LibraryObserver {
         contextMenu.getItems().addAll(editItem, deleteItem);
         return contextMenu;
     }
-
-    @FXML
-    public void onCreatePlaylist() {
-        try {
-            // A. Carica il file FXML del modale
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/createPlaylist.fxml"));
-            Parent root = loader.load();
-
-            // B. Prepara la finestra (Stage)
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle("Nuova Playlist");
-            dialogStage.initModality(Modality.APPLICATION_MODAL); // Blocca la finestra principale
-            dialogStage.setResizable(false);
-
-            // C. Imposta le dimensioni (regolale se il tuo modale è più grande/piccolo)
-            Scene scene = new Scene(root, 400, 200);
-            dialogStage.setScene(scene);
-
-            // D. Mostra il modale e attendi la chiusura
-            dialogStage.showAndWait();
-
-            // E. Verifica per il debug: stampa su console le playlist attualmente esistenti
-            System.out.println("--- STATO ATTUALE PLAYLIST ---");
-            models.PlaylistManager.getInstance().getPlaylists().forEach(p ->
-                    System.out.println("- " + p.getName())
-            );
-
-        } catch (Exception e) {
-            e.printStackTrace();
-            System.out.println("Errore durante il caricamento di createPlaylist.fxml");
-        }
-    }
     private void openPlayerView(Track track) {
         try {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/views/playerView.fxml"));
+            // 1. Carichiamo il file FXML del Player
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/playerView.fxml"));
+            Parent root = loader.load();
 
-            Parent playerView = loader.load();
-
+            // 2. Recuperiamo il controller del Player e gli passiamo la traccia corrente
             PlayerController playerController = loader.getController();
-            playerController.setTrack(track);
+            playerController.setTrack(track); // Questo metodo dovrai crearlo nel PlayerViewController
 
-            // Rimuove il player precedente
-            rootPane.getChildren().clear();
+            // 3. Prepariamo la nuova finestra (Stage)
+            Stage playerStage = new Stage();
+            playerStage.setTitle("Riproduzione: " + track.getName());
 
-            // Aggiunge il nuovo player
-            rootPane.getChildren().add(playerView);
+            // Scegli l'approccio che preferisci:
+            // Opzione A: Finestra indipendente (L'utente può navigare sia nella libreria che nel player contemporaneamente)
+            playerStage.initModality(Modality.NONE);
+
+            // Opzione B: Finestra bloccante (Scomoda per un player, ma blocca la libreria finché non chiudi)
+            // playerStage.initModality(Modality.APPLICATION_MODAL);
+
+            // 4. Impostiamo la scena (Adatta le dimensioni al look del tuo player)
+            Scene scene = new Scene(root, 600, 100);
+            playerStage.setScene(scene);
+
+            // 5. Mostriamo la finestra del player
+            playerStage.show();
+
+            System.out.println("Player avviato per: " + track.getName());
 
         } catch (IOException e) {
             e.printStackTrace();
+            System.err.println("Errore durante il caricamento di playerView.fxml: " + e.getMessage());
 
-            Alert alert = new Alert(
-                    Alert.AlertType.ERROR,
-                    "Impossibile aprire il Player Musicale.",
-                    ButtonType.OK);
-
+            Alert alert = new Alert(Alert.AlertType.ERROR, "Impossibile aprire il Player Musicale.", ButtonType.OK);
             alert.showAndWait();
         }
     }
