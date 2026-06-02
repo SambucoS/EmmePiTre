@@ -33,12 +33,12 @@ public class PlaylistController implements Initializable {
     @FXML
     private Label messageLabel;
 
-    // ComboBox usata nella schermata removeFromPlaylist.fxml
+    // ComboBox usata nella schermata managePlaylist.fxml
     // Serve per selezionare la playlist da cui rimuovere una traccia
     @FXML
     private ComboBox<Playlist> playlistComboBox;
 
-    // ListView usata nella schermata removeFromPlaylist.fxml
+    // ListView usata nella schermata managePlaylist.fxml
     // Mostra le tracce contenute nella playlist selezionata
     @FXML
     private ListView<Track> playlistTracksListView;
@@ -51,7 +51,7 @@ public class PlaylistController implements Initializable {
      *
      * Ad esempio:
      * - in createPlaylist.fxml non esistono playlistComboBox e playlistTracksListView
-     * - in removeFromPlaylist.fxml non esiste playlistNameField
+     * - in managePlaylist.fxml non esiste playlistNameField
      *
      * Per questo motivo controlliamo che playlistComboBox non sia null
      * prima di inizializzare la parte relativa alla rimozione da playlist.
@@ -59,7 +59,7 @@ public class PlaylistController implements Initializable {
     @Override
     public void initialize(URL url, ResourceBundle resourceBundle) {
 
-        // Se la ComboBox esiste, significa che stiamo caricando la schermata removeFromPlaylist.fxml
+        // Se la ComboBox esiste, significa che stiamo caricando la schermata managePlaylist.fxml
         if (playlistComboBox != null) {
 
             // Carica nella ComboBox tutte le playlist presenti nel PlaylistManager
@@ -143,7 +143,7 @@ public class PlaylistController implements Initializable {
     }
 
     /*
-     * Metodo collegato al pulsante "Rimuovi" della schermata removeFromPlaylist.fxml.
+     * Metodo collegato al pulsante "Rimuovi" della schermata managePlaylist.fxml.
      * Rimuove dalla playlist selezionata la traccia scelta nella ListView.
      */
     @FXML
@@ -180,7 +180,7 @@ public class PlaylistController implements Initializable {
     }
 
     /*
-     * Metodo collegato al pulsante "Annulla" della schermata removeFromPlaylist.fxml.
+     * Metodo collegato al pulsante "Annulla" della schermata managePlaylist.fxml.
      * Azzera la selezione della playlist, svuota la lista delle tracce
      * e cancella eventuali messaggi.
      */
@@ -202,4 +202,25 @@ public class PlaylistController implements Initializable {
             messageLabel.setText("");
         }
     }
+
+    @FXML
+    private TextField renamePlaylistField;
+
+    @FXML
+    private TextField trackTitleField;
+
+    @FXML
+    private TextField trackArtistField;
+
+    @FXML
+    private TextField trackAlbumField;
+
+    @FXML
+    private TextField trackGenreField;
+
+    @FXML
+    private TextField trackYearField;
+
+    @FXML
+    private TextField trackDurationField;
 }
