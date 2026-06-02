@@ -8,8 +8,7 @@ import javafx.scene.control.TableColumn;
 import models.Track;
 
 public class PlayerController {
-    @FXML
-    private TableColumn<Track, Void> actionsColumn;
+
     @FXML
     private Button statusButton;
 

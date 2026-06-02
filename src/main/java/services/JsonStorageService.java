@@ -8,21 +8,22 @@ import models.Playlist;
 import java.io.File;
 import java.util.ArrayList;
 import java.util.List;
+import com.fasterxml.jackson.databind.DeserializationFeature;
 
 public class JsonStorageService {
 
     private final String FILE_PATH = "jsonfiles/tracks.json";
     private final String PLAYLISTS_FILE = "jsonfiles/playlists.json";
 
-    private final ObjectMapper mapper = new ObjectMapper();
-
+    private final ObjectMapper mapper = new ObjectMapper()
+            .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     // Nessuna variabile "cache" interna. Il service non ha "stato".
 
     public List<Track> loadFromFile() {
         try {
             File file = new File(FILE_PATH);
 
-            if (!file.exists()) {
+            if (!file.exists() || file.length() == 0) {
                 System.out.println("File JSON non trovato, creo una libreria vuota.");
                 return new ArrayList<>();
             }
@@ -53,7 +54,7 @@ public class JsonStorageService {
         try {
             File file = new File(PLAYLISTS_FILE);
 
-            if (!file.exists()) {
+            if (!file.exists() || file.length() == 0) {
                 System.out.println("File JSON delle playlist non trovato, creo un elenco vuoto.");
                 return new ArrayList<>();
             }

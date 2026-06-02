@@ -1,6 +1,6 @@
 package models;
 
-import services.JsonStorageService; // O un PlaylistService dedicato, se preferisci separare i DAO
+import services.JsonStorageService;
 
 import java.util.List;
 

@@ -157,7 +157,7 @@ public class LibraryViewController implements LibraryObserver {
         });
 
 
-        actionsColumn.setCellFactory(column -> new TableCell<>() {
+        actionsColumn.setCellFactory(column -> new TableCell<Track, Void>() {
             private final Label dotsLabel = new Label("⋮");
             {
                 dotsLabel.setCursor(Cursor.HAND);
@@ -199,14 +199,7 @@ public class LibraryViewController implements LibraryObserver {
 
     @FXML
     public void onLoadLibrary() {
-        // Popoliamo il Singleton globale solo se è attualmente vuoto (evita duplicazioni al refresh)
-        if (Library.getInstance().getTracks().isEmpty()) {
-            Library.getInstance().addTrack(new Track("C:/music/song1.mp3", "Canzone Figa", "Artista Famoso","Album", "Pop", 2023, true, true, 215));
-            Library.getInstance().addTrack(new Track("C:/music/song2.mp3", "Brano Pulito", "Artista Indie", "Album", "Lo-fi", 2024, false, false, 180));
-            Library.getInstance().addTrack(new Track("C:/music/song3.mp3", "Classico Greve", "Rapper Serio", "Album", "Rap", 1999, true, false, 240));
-        } else {
             trackList.getItems().setAll(Library.getInstance().getTracks());
-        }
     }
 
     @FXML
@@ -306,5 +299,37 @@ public class LibraryViewController implements LibraryObserver {
 
         contextMenu.getItems().addAll(editItem, deleteItem);
         return contextMenu;
+    }
+
+    @FXML
+    public void onCreatePlaylist() {
+        try {
+            // A. Carica il file FXML del modale
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/createPlaylist.fxml"));
+            Parent root = loader.load();
+
+            // B. Prepara la finestra (Stage)
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Nuova Playlist");
+            dialogStage.initModality(Modality.APPLICATION_MODAL); // Blocca la finestra principale
+            dialogStage.setResizable(false);
+
+            // C. Imposta le dimensioni (regolale se il tuo modale è più grande/piccolo)
+            Scene scene = new Scene(root, 400, 200);
+            dialogStage.setScene(scene);
+
+            // D. Mostra il modale e attendi la chiusura
+            dialogStage.showAndWait();
+
+            // E. Verifica per il debug: stampa su console le playlist attualmente esistenti
+            System.out.println("--- STATO ATTUALE PLAYLIST ---");
+            models.PlaylistManager.getInstance().getPlaylists().forEach(p ->
+                    System.out.println("- " + p.getName())
+            );
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            System.out.println("Errore durante il caricamento di createPlaylist.fxml");
+        }
     }
 }

@@ -3,7 +3,6 @@ package controllers;
 import javafx.fxml.FXML;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
-import services.PlaylistService;
 
 public class PlaylistController {
 
@@ -13,18 +12,15 @@ public class PlaylistController {
     @FXML
     private Label messageLabel;
 
-    private final PlaylistService playlistService = new PlaylistService();
-
     @FXML
     private void handleCreatePlaylist() {
         String playlistName = playlistNameField.getText();
 
         try {
-            playlistService.createPlaylist(playlistName);
+            models.PlaylistManager.getInstance().createPlaylist(playlistName);
 
             messageLabel.setStyle("-fx-text-fill: green;");
             messageLabel.setText("Playlist creata correttamente.");
-
             playlistNameField.clear();
 
         } catch (IllegalArgumentException e) {

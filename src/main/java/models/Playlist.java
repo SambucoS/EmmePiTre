@@ -6,6 +6,8 @@ import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
 import java.util.Objects;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonSetter;
 
 public class Playlist implements TrackList {
 
@@ -20,6 +22,13 @@ public class Playlist implements TrackList {
     public Playlist(String name) {
         setName(name);
         this.tracks = new ArrayList<>(); // Crea una lista vuota di tracce
+    }
+    @JsonSetter("tracks")
+    private void setTracksForJackson(List<Track> loadedTracks) {
+        this.tracks.clear();
+        if (loadedTracks != null) {
+            this.tracks.addAll(loadedTracks);
+        }
     }
 
     // Leggiamo il nome della playlist
@@ -75,6 +84,7 @@ public class Playlist implements TrackList {
         return tracks.contains(track);
     }
 
+    @JsonIgnore
     // Restituisce true se la playlist non contiene tracce
     public boolean isEmpty() {
         return tracks.isEmpty();
