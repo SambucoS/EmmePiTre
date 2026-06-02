@@ -246,7 +246,20 @@ public class LibraryViewController implements LibraryObserver {
             Library.getInstance().removeTrack(selected);
         }
     }
-    private ContextMenu createActionMenu(TableRow<Track> row) {
+
+    public Track getTrack() {
+        Track selected = trackList.getSelectionModel().getSelectedItem();
+
+        if (selected == null) {
+            System.out.println("Nessuna traccia selezionata");
+            return null;
+        }
+
+        return selected;
+    }
+
+
+        private ContextMenu createActionMenu(TableRow<Track> row) {
         ContextMenu contextMenu = new ContextMenu();
 
         MenuItem editItem = new MenuItem("Modifica traccia");
@@ -307,4 +320,31 @@ public class LibraryViewController implements LibraryObserver {
         contextMenu.getItems().addAll(editItem, deleteItem);
         return contextMenu;
     }
+
+
+    @FXML
+    public void modifyTrack() {
+        Track selected = getTrack();
+
+        if (selected == null) {
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/modify.fxml"));
+            Parent root = loader.load();
+
+            ModifyController controller = loader.getController();
+            controller.setTrack(selected);
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Modify Track");
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+
 }

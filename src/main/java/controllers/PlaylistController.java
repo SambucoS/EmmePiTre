@@ -12,10 +12,12 @@ import models.Playlist;
 import models.Track;
 import services.PlaylistService;
 
-import java.awt.event.ActionEvent;
+//import java.awt.event.ActionEvent;
 import java.io.IOException;
 
 public class PlaylistController {
+
+    private Playlist currentPlaylist;
 
     @FXML
     private TextField playlistNameField;
@@ -33,6 +35,8 @@ public class PlaylistController {
 
     @FXML
     private ListView<?> trackListView;
+
+
 
 
 
@@ -91,20 +95,16 @@ public class PlaylistController {
     @FXML
     private void handleAddTrack() {
 
-        Track selectedTrack =
-                LibraryViewController.getTrack();
+        Track selectedTrack = LibraryViewController.getTrack();
 
         if (selectedTrack == null) {
-
             messageLabel.setText("Seleziona una traccia.");
             return;
         }
 
-        Playlist.addTrack(selectedTrack);
+        currentPlaylist.addTrack(selectedTrack);
 
-        trackListView.getItems().setAll(
-                //currentPlaylist.getTracks()
-        );
+        trackListView.getItems().setAll(currentPlaylist.getTracks());
 
         messageLabel.setText("Traccia aggiunta.");
     }
