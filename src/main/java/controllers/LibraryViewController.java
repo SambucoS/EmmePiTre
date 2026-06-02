@@ -161,7 +161,7 @@ public class LibraryViewController implements LibraryObserver {
             private final Label dotsLabel = new Label("⋮");
             {
                 dotsLabel.setCursor(Cursor.HAND);
-                dotsLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #888888; -fx-padding: 0 5 0 5;");
+                dotsLabel.setStyle("-fx-font-size: 12px; -fx-font-weight: regular; -fx-text-fill: #888888; -fx-padding: 0 5 0 5;");
 
                 // Quando clicchi sui tre puntini col tasto sinistro, compare lo stesso menu
                 dotsLabel.setOnMouseClicked(event -> {
@@ -248,8 +248,36 @@ public class LibraryViewController implements LibraryObserver {
         // 1. Logica per la MODIFICA (Placeholder)
         editItem.setOnAction(event -> {
             Track currentTrack = row.getItem();
-            // Per ora facciamo solo una print, in futuro aprirai il modale di modifica qui
-            System.out.println("Modifica richiesta per la traccia: " + currentTrack.getName());
+
+            trackList.getSelectionModel().select(currentTrack);
+
+            try {
+                // A. Carichiamo il file FXML del modale
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/modify.fxml"));
+                Parent root = loader.load();
+
+                // B. Recuperiamo il controller e impostiamo il contesto (true = da Libreria)
+                ModifyController dialogController = loader.getController();
+
+                dialogController.setTrack(currentTrack);
+                // C. Prepariamo la finestra (Stage)
+                Stage dialogStage = new Stage();
+                dialogStage.setTitle("Modifica traccia");
+                dialogStage.initModality(Modality.APPLICATION_MODAL); // Rende la finestra bloccante
+                dialogStage.setResizable(false); // Blocca il ridimensionamento
+
+                // D. Impostiamo la scena con le dimensioni fisse 400x120
+                Scene scene = new Scene(root, 450, 600);
+                dialogStage.setScene(scene);
+
+                // E. Mostriamo il modale e mettiamo "in pausa" questo codice finché non viene chiuso
+                dialogStage.showAndWait();
+
+
+            } catch (Exception e) {
+                e.printStackTrace();
+                System.out.println("Errore durante il caricamento del modale modifyTrack.fxml");
+            }
         });
 
         // 2. Logica per l'ELIMINAZIONE (Apertura Modale)

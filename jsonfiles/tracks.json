@@ -262,10 +262,20 @@
   "pathname" : null,
   "name" : "Crazy in Love",
   "artist" : "Beyoncé ft. Jay-Z",
-  "album" : null,
+  "album" : "Album",
   "genre" : "R&B",
   "year" : 2003,
   "favourite" : false,
   "explicit" : true,
   "duration" : 236
+}, {
+  "pathname" : "asd",
+  "name" : "dssa",
+  "artist" : "dsa",
+  "album" : "das",
+  "genre" : "sad",
+  "year" : 123,
+  "favourite" : false,
+  "explicit" : false,
+  "duration" : 123
 } ]

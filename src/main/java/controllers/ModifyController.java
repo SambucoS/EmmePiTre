@@ -3,6 +3,7 @@ package controllers;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 import models.Track;
 
 public class ModifyController {
@@ -19,6 +20,7 @@ public class ModifyController {
     @FXML private TextField txtYear;
 
     private Track track;
+
 
     @FXML
     public void initialize() {
@@ -47,19 +49,23 @@ public class ModifyController {
 
     @FXML
     void handleSalva(ActionEvent event) {
-
         if (!isValid()) return;
 
+        // 1. Aggiorna l'oggetto Track in RAM (Codice che hai già scritto)
         track.setName(txtName.getText());
         track.setArtist(txtArtist.getText());
         track.setAlbum(txtAlbum.getText());
-        track.setGenre((String) cmbGenre.getValue());
+        track.setGenre(cmbGenre.getValue());
 
         track.setExplicit(chkExplicit.isSelected());
         track.setFavourite(chkFavourite.isSelected());
 
         track.setYear(Integer.parseInt(txtYear.getText()));
         track.setDuration(Integer.parseInt(txtDuration.getText()));
+
+        models.Library.getInstance().sync();
+
+        models.Library.getInstance().notifyObservers();
 
         closeWindow();
     }
@@ -92,7 +98,9 @@ public class ModifyController {
     }
 
     private void closeWindow() {
-        btnSalva.getScene().getWindow().hide();
+        // Recupera lo stage attuale e lo chiude definitivamente, liberando le risorse
+        Stage stage = (Stage) btnSalva.getScene().getWindow();
+        stage.close();
     }
 }
 
