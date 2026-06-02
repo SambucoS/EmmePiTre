@@ -46,6 +46,18 @@ public class PlaylistManager {
     }
 
     public void removeTrackFromPlaylist(Track track, Playlist playlist) {
+        if (playlist == null) {
+            throw new IllegalArgumentException("Seleziona una playlist.");
+        }
+
+        if (track == null) {
+            throw new IllegalArgumentException("Seleziona una traccia da rimuovere.");
+        }
+
+        if (!playlist.containsTrack(track)) {
+            throw new IllegalArgumentException("La traccia non è presente nella playlist.");
+        }
+
         playlist.removeTrack(track);
         this.sync();
     }

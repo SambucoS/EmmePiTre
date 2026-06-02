@@ -75,7 +75,7 @@
   "album" : null,
   "genre" : "Pop",
   "year" : 2010,
-  "favourite" : false,
+  "favourite" : true,
   "explicit" : true,
   "duration" : 228
 }, {
