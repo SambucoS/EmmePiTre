@@ -24,18 +24,48 @@ public class PlayerController {
     private Label durationLbl;;
 
     private Track track;
+    private java.util.List<Track> currentPlaylist; // Lista delle canzoni
+    private int currentIndex; // Posizione della canzone attuale
 
     /**
-     * Serve a impostare i parametri, da visualizzare durante la riproduzione
-     * @param track la traccia passata dal controller principale
+     * Serve a impostare i parametri da visualizzare durante la riproduzione,
+     * passando anche il contesto dell'intera lista per permettere lo skip.
+     * * @param track la traccia corrente
+     * @param playlist l'intera lista delle tracce visualizzata nella tabella
      */
-    public void setTrack(Track track) {
+    public void setTrack(Track track, java.util.List<Track> playlist) {
         this.track = track;
+        this.currentPlaylist = playlist;
+        this.currentIndex = playlist.indexOf(track); // Trova in che posizione siamo
+
         this.tnameLbl.setText(track.getName());
         this.durationLbl.setText(durationFormatter(track.getDuration()));
-
+        this.statusButton.setText("Play"); // Resetta il bottone se cambia la canzone
     }
 
+    @FXML
+    public void handlePrev(ActionEvent event) {
+        if (currentPlaylist != null && !currentPlaylist.isEmpty()) {
+            currentIndex--;
+            if (currentIndex < 0) {
+                currentIndex = currentPlaylist.size() - 1; // Se sei alla prima, riparti dall'ultima
+            }
+            // Richiama setTrack con la nuova canzone per aggiornare la UI
+            setTrack(currentPlaylist.get(currentIndex), currentPlaylist);
+        }
+    }
+
+    @FXML
+    public void handleNext(ActionEvent event) {
+        if (currentPlaylist != null && !currentPlaylist.isEmpty()) {
+            currentIndex++;
+            if (currentIndex >= currentPlaylist.size()) {
+                currentIndex = 0; // Se sei all'ultima, riparti dalla prima
+            }
+            // Richiama setTrack con la nuova canzone per aggiornare la UI
+            setTrack(currentPlaylist.get(currentIndex), currentPlaylist);
+        }
+    }
     /**
      * Attualmente serve per cambiare visivamente lo stato del bottone
      * @param actionEvent è l'evento che genera il cambio di stato (la pressione del pulsante "Play"|"Pause")

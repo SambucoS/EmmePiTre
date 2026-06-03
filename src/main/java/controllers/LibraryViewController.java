@@ -405,8 +405,8 @@ public class LibraryViewController implements LibraryObserver {
             // Caricamento del controller associato alla view del Player (PlayerController).
             PlayerController playerController = loader.getController();
 
-            // Passaggio dell'oggetto 'Track' selezionato al controller del player
-            playerController.setTrack(track);
+            // Passaggio dell'oggetto 'Track' selezionato E dell'intera lista in tabella al controller del player
+            playerController.setTrack(track, trackList.getItems());
 
             // Per rimuovere eventuali istanze di player aperti in precedenza, viene pulito il contenitore principale
             // per evitare sovrapposizioni
