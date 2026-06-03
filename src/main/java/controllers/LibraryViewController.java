@@ -9,6 +9,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
 import javafx.scene.layout.HBox;
+import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import models.Library;
@@ -20,7 +21,9 @@ public class LibraryViewController implements LibraryObserver {
 
     public Label titleBar;
     public HBox mainBar;
+    private Parent currentPlayerView;
 
+    @FXML private StackPane rootPane;
     @FXML private TableView<Track> trackList;
     @FXML private TableColumn<Track, Boolean> favouriteColumn;
     @FXML private TableColumn<Track, String> titleColumn;
@@ -236,7 +239,7 @@ public class LibraryViewController implements LibraryObserver {
         dialogStage.setResizable(false); // Blocca il ridimensionamento
 
         // D. Impostiamo la scena con le dimensioni fisse 400x120
-        Scene scene = new Scene(root, 600, 300);
+        Scene scene = new Scene(root, 600, 450);
         dialogStage.setScene(scene);
 
         // E. Mostriamo il modale e mettiamo "in pausa" questo codice finché non viene chiuso
@@ -347,39 +350,30 @@ public class LibraryViewController implements LibraryObserver {
 
     private void openPlayerView(Track track) {
         try {
-            // 1. Carichiamo il file FXML del Player
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/playerView.fxml"));
-            Parent root = loader.load();
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/views/playerView.fxml"));
 
-            // 2. Recuperiamo il controller del Player e gli passiamo la traccia corrente
+            Parent playerView = loader.load();
+
             PlayerController playerController = loader.getController();
-            playerController.setTrack(track); // Questo metodo dovrai crearlo nel PlayerViewController
+            playerController.setTrack(track);
 
-            // 3. Prepariamo la nuova finestra (Stage)
-            Stage playerStage = new Stage();
-            playerStage.setTitle("Riproduzione: " + track.getName());
+            // Rimuove il player precedente
+            rootPane.getChildren().clear();
 
-            // Scegli l'approccio che preferisci:
-            // Opzione A: Finestra indipendente (L'utente può navigare sia nella libreria che nel player contemporaneamente)
-            playerStage.initModality(Modality.NONE);
+            // Aggiunge il nuovo player
+            rootPane.getChildren().add(playerView);
 
-            // Opzione B: Finestra bloccante (Scomoda per un player, ma blocca la libreria finché non chiudi)
-            // playerStage.initModality(Modality.APPLICATION_MODAL);
-
-            // 4. Impostiamo la scena (Adatta le dimensioni al look del tuo player)
-            Scene scene = new Scene(root, 600, 100);
-            playerStage.setScene(scene);
-
-            // 5. Mostriamo la finestra del player
-            playerStage.show();
-
-            System.out.println("Player avviato per: " + track.getName());
+            currentPlayerView = playerView;
 
         } catch (IOException e) {
             e.printStackTrace();
-            System.err.println("Errore durante il caricamento di playerView.fxml: " + e.getMessage());
 
-            Alert alert = new Alert(Alert.AlertType.ERROR, "Impossibile aprire il Player Musicale.", ButtonType.OK);
+            Alert alert = new Alert(
+                    Alert.AlertType.ERROR,
+                    "Impossibile aprire il Player Musicale.",
+                    ButtonType.OK);
+
             alert.showAndWait();
         }
     }

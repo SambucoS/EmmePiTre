@@ -28,7 +28,7 @@ public class PlayerController {
     public void setTrack(Track track) {
         this.track = track;
         this.tnameLbl.setText(track.getName());
-        this.durationLbl.setText(Integer.toString(track.getDuration()));
+        this.durationLbl.setText(formattaSecondi(track.getDuration()));
 
     }
 
@@ -40,4 +40,11 @@ public class PlayerController {
         }
     }
 
+    public String formattaSecondi(int secondiTotali) {
+        int minuti = secondiTotali / 60;
+        int secondiRimanenti = secondiTotali % 60;
+
+        // %d significa numero intero, %02d significa "almeno due cifre con lo zero davanti"
+        return String.format("%d:%02d", minuti, secondiRimanenti);
+    }
 }
