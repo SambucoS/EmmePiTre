@@ -171,6 +171,13 @@ public class LibraryViewController implements LibraryObserver {
                     row.setContextMenu(rowMenu);
                 }
             });
+            row.setOnMouseClicked(event -> {
+                // Controllo fondamentale: !row.isEmpty() evita crash se fai doppio click su una riga vuota
+                if (event.getButton() == javafx.scene.input.MouseButton.PRIMARY && event.getClickCount() == 2 && !row.isEmpty()) {
+                    Track selectedTrack = row.getItem();
+                    openPlayerView(selectedTrack);
+                }
+            });
 
             return row;
         });
