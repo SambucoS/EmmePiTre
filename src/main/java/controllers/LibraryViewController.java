@@ -300,7 +300,30 @@ public class LibraryViewController implements LibraryObserver {
         editItem.setOnAction(event -> {
             Track currentTrack = row.getItem();
             // Per ora facciamo solo una print, in futuro aprirai il modale di modifica qui
-            System.out.println("Modifica richiesta per la traccia: " + currentTrack.getName());
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/modify.fxml"));
+            Parent root = null;
+            try {
+                root = loader.load();
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+
+            // B. Recuperiamo il controller e impostiamo il contesto (true = da Libreria)
+            ModifyController dialogController = loader.getController();
+
+
+            // C. Prepariamo la finestra (Stage)
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Modifica");
+            dialogStage.initModality(Modality.APPLICATION_MODAL); // Rende la finestra bloccante
+            dialogStage.setResizable(false); // Blocca il ridimensionamento
+
+            // D. Impostiamo la scena con le dimensioni fisse 400x120
+            Scene scene = new Scene(root, 600, 400);
+            dialogStage.setScene(scene);
+
+            // E. Mostriamo il modale e mettiamo "in pausa" questo codice finché non viene chiuso
+            dialogStage.showAndWait();
         });
 
         // 2. Logica per l'ELIMINAZIONE (Apertura Modale)
@@ -397,7 +420,8 @@ public class LibraryViewController implements LibraryObserver {
         try {
             // Creazione del caricatore FXML, specificando il path della view del Player
             FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/views/playerView.fxml"));
+                    getClass().getResource("/views/libraryView.fxml"));
+
 
             // Caricamento del contenuto del file fxml, l'albero dei nodi
             Parent playerView = loader.load();

@@ -250,7 +250,7 @@ public class PlaylistController implements Initializable {
             int duration = Integer.parseInt(trackDurationField.getText());
 
             // 2. crea track
-            Track newTrack = new Track(title, artist, album, genre, year, duration);
+            Track newTrack = new Track(null,title, artist, album, genre, year,true, true, duration);
 
             // 3. aggiungi alla playlist
             selectedPlaylist.addTrack(newTrack);
