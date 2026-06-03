@@ -299,32 +299,8 @@ public class LibraryViewController implements LibraryObserver {
         // 1. Logica per la MODIFICA (Placeholder)
         editItem.setOnAction(event -> {
             Track currentTrack = row.getItem();
-            // Per ora facciamo solo una print, in futuro aprirai il modale di modifica qui
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/modify.fxml"));
-            Parent root = null;
-            try {
-                root = loader.load();
-            } catch (IOException e) {
-                throw new RuntimeException(e);
-            }
-
-            // B. Recuperiamo il controller e impostiamo il contesto (true = da Libreria)
-            ModifyController dialogController = loader.getController();
-
-
-            // C. Prepariamo la finestra (Stage)
-            Stage dialogStage = new Stage();
-            dialogStage.setTitle("Modifica");
-            dialogStage.initModality(Modality.APPLICATION_MODAL); // Rende la finestra bloccante
-            dialogStage.setResizable(false); // Blocca il ridimensionamento
-
-            // D. Impostiamo la scena con le dimensioni fisse 400x120
-            Scene scene = new Scene(root, 600, 400);
-            dialogStage.setScene(scene);
-
-            // E. Mostriamo il modale e mettiamo "in pausa" questo codice finché non viene chiuso
-            dialogStage.showAndWait();
-        });
+            modifyTrack(currentTrack);
+            });
 
         // 2. Logica per l'ELIMINAZIONE (Apertura Modale)
         deleteItem.setOnAction(event -> {
@@ -455,4 +431,28 @@ public class LibraryViewController implements LibraryObserver {
         }
     }
 
+    @FXML
+    public void modifyTrack(Track track) {
+        Track selected = track;
+
+        if (selected == null) {
+            return;
+        }
+
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/modify.fxml"));
+            Parent root = loader.load();
+
+            ModifyController controller = loader.getController();
+            controller.setTrack(selected);
+
+            Stage stage = new Stage();
+            stage.setScene(new Scene(root));
+            stage.setTitle("Modify Track");
+            stage.show();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
 }
