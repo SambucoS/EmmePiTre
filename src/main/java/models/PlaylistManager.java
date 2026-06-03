@@ -36,6 +36,10 @@ public class PlaylistManager {
     }
 
     public void deletePlaylist(Playlist playlist) {
+        if (playlist == null) {
+            throw new IllegalArgumentException("La playlist non può essere null.");
+        }
+
         this.playlists.remove(playlist);
         this.sync();
     }
