@@ -14,7 +14,7 @@
       fx:controller="controllers.PlaylistController"
       spacing="15"
       prefWidth="700"
-      prefHeight="450"
+      prefHeight="500"
       style="-fx-background-color: #f7f7f7;">
 
     <padding>
@@ -24,7 +24,7 @@
     <Label text="Gestione Playlist"
            style="-fx-font-size: 22px; -fx-font-weight: bold;"/>
 
-    <!-- Selezione playlist -->
+    <!-- Sezione superiore: selezione playlist e rinomina -->
     <HBox spacing="10" alignment="CENTER_LEFT">
         <Label text="Playlist:"/>
 
@@ -32,12 +32,11 @@
                   promptText="Seleziona playlist"
                   prefWidth="250"/>
 
-        <!-- TextField = campo in cui scrivere il nuovo nome -->
         <TextField fx:id="renamePlaylistField"
                    promptText="Nuovo nome playlist"
                    prefWidth="220"/>
 
-        <!-- Per ora il bottone è solo grafico: non ha onAction -->
+        <!-- Per ora il bottone è solo grafico: la logica di rinomina verrà aggiunta dopo -->
         <Button text="Rinomina"
                 prefWidth="100"/>
     </HBox>
@@ -45,14 +44,14 @@
     <!-- Area centrale divisa in due colonne -->
     <HBox spacing="20" alignment="CENTER">
 
-        <!-- Colonna sinistra: elenco tracce presenti nella playlist -->
+        <!-- Colonna sinistra: elenco tracce presenti nella playlist selezionata -->
         <VBox spacing="10" prefWidth="320">
             <Label text="Tracce nella playlist:"
                    style="-fx-font-weight: bold;"/>
 
             <ListView fx:id="playlistTracksListView"
                       prefWidth="320"
-                      prefHeight="230"/>
+                      prefHeight="260"/>
 
             <Button text="Rimuovi traccia"
                     onAction="#handleRemoveTrackFromPlaylist"
@@ -60,7 +59,7 @@
                     style="-fx-background-color: #d63031; -fx-text-fill: white; -fx-font-weight: bold;"/>
         </VBox>
 
-        <!-- Colonna destra: form per aggiungere una traccia -->
+        <!-- Colonna destra: form grafico per aggiungere una traccia alla playlist -->
         <VBox spacing="10" prefWidth="320">
             <Label text="Aggiungi traccia:"
                    style="-fx-font-weight: bold;"/>
@@ -89,7 +88,7 @@
                        promptText="Durata in secondi"
                        prefWidth="300"/>
 
-            <!-- Anche questo bottone può rimanere solo grafico per ora -->
+            <!-- Per ora il bottone è solo grafico: la logica verrà aggiunta dalla parte di popolamento playlist -->
             <Button text="Aggiungi traccia"
                     prefWidth="150"
                     style="-fx-background-color: #6c5ce7; -fx-text-fill: white; -fx-font-weight: bold;"/>
@@ -97,10 +96,12 @@
 
     </HBox>
 
+    <!-- Messaggi di conferma o errore -->
     <Label fx:id="messageLabel"
            text=""
            style="-fx-font-size: 12px;"/>
 
+    <!-- Pulsante di chiusura/annullamento della schermata -->
     <HBox spacing="10" alignment="CENTER_RIGHT">
         <Button text="Annulla"
                 onAction="#handleCancelRemove"

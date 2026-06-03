@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx"
+      xmlns:fx="http://javafx.com/fxml"
+      fx:controller="controllers.RemovePlaylistController"
+      spacing="15"
+      alignment="CENTER"
+      prefWidth="380"
+      prefHeight="180"
+      style="-fx-background-color: #f7f7f7;">
+
+    <padding>
+        <Insets top="25" right="25" bottom="25" left="25"/>
+    </padding>
+
+    <Label text="Sei sicuro di voler eliminare questa playlist?"
+           wrapText="true"
+           style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
+
+    <Label fx:id="playlistNameLabel"
+           text=""
+           style="-fx-font-size: 14px;"/>
+
+    <HBox spacing="10" alignment="CENTER">
+        <Button text="Annulla"
+                onAction="#handleCancel"
+                prefWidth="100"/>
+
+        <Button text="Elimina"
+                onAction="#handleConfirmDelete"
+                prefWidth="100"
+                style="-fx-background-color: #d63031; -fx-text-fill: white; -fx-font-weight: bold;"/>
+    </HBox>
+
+</VBox>
