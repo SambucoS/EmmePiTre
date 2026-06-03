@@ -36,30 +36,27 @@ public class LibraryViewController implements LibraryObserver {
 
     @FXML
     public void initialize() {
-        // 1. Stile della barra di selezione (Grigio elegante, testo nero)
+        //Stile della barra di selezione
         trackList.setStyle(
                 "-fx-selection-bar: #e0e0e0; " +
                         "-fx-selection-bar-text: #000000; " +
                         "-fx-selection-bar-non-focused: #f0f0f0;"
         );
 
-        // 2. Correzione PropertyValueFactory (Tutti uniformati al POJO del tuo compagno)
+        //Correzione PropertyValueFactory
         favouriteColumn.setCellValueFactory(new PropertyValueFactory<>("favourite"));
         titleColumn.setCellValueFactory(new PropertyValueFactory<>("name"));
         explicitColumn.setCellValueFactory(new PropertyValueFactory<>("explicit"));
         authorColumn.setCellValueFactory(new PropertyValueFactory<>("artist"));
-
-        // Nota: Questa riga genererà un warning finché il team non aggiungerà 'album' alla classe Track
         albumColumn.setCellValueFactory(new PropertyValueFactory<>("album"));
-
         yearColumn.setCellValueFactory(new PropertyValueFactory<>("year"));
         genreColumn.setCellValueFactory(new PropertyValueFactory<>("genre"));
         lengthColumn.setCellValueFactory(new PropertyValueFactory<>("duration"));
 
-        // 3. Registrazione del Controller come Observer del Modello (Task 1.2.5)
+        //Registrazione del Controller come Observer
         Library.getInstance().addObserver(this);
 
-        // 4. Logica Grafica Interattiva: Colonna Preferiti (Stella)
+        //Colonna Preferiti
         favouriteColumn.setCellFactory(column -> new TableCell<>() {
             @Override
             protected void updateItem(Boolean isFav, boolean empty) {
@@ -80,7 +77,6 @@ public class LibraryViewController implements LibraryObserver {
                     }
 
                     starLabel.setOnMouseClicked(event -> {
-                        // Caro Modello, l'utente vuole cambiare il preferito. Pensaci tu!
                         Library.getInstance().toggleFavourite(currentTrack);
                     });
 
@@ -89,7 +85,7 @@ public class LibraryViewController implements LibraryObserver {
             }
         });
 
-        // 5. Logica Grafica Interattiva: Colonna Explicit (Badge "E")
+        //Colonna Explicit
         explicitColumn.setCellFactory(column -> new TableCell<>() {
             @Override
             protected void updateItem(Boolean isExplicit, boolean empty) {
@@ -118,7 +114,7 @@ public class LibraryViewController implements LibraryObserver {
             }
         });
 
-        // 6. Formattazione personalizzata della Durata (da secondi a mm:ss)
+        //Formattazione personalizzata della Durata (da secondi a mm:ss)
         lengthColumn.setCellFactory(column -> new TableCell<>() {
             @Override
             protected void updateItem(Integer totalSeconds, boolean empty) {
@@ -132,54 +128,56 @@ public class LibraryViewController implements LibraryObserver {
                 }
             }
         });
-
-        // Caricamento iniziale dei dati finti per il test
+        //popolamento
         onLoadLibrary();
-        // =========================================================
-        // MENU A TENDINA (Modifica/Elimina) - Task 1.4
-        // =========================================================
+        // MENU A TENDINA (Modifica/Elimina)
 
-        // A. Configurazione del Click Destro sulla riga intera
+        // Configurazione del Click Destro sulla riga intera (Metodo Nativo JavaFX)
         trackList.setRowFactory(tv -> {
             TableRow<Track> row = new TableRow<>();
 
-            // Creiamo il menu contestuale associato alla riga
+            // Creiamo un UNICO menu per questa riga
             ContextMenu rowMenu = createActionMenu(row);
 
-            // Mostra il menu con il click destro solo se la riga non è vuota
-            row.setOnMouseClicked(event -> {
-                if (event.getButton() == javafx.scene.input.MouseButton.SECONDARY && !row.isEmpty()) {
-                    rowMenu.show(row, event.getScreenX(), event.getScreenY());
-                }
-                // Aggiunta doppioclick
-                else if (event.getButton() == javafx.scene.input.MouseButton.PRIMARY && event.getClickCount() == 2) {
-                    Track selectedTrack = row.getItem();
-                    openPlayerView(selectedTrack);
+            // Invece di gestire a mano il click destro, usiamo la proprietà nativa.
+            // Il listener assicura che il menu esista solo se la riga contiene effettivamente una canzone.
+            row.itemProperty().addListener((obs, oldItem, newItem) -> {
+                if (newItem == null) {
+                    row.setContextMenu(null);
+                } else {
+                    row.setContextMenu(rowMenu);
                 }
             });
 
             return row;
         });
 
-
+        // Configurazione Click Sinistro sui tre puntini
         actionsColumn.setCellFactory(column -> new TableCell<>() {
             private final Label dotsLabel = new Label("⋮");
             {
                 dotsLabel.setCursor(Cursor.HAND);
                 dotsLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #888888; -fx-padding: 0 5 0 5;");
 
-                // Quando clicchi sui tre puntini col tasto sinistro, compare lo stesso menu
                 dotsLabel.setOnMouseClicked(event -> {
                     if (event.getButton() == javafx.scene.input.MouseButton.PRIMARY) {
+                        event.consume(); //Blocca il click per non farlo "rimbalzare" sulla riga sotto
+
                         TableRow<Track> row = getTableRow();
-                        if (row != null && !row.isEmpty()) {
-                            ContextMenu menu = createActionMenu(row);
-                            // Mostra il menu a tendina posizionato sotto l'icona dei tre puntini
-                            menu.show(dotsLabel, javafx.geometry.Side.BOTTOM, 0, 0);
+                        if (row != null && !row.isEmpty() && row.getContextMenu() != null) {
+                            ContextMenu menu = row.getContextMenu(); // Recuperiamo il menu nativo della riga
+
+                            // Se il menu è aperto, chiudilo, altrimenti mostralo
+                            if (menu.isShowing()) {
+                                menu.hide();
+                            } else {
+                                menu.show(dotsLabel, javafx.geometry.Side.BOTTOM, 0, 0);
+                            }
                         }
                     }
                 });
             }
+
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
@@ -192,9 +190,7 @@ public class LibraryViewController implements LibraryObserver {
         });
     }
 
-    // =========================================================
     // AGGIORNAMENTO AUTOMATICO OBSERVER (Task 1.2.5)
-    // =========================================================
     @Override
     public void onLibraryChanged() {
         System.out.println("Notifica ricevuta dall'Observer: sto aggiornando la TableView!");
@@ -204,55 +200,40 @@ public class LibraryViewController implements LibraryObserver {
 
     @FXML
     public void onLoadLibrary() {
-        // Popoliamo il Singleton globale solo se è attualmente vuoto (evita duplicazioni al refresh)
-        if (Library.getInstance().getTracks().isEmpty()) {
-            Library.getInstance().addTrack(new Track("C:/music/song1.mp3", "Canzone Figa", "Artista Famoso","Album", "Pop", 2023, true, true, 215));
-            Library.getInstance().addTrack(new Track("C:/music/song2.mp3", "Brano Pulito", "Artista Indie", "Album", "Lo-fi", 2024, false, false, 180));
-            Library.getInstance().addTrack(new Track("C:/music/song3.mp3", "Classico Greve", "Rapper Serio", "Album", "Rap", 1999, true, false, 240));
-        } else {
             trackList.getItems().setAll(Library.getInstance().getTracks());
-        }
     }
 
     @FXML
     public void onAddTrack() throws IOException {
-        // Cliccando sul bottone "Add a Track", simuliamo l'aggiunta di un brano nel Modello globale.
-        // Grazie all'Observer Pattern, vedrai la riga aggiungersi da sola nella tabella!
+        //Carichiamo modale
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/addTrackModal.fxml"));
-        Parent root = null;
-        try {
-            root = loader.load();
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+        Parent root = loader.load();
 
-        // B. Recuperiamo il controller e impostiamo il contesto (true = da Libreria)
+        //Recuperiamo il controller
         AddTrackController dialogController = loader.getController();
 
-        // C. Prepariamo la finestra (Stage)
+        //Prepariamo la finestra (Stage)
         Stage dialogStage = new Stage();
         dialogStage.setTitle("Form Aggiunta");
         dialogStage.initModality(Modality.APPLICATION_MODAL); // Rende la finestra bloccante
         dialogStage.setResizable(false); // Blocca il ridimensionamento
 
-        // D. Impostiamo la scena con le dimensioni fisse 400x120
+        //Impostiamo la scena con le dimensioni fisse
         Scene scene = new Scene(root, 600, 300);
         dialogStage.setScene(scene);
 
-        // E. Mostriamo il modale e mettiamo "in pausa" questo codice finché non viene chiuso
+        //Mostriamo il modale e aspettiamo
         dialogStage.showAndWait();
     }
 
-    @FXML
-    public void onRemoveTrack() {
-        Track selected = trackList.getSelectionModel().getSelectedItem();
-        if (selected != null) {
-            // Chiamiamo il metodo di rimozione della Library, l'interfaccia si adeguerà da sola via notifica
-            Library.getInstance().removeTrack(selected);
-        }
-    }
     private ContextMenu createActionMenu(TableRow<Track> row) {
         ContextMenu contextMenu = new ContextMenu();
+        contextMenu.setStyle(
+                "-fx-selection-bar: #d0d0d0; " +
+                        "-fx-selection-bar-text: #000000; " +
+                        "-fx-font-size: 12px; " +
+                        "-fx-font-weight: normal;"
+        );
 
         MenuItem editItem = new MenuItem("Modifica traccia");
         MenuItem deleteItem = new MenuItem("Elimina traccia");
@@ -260,7 +241,6 @@ public class LibraryViewController implements LibraryObserver {
         // 1. Logica per la MODIFICA (Placeholder)
         editItem.setOnAction(event -> {
             Track currentTrack = row.getItem();
-            // Per ora facciamo solo una print, in futuro aprirai il modale di modifica qui
             System.out.println("Modifica richiesta per la traccia: " + currentTrack.getName());
         });
 
@@ -272,31 +252,30 @@ public class LibraryViewController implements LibraryObserver {
             trackList.getSelectionModel().select(currentTrack);
 
             try {
-                // A. Carichiamo il file FXML del modale
+                //Carica il file FXML del modale
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/deleteTrack.fxml"));
                 Parent root = loader.load();
 
-                // B. Recuperiamo il controller e impostiamo il contesto (true = da Libreria)
+                //Carica il controller e setta il contesto (libreria o playlist)
                 DeleteTrackController dialogController = loader.getController();
                 dialogController.setContext(true);
 
-                // C. Prepariamo la finestra (Stage)
+                //Prepariamo la finestra
                 Stage dialogStage = new Stage();
                 dialogStage.setTitle("Conferma Eliminazione");
                 dialogStage.initModality(Modality.APPLICATION_MODAL); // Rende la finestra bloccante
                 dialogStage.setResizable(false); // Blocca il ridimensionamento
 
-                // D. Impostiamo la scena con le dimensioni fisse 400x120
+                //Impostiamo le dimensioni
                 Scene scene = new Scene(root, 600, 150);
                 dialogStage.setScene(scene);
 
-                // E. Mostriamo il modale e mettiamo "in pausa" questo codice finché non viene chiuso
+                //Mostriamo il modale e aspettiamo
                 dialogStage.showAndWait();
 
-                // F. Controlliamo cosa ha scelto l'utente
+                //Controlliamo cosa ha scelto l'utente
                 if (dialogController.isConfirmed()) {
-                    // Se ha cliccato "Sono sicuro", eliminiamo la traccia dal modello centrale!
-                    // Grazie all'Observer Pattern, la riga sparirà automaticamente dalla TableView
+                    // Se ha cliccato "Sono sicuro", eliminiamo la traccia
                     Library.getInstance().removeTrack(currentTrack);
                     System.out.println("Traccia eliminata definitivamente: " + currentTrack.getName());
                 } else {
@@ -316,24 +295,24 @@ public class LibraryViewController implements LibraryObserver {
     @FXML
     public void onCreatePlaylist() {
         try {
-            // A. Carica il file FXML del modale
+            //Carica il file FXML del modale
             FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/createPlaylist.fxml"));
             Parent root = loader.load();
 
-            // B. Prepara la finestra (Stage)
+            //Prepara la finestra (Stage)
             Stage dialogStage = new Stage();
             dialogStage.setTitle("Nuova Playlist");
             dialogStage.initModality(Modality.APPLICATION_MODAL); // Blocca la finestra principale
             dialogStage.setResizable(false);
 
-            // C. Imposta le dimensioni (regolale se il tuo modale è più grande/piccolo)
+            //Imposta le dimensioni
             Scene scene = new Scene(root, 400, 200);
             dialogStage.setScene(scene);
 
-            // D. Mostra il modale e attendi la chiusura
+            //Mostra il modale e attendi
             dialogStage.showAndWait();
 
-            // E. Verifica per il debug: stampa su console le playlist attualmente esistenti
+            //debug, valutare cancellazione
             System.out.println("--- STATO ATTUALE PLAYLIST ---");
             models.PlaylistManager.getInstance().getPlaylists().forEach(p ->
                     System.out.println("- " + p.getName())

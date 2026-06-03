@@ -14,7 +14,8 @@ public class DeleteTrackController {
 
     private boolean confirmed = false;
 
-    // Riceve il contesto dal controller chiamante
+    // Riceve il contesto dal controller chiamante, per decidere se stampare il messaggio
+    // relativo alla Library o alla Playlist
     public void setContext(boolean isFromLibrary) {
         if (isFromLibrary) {
             messageLabel.setText("Sei sicuro di voler eliminare definitivamente questa traccia?\nVerrà rimossa a cascata da tutte le playlist.");

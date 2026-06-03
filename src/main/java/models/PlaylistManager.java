@@ -10,12 +10,11 @@ public class PlaylistManager {
     private final JsonStorageService database;
     private final List<Playlist> playlists;
 
-    // Se vuoi aggiornare la GUI delle playlist in tempo reale,
-    // puoi creare un PlaylistObserver analogo a LibraryObserver!
-
     private PlaylistManager() {
         this.database = new JsonStorageService();
-        this.playlists = database.loadPlaylistsFromFile(); // Il DAO fa il suo lavoro
+
+        //carica i dati dal JSON
+        this.playlists = database.loadPlaylistsFromFile();
     }
 
     public static PlaylistManager getInstance() {
@@ -25,24 +24,26 @@ public class PlaylistManager {
         return instance;
     }
 
+    // METODI CRUD PLAYLIST -
     public List<Playlist> getPlaylists() {
-        return this.playlists;
+        return this.playlists; // Restituisce la lista in RAM
     }
 
     public void createPlaylist(String name) {
         Playlist newPlaylist = new Playlist(name);
-        this.playlists.add(newPlaylist);
-        this.sync();
+        this.playlists.add(newPlaylist); //Aggiunge la playlist alla RAM
+        this.sync();                     //Salva sul disco
     }
 
     public void deletePlaylist(Playlist playlist) {
-        this.playlists.remove(playlist);
-        this.sync();
+        this.playlists.remove(playlist); //Rimuove la playlist dalla RAM
+        this.sync();                     //Salva sul disco
     }
 
+    // GESTIONE TRACCE NELLE PLAYLIST
     public void addTrackToPlaylist(Track track, Playlist playlist) {
-        playlist.addTrack(track);
-        this.sync();
+        playlist.addTrack(track); //Aggiunge la traccia alla playlist in RAM
+        this.sync();              //Salva sul disco
     }
 
     public void removeTrackFromPlaylist(Track track, Playlist playlist) {
@@ -58,11 +59,13 @@ public class PlaylistManager {
             throw new IllegalArgumentException("La traccia non è presente nella playlist.");
         }
 
-        playlist.removeTrack(track);
-        this.sync();
+        playlist.removeTrack(track); //Rimuove la traccia dalla playlist in RAM
+        this.sync();                 //Salva sul disco
     }
 
+    // FUNZIONE DI SINCRONIZZAZIONE
     private void sync() {
+        // Passa la lista aggiornata al service per la scrittura su file
         this.database.savePlaylistsToFile(this.playlists);
         System.out.println("Playlists salvate su file!");
     }

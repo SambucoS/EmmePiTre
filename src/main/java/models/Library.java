@@ -11,8 +11,6 @@ public class Library implements TrackList {
     private static Library instance;
     private final JsonStorageService database;
     private final List<LibraryObserver> observers;
-
-    // LA NOVITÀ: Ora è la Library a possedere la lista delle tracce in memoria!
     private final List<Track> tracks;
 
     // Costruttore privato per il Singleton
@@ -20,7 +18,7 @@ public class Library implements TrackList {
         this.database = new JsonStorageService();
         this.observers = new ArrayList<>();
 
-        // Al primo avvio, carica i dati dal JSON e li salva nella sua lista interna
+        //carica i dati dal JSON
         this.tracks = database.loadFromFile();
     }
 
@@ -31,7 +29,7 @@ public class Library implements TrackList {
         return instance;
     }
 
-    //COMMENTO DI PROVA
+    //Implementazione Observer per comunicare i cambiamenti
     public void addObserver(LibraryObserver observer) {
         this.observers.add(observer);
     }
@@ -46,21 +44,19 @@ public class Library implements TrackList {
         }
     }
 
-    // =========================================================
-    // METODI CRUD (Task 1.2.4)
-    // =========================================================
+    // METODI CRUD -
     @Override
     public void addTrack(Track track) {
-        this.tracks.add(track); // 1. Aggiunge la traccia alla RAM
-        this.sync();            // 2. Salva sul disco
-        notifyObservers();      // 3. Aggiorna la GUI
+        this.tracks.add(track); //Aggiunge la traccia alla RAM
+        this.sync();            //Salva sul disco
+        notifyObservers();      //Aggiorna la GUI
     }
 
     @Override
     public void removeTrack(Track track) {
-        this.tracks.remove(track); // 1. Rimuove la traccia dalla RAM
-        this.sync();               // 2. Salva sul disco
-        notifyObservers();         // 3. Aggiorna la GUI
+        this.tracks.remove(track); //Rimuove la traccia dalla RAM
+        this.sync();               //Salva sul disco
+        notifyObservers();         //Aggiorna la GUI
     }
 
     @Override
@@ -73,9 +69,7 @@ public class Library implements TrackList {
         return this.tracks.size();
     }
 
-    // =========================================================
     // GESTIONE LABEL
-    // =========================================================
     public void toggleFavourite(Track track) {
         track.setFavourite(!track.isFavourite());
         this.sync();
@@ -88,11 +82,9 @@ public class Library implements TrackList {
         notifyObservers();
     }
 
-    // =========================================================
-    // FUNZIONE DI SINCRONIZZAZIONE (Task 1.2.4 / US 1.1)
-    // =========================================================
+    // FUNZIONE DI SINCRONIZZAZIONE
     public void sync() {
-        // Passa la lista aggiornata al DAO per la scrittura su file
+        // Passa la lista aggiornata al service per la scrittura su file
         this.database.saveToFile(this.tracks);
         System.out.println("File JSON sovrascritto e aggiornato con i nuovi dati!");
     }
