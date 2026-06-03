@@ -66,6 +66,22 @@ public class PlaylistController implements Initializable {
         // Se la ComboBox esiste, significa che stiamo caricando la schermata managePlaylist.fxml
         if (playlistComboBox != null) {
 
+            playlistComboBox.setConverter(new javafx.util.StringConverter<Playlist>() {
+                @Override
+                public String toString(Playlist playlist) {
+                    if (playlist == null) {
+                        return null;
+                    }
+                    // Usa getName() come hai fatto più sotto per la label
+                    return playlist.getName();
+                }
+
+                @Override
+                public Playlist fromString(String string) {
+                    return null;
+                }
+            });
+
             // Carica nella ComboBox tutte le playlist presenti nel PlaylistManager
             playlistComboBox.getItems().setAll(
                     PlaylistManager.getInstance().getPlaylists()
