@@ -155,44 +155,47 @@ public class LibraryViewController implements LibraryObserver {
         // MENU A TENDINA (Modifica/Elimina) - Task 1.4
         // =========================================================
 
-        // A. Configurazione del Click Destro sulla riga intera
+        // Configurazione del Click Destro sulla riga intera (Metodo Nativo JavaFX)
         trackList.setRowFactory(tv -> {
             TableRow<Track> row = new TableRow<>();
 
-            // Creiamo il menu contestuale associato alla riga
+            // Creiamo un UNICO menu per questa riga
             ContextMenu rowMenu = createActionMenu(row);
 
-            // Mostra il menu con il click destro solo se la riga non è vuota
-            row.setOnMouseClicked(event -> {
-                if (event.getButton() == javafx.scene.input.MouseButton.SECONDARY && !row.isEmpty()) {
-                    rowMenu.show(row, event.getScreenX(), event.getScreenY());
-                }
-                // Aggiunta gestione del doppioclick
-                else if (event.getButton() == javafx.scene.input.MouseButton.PRIMARY && event.getClickCount() == 2) {
-                    Track selectedTrack = row.getItem(); // recupero della traccia selezionata
-                    openPlayerView(selectedTrack); // chiamata del metodo per il caricamento del player
+            // Invece di gestire a mano il click destro, usiamo la proprietà nativa.
+            // Il listener assicura che il menu esista solo se la riga contiene effettivamente una canzone.
+            row.itemProperty().addListener((obs, oldItem, newItem) -> {
+                if (newItem == null) {
+                    row.setContextMenu(null);
+                } else {
+                    row.setContextMenu(rowMenu);
                 }
             });
 
             return row;
         });
 
-
+        // Configurazione Click Sinistro sui tre puntini
         actionsColumn.setCellFactory(column -> new TableCell<>() {
             private final Label dotsLabel = new Label("⋮");
-
             {
                 dotsLabel.setCursor(Cursor.HAND);
                 dotsLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #888888; -fx-padding: 0 5 0 5;");
 
-                // Quando clicchi sui tre puntini col tasto sinistro, compare lo stesso menu
                 dotsLabel.setOnMouseClicked(event -> {
                     if (event.getButton() == javafx.scene.input.MouseButton.PRIMARY) {
+                        event.consume(); // Blocca il click per non farlo "rimbalzare" sulla riga sotto
+
                         TableRow<Track> row = getTableRow();
-                        if (row != null && !row.isEmpty()) {
-                            ContextMenu menu = createActionMenu(row);
-                            // Mostra il menu a tendina posizionato sotto l'icona dei tre puntini
-                            menu.show(dotsLabel, javafx.geometry.Side.BOTTOM, 0, 0);
+                        if (row != null && !row.isEmpty() && row.getContextMenu() != null) {
+                            ContextMenu menu = row.getContextMenu(); // Recuperiamo il menu nativo della riga
+
+                            // Se il menu è aperto, chiudilo (effetto toggle), altrimenti mostralo
+                            if (menu.isShowing()) {
+                                menu.hide();
+                            } else {
+                                menu.show(dotsLabel, javafx.geometry.Side.BOTTOM, 0, 0);
+                            }
                         }
                     }
                 });
@@ -272,6 +275,16 @@ public class LibraryViewController implements LibraryObserver {
 
     private ContextMenu createActionMenu(TableRow<Track> row) {
         ContextMenu contextMenu = new ContextMenu();
+
+        // Applichiamo lo stile direttamente al contenitore del menu.
+        // -fx-selection-bar imposta il colore grigio quando ci passi sopra col mouse.
+        // -fx-selection-bar-text mantiene il testo nero quando è evidenziato.
+        contextMenu.setStyle(
+                "-fx-selection-bar: #d0d0d0; " +
+                        "-fx-selection-bar-text: #000000; " +
+                        "-fx-font-size: 12px; " +
+                        "-fx-font-weight: normal;"
+        );
 
         MenuItem editItem = new MenuItem("Modifica traccia");
         MenuItem deleteItem = new MenuItem("Elimina traccia");
