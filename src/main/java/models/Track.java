@@ -13,11 +13,11 @@ public class Track {
     private int duration; // in seconds
 
     // Empty constructor
-   // public Track() {}
+    public Track() {}
 
     // Full constructor
     public Track(String pathname, String name, String artist, String album, String genre,
-                 String year, boolean favourite, boolean explicit, int duration) {
+                 int year, boolean favourite, boolean explicit, int duration) {
         this.pathname = pathname;
         this.name = name;
         this.artist = artist;
@@ -28,6 +28,17 @@ public class Track {
         this.explicit = explicit;
         this.duration = duration;
     }
+
+    public Track( String name, String artist, String album, String genre,
+                 int year, int duration) {
+        this.name = name;
+        this.artist = artist;
+        this.album = album;
+        this.genre = genre;
+        this.year = year;
+        this.duration = duration;
+    }
+
 
     // Getters and Setters
     public String getPathname() {
@@ -152,4 +163,5 @@ public class Track {
                 ", duration=" + duration +
                 '}';
     }
+
 }

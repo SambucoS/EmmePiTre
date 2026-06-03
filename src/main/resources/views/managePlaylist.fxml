@@ -9,102 +9,65 @@
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
-      fx:controller="controllers.PlaylistController"
-      spacing="15"
-      prefWidth="700"
-      prefHeight="450"
-      style="-fx-background-color: #f7f7f7;">
+<VBox prefHeight="450" prefWidth="700" spacing="15" style="-fx-background-color: #f7f7f7;" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.PlaylistController">
 
     <padding>
-        <Insets top="25" right="25" bottom="25" left="25"/>
+        <Insets bottom="25" left="25" right="25" top="25" />
     </padding>
 
-    <Label text="Gestione Playlist"
-           style="-fx-font-size: 22px; -fx-font-weight: bold;"/>
+    <Label style="-fx-font-size: 22px; -fx-font-weight: bold;" text="Gestione Playlist" />
 
     <!-- Selezione playlist -->
-    <HBox spacing="10" alignment="CENTER_LEFT">
-        <Label text="Playlist:"/>
+    <HBox alignment="CENTER_LEFT" spacing="10">
+        <Label text="Playlist:" />
 
-        <ComboBox fx:id="playlistComboBox"
-                  promptText="Seleziona playlist"
-                  prefWidth="250"/>
+        <ComboBox fx:id="playlistComboBox" prefWidth="250" promptText="Seleziona playlist" />
 
         <!-- TextField = campo in cui scrivere il nuovo nome -->
-        <TextField fx:id="renamePlaylistField"
-                   promptText="Nuovo nome playlist"
-                   prefWidth="220"/>
+        <TextField fx:id="renamePlaylistField" prefWidth="220" promptText="Nuovo nome playlist" />
 
         <!-- Per ora il bottone è solo grafico: non ha onAction -->
-        <Button text="Rinomina"
-                prefWidth="100"/>
+        <Button prefWidth="100" text="Rinomina" />
     </HBox>
 
     <!-- Area centrale divisa in due colonne -->
-    <HBox spacing="20" alignment="CENTER">
+    <HBox alignment="CENTER" spacing="20">
 
         <!-- Colonna sinistra: elenco tracce presenti nella playlist -->
-        <VBox spacing="10" prefWidth="320">
-            <Label text="Tracce nella playlist:"
-                   style="-fx-font-weight: bold;"/>
+        <VBox prefWidth="320" spacing="10">
+            <Label style="-fx-font-weight: bold;" text="Tracce nella playlist:" />
 
-            <ListView fx:id="playlistTracksListView"
-                      prefWidth="320"
-                      prefHeight="230"/>
+            <ListView fx:id="playlistTracksListView" prefHeight="230" prefWidth="320" />
 
-            <Button text="Rimuovi traccia"
-                    onAction="#handleRemoveTrackFromPlaylist"
-                    prefWidth="150"
-                    style="-fx-background-color: #d63031; -fx-text-fill: white; -fx-font-weight: bold;"/>
+            <Button onAction="#handleRemoveTrackFromPlaylist" prefWidth="150" style="-fx-background-color: #d63031; -fx-text-fill: white; -fx-font-weight: bold;" text="Rimuovi traccia" />
         </VBox>
 
         <!-- Colonna destra: form per aggiungere una traccia -->
-        <VBox spacing="10" prefWidth="320">
-            <Label text="Aggiungi traccia:"
-                   style="-fx-font-weight: bold;"/>
+        <VBox prefWidth="320" spacing="10">
+            <Label style="-fx-font-weight: bold;" text="Aggiungi traccia:" />
 
-            <TextField fx:id="trackTitleField"
-                       promptText="Titolo"
-                       prefWidth="300"/>
+            <TextField fx:id="trackTitleField" prefWidth="300" promptText="Titolo" />
 
-            <TextField fx:id="trackArtistField"
-                       promptText="Artista"
-                       prefWidth="300"/>
+            <TextField fx:id="trackArtistField" prefWidth="300" promptText="Artista" />
 
-            <TextField fx:id="trackAlbumField"
-                       promptText="Album"
-                       prefWidth="300"/>
+            <TextField fx:id="trackAlbumField" prefWidth="300" promptText="Album" />
 
-            <TextField fx:id="trackGenreField"
-                       promptText="Genere"
-                       prefWidth="300"/>
+            <TextField fx:id="trackGenreField" prefWidth="300" promptText="Genere" />
 
-            <TextField fx:id="trackYearField"
-                       promptText="Anno"
-                       prefWidth="300"/>
+            <TextField fx:id="trackYearField" prefWidth="300" promptText="Anno" />
 
-            <TextField fx:id="trackDurationField"
-                       promptText="Durata in secondi"
-                       prefWidth="300"/>
+            <TextField fx:id="trackDurationField" prefWidth="300" promptText="Durata in secondi" />
 
             <!-- Anche questo bottone può rimanere solo grafico per ora -->
-            <Button text="Aggiungi traccia"
-                    prefWidth="150"
-                    style="-fx-background-color: #6c5ce7; -fx-text-fill: white; -fx-font-weight: bold;"/>
+            <Button fx:id="buttonAggiungiTraccia" onAction="#handleAggiungiTraccia" prefWidth="150" style="-fx-background-color: #6c5ce7; -fx-text-fill: white; -fx-font-weight: bold;" text="Aggiungi traccia" />
         </VBox>
 
     </HBox>
 
-    <Label fx:id="messageLabel"
-           text=""
-           style="-fx-font-size: 12px;"/>
+    <Label fx:id="messageLabel" style="-fx-font-size: 12px;" text="" />
 
-    <HBox spacing="10" alignment="CENTER_RIGHT">
-        <Button text="Annulla"
-                onAction="#handleCancelRemove"
-                prefWidth="100"/>
+    <HBox alignment="CENTER_RIGHT" spacing="10">
+        <Button onAction="#handleCancelRemove" prefWidth="100" text="Annulla" />
     </HBox>
 
 </VBox>

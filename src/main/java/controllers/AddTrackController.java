@@ -8,8 +8,8 @@ import javafx.scene.control.Button;
 import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import models.Library;
 import models.Track;
-import services.LibraryService;
 
 public class AddTrackController {
 
@@ -27,7 +27,6 @@ public class AddTrackController {
 
     private Track trackArrived = null;
     private boolean saveClicked = false;
-    public LibraryService service = new LibraryService();
     @FXML
     public void initialize() {
 
@@ -61,8 +60,8 @@ public class AddTrackController {
             trackArrived = new Track(pathname, name, artist, album, genre, year, favourite, explicit, duration);
 
             saveClicked = true;
-            service.addTrack(trackArrived);
-            // Chiudiamo la finestra modale
+            Library.getInstance().addTrack(trackArrived);
+
             closeStage();
         }
     }

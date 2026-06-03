@@ -75,32 +75,67 @@ public class ModifyController {
         closeWindow();
     }
 
-    private boolean isValid() {
-
-        if (txtName.getText().isEmpty() ||
-                txtArtist.getText().isEmpty()) {
-            return false;
-        }
-
-        try {
-            int year = Integer.parseInt(txtYear.getText());
-            int duration = Integer.parseInt(txtDuration.getText());
-
-            if (year < 1900 || duration <= 0) {
-                return false;
-            }
-
-        } catch (NumberFormatException e) {
-            return false;
-        }
-
-        return true;
-    }
-
     private void closeWindow() {
         // Recupera lo stage attuale e lo chiude definitivamente, liberando le risorse
         Stage stage = (Stage) btnSalva.getScene().getWindow();
         stage.close();
+    }
+
+    private boolean isValid() {
+        String errorMessage = "";
+
+        if (txtName.getText() == null || txtName.getText().isBlank()) {
+            errorMessage += "Titolo non valido!\n";
+        }
+
+        if (txtArtist.getText() == null || txtArtist.getText().isBlank()) {
+            errorMessage += "Artista non valido!\n";
+        }
+
+        if (txtAlbum.getText() == null || txtAlbum.getText().isBlank()) {
+            errorMessage += "Album non valido!\n";
+        }
+
+        if (cmbGenre.getValue() == null || cmbGenre.getValue().isBlank()) {
+            errorMessage += "Genere non valido!\n";
+        }
+
+
+
+        // Validazione Anno
+        if (txtYear.getText() == null || txtYear.getText().isBlank()) {
+            errorMessage += "Anno non valido!\n";
+        } else {
+            try {
+                Integer.parseInt(txtYear.getText());
+            } catch (NumberFormatException e) {
+                errorMessage += "L'anno deve essere un numero intero!\n";
+            }
+        }
+
+        // Validazione Durata
+        if (txtDuration.getText() == null || txtDuration.getText().isBlank()) {
+            errorMessage += "Durata non valida!\n";
+        } else {
+            try {
+                Integer.parseInt(txtDuration.getText());
+            } catch (NumberFormatException e) {
+                errorMessage += "La durata deve essere un numero intero (in secondi)!\n";
+            }
+        }
+
+        // Se non ci sono errori, l'input è valido
+        if (errorMessage.length() == 0) {
+            return true;
+        } else {
+            // Mostra una finestra di avviso in caso di errore
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Campi non validi");
+            alert.setHeaderText("Per favore, correggi i campi errati");
+            alert.setContentText(errorMessage);
+            alert.showAndWait();
+            return false;
+        }
     }
 }
 
