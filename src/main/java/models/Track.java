@@ -16,7 +16,7 @@ public class Track {
     // Costruttore vuoto
     public Track() {}
 
-    // Costruttore
+    // Costruttore completo
     public Track(String pathname, String name, String artist, String album, String genre,
                  int year, boolean favourite, boolean explicit, int duration) {
         this.pathname = pathname;
@@ -103,8 +103,10 @@ public class Track {
     }
 
 
-    // viene usato Objects.equals(...) per gestire automaticamente i null
-    // il metodo si occupa di verificare se due oggetti (Track) sono uguali
+    /** viene usato Objects.equals(...) per gestire automaticamente i null
+     * il metodo si occupa di verificare se due oggetti (Track) sono uguali
+     * @params obj la traccia con cui effettuare la verifica di uguaglianza
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {

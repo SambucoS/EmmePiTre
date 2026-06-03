@@ -40,13 +40,19 @@ public class AddTrackController {
 
     }
 
+    // ritorna la traccia
     public Track getTrack() {
         return trackAdded;
     }
 
-
+    /**
+     * Estrae i dati dai campi e aggiunge la nuova traccia creata alla libreria
+     * @param event che risulta essere l'evento catturato (pressione del bottone "Salva")
+     */
     @FXML
     void handleSave(ActionEvent event) {
+
+        // richiama il metodo per il controllo degli errori
         if (isInputValid()) {
 
             // Vengono estratti i dati dai campi del form
@@ -58,7 +64,7 @@ public class AddTrackController {
             boolean favourite = chkFavourite.isSelected();
             boolean explicit = chkExplicit.isSelected();
 
-            // Vengono convertiti ciò che è presente nei campi year e duration da String a Integer
+            // Viene convertito il contenuto nei campi year e duration da String a Integer
             int year = Integer.parseInt(txtYear.getText());
             int duration = Integer.parseInt(txtDuration.getText());
 
@@ -73,7 +79,7 @@ public class AddTrackController {
         }
     }
 
-    @FXML // Chiude semplicemente la modale senza salvare nulla
+    @FXML // Chiude la modale
     void handleCancel(ActionEvent event) {
 
         closeStage();
@@ -85,21 +91,34 @@ public class AddTrackController {
     }
 
 
-    // Imposta il colore del bordo a rosso e definisce uno spessore (es. 2px)
+    /** Imposta il colore del bordo a rosso e definisce uno spessore
+        @params t è il textfield su cui apporre la modifica di stile
+     */
     public void setBorderRed(TextField t) {
 
         t.setStyle("-fx-border-color: red; -fx-border-width: 2px;");
     }
-    // Annulla la modifica del bordo
+
+    /** Annulla la modifica del bordo
+        @params t è il textfield su cui apporre il reset dellostile
+     */
     public void removeBorderRed(TextField t){
         t.setStyle("");
     }
 
     /**
      * Valida l'input dell'utente nei campi di testo.
+     * tutte le verifiche seguono gli step:
+     * controllo che il campo non sia vuoto/ci siano problemi (year/duration)
+     * --> set del bordo rosso se ci sono errori || reset dello stile
+     * per gestire il caso in cui l'utente commette errori più volte
+     *
+     * @return un booleano che definisce se gli input nei campi sono validi o meno
+     * @throws NumberFormatException generata quando il testo
+     * contiene caratteri che un numero non può avere
      */
     private boolean isInputValid() {
-        List<String> errorMessages = new ArrayList<>();
+        List<String> errorMessages = new ArrayList<>(); // viene inizializzata la lista dei messaggi
 
         if (txtPathname.getText() == null || txtPathname.getText().isBlank()) {
             errorMessages.add("Percorso file non valido!\n");
@@ -137,11 +156,11 @@ public class AddTrackController {
 
         // Validazione Anno
         if (txtYear.getText() == null || txtYear.getText().isBlank()) {
-            errorMessages.add("Anno non valido!\n");
+            errorMessages.add("Perfavore inserisci l'anno di rilascio della canzone\n");
             setBorderRed(txtYear);
         } else {
             try {
-                Integer.parseInt(txtYear.getText());
+                Integer.parseInt(txtYear.getText().trim()); // Vengono tolti anche gli spazi per evitare situazioni del tipo "  2015 "
                 removeBorderRed(txtYear);
             } catch (NumberFormatException e) {
                 errorMessages.add("L'anno deve essere un numero intero!\n");
@@ -152,26 +171,25 @@ public class AddTrackController {
 
         // Validazione Durata
         if (txtDuration.getText() == null || txtDuration.getText().isBlank()) {
-            errorMessages.add("Durata non valida!\n");
+            errorMessages.add("Perfavore inserisci la durata della canzone\n");
             setBorderRed(txtDuration);
         } else {
             try {
-                Integer.parseInt(txtDuration.getText());
+                Integer.parseInt(txtDuration.getText().trim());
                 removeBorderRed(txtDuration);
             } catch (NumberFormatException e) {
                 errorMessages.add("La durata deve essere un numero intero (in secondi)!\n");
             }
         }
 
-        // Se non ci sono errori, l'input è valido
-        if (errorMessages.size() == 0) {
+        if (errorMessages.size() == 0) { // Se non ci sono errori l'input è valido
             return true;
         } else {
             // Mostra una finestra di avviso in caso di errore
             Alert alert = new Alert(AlertType.ERROR);
             alert.setTitle("Campi non validi");
             alert.setHeaderText("Per favore, correggi i campi errati");
-            if(errorMessages.size() == 1){
+            if(errorMessages.size() == 1){ // Se il messaggio di errore è uno solo, viene stampato a video
             alert.setContentText(errorMessages.get(0));}
             alert.showAndWait();
             return false;

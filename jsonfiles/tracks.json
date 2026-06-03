@@ -255,7 +255,7 @@
   "album" : null,
   "genre" : "Rock",
   "year" : 2003,
-  "favourite" : false,
+  "favourite" : true,
   "explicit" : false,
   "duration" : 187
 }, {

@@ -23,19 +23,32 @@ public class LibraryViewController implements LibraryObserver {
     public HBox mainBar;
     private Parent currentPlayerView;
 
-    @FXML private StackPane rootPane;
-    @FXML private TableView<Track> trackList;
-    @FXML private TableColumn<Track, Boolean> favouriteColumn;
-    @FXML private TableColumn<Track, String> titleColumn;
-    @FXML private TableColumn<Track, Boolean> explicitColumn;
-    @FXML private TableColumn<Track, String> authorColumn;
-    @FXML private TableColumn<Track, String> albumColumn;
-    @FXML private TableColumn<Track, Integer> yearColumn;
-    @FXML private TableColumn<Track, String> genreColumn;
-    @FXML private TableColumn<Track, Integer> lengthColumn;
-    @FXML private TableColumn<Track, Void> actionsColumn;
-    @FXML private TextField researchBar;
-    @FXML private Button addButton;
+    @FXML
+    private StackPane rootPane;
+    @FXML
+    private TableView<Track> trackList;
+    @FXML
+    private TableColumn<Track, Boolean> favouriteColumn;
+    @FXML
+    private TableColumn<Track, String> titleColumn;
+    @FXML
+    private TableColumn<Track, Boolean> explicitColumn;
+    @FXML
+    private TableColumn<Track, String> authorColumn;
+    @FXML
+    private TableColumn<Track, String> albumColumn;
+    @FXML
+    private TableColumn<Track, Integer> yearColumn;
+    @FXML
+    private TableColumn<Track, String> genreColumn;
+    @FXML
+    private TableColumn<Track, Integer> lengthColumn;
+    @FXML
+    private TableColumn<Track, Void> actionsColumn;
+    @FXML
+    private TextField researchBar;
+    @FXML
+    private Button addButton;
 
     @FXML
     public void initialize() {
@@ -154,10 +167,10 @@ public class LibraryViewController implements LibraryObserver {
                 if (event.getButton() == javafx.scene.input.MouseButton.SECONDARY && !row.isEmpty()) {
                     rowMenu.show(row, event.getScreenX(), event.getScreenY());
                 }
-                // Aggiunta doppioclick
+                // Aggiunta gestione del doppioclick
                 else if (event.getButton() == javafx.scene.input.MouseButton.PRIMARY && event.getClickCount() == 2) {
-                    Track selectedTrack = row.getItem();
-                    openPlayerView(selectedTrack);
+                    Track selectedTrack = row.getItem(); // recupero della traccia selezionata
+                    openPlayerView(selectedTrack); // chiamata del metodo per il caricamento del player
                 }
             });
 
@@ -167,6 +180,7 @@ public class LibraryViewController implements LibraryObserver {
 
         actionsColumn.setCellFactory(column -> new TableCell<>() {
             private final Label dotsLabel = new Label("⋮");
+
             {
                 dotsLabel.setCursor(Cursor.HAND);
                 dotsLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #888888; -fx-padding: 0 5 0 5;");
@@ -183,6 +197,7 @@ public class LibraryViewController implements LibraryObserver {
                     }
                 });
             }
+
             @Override
             protected void updateItem(Void item, boolean empty) {
                 super.updateItem(item, empty);
@@ -209,7 +224,7 @@ public class LibraryViewController implements LibraryObserver {
     public void onLoadLibrary() {
         // Popoliamo il Singleton globale solo se è attualmente vuoto (evita duplicazioni al refresh)
         if (Library.getInstance().getTracks().isEmpty()) {
-            Library.getInstance().addTrack(new Track("C:/music/song1.mp3", "Canzone Figa", "Artista Famoso","Album", "Pop", 2023, true, true, 215));
+            Library.getInstance().addTrack(new Track("C:/music/song1.mp3", "Canzone Figa", "Artista Famoso", "Album", "Pop", 2023, true, true, 215));
             Library.getInstance().addTrack(new Track("C:/music/song2.mp3", "Brano Pulito", "Artista Indie", "Album", "Lo-fi", 2024, false, false, 180));
             Library.getInstance().addTrack(new Track("C:/music/song3.mp3", "Classico Greve", "Rapper Serio", "Album", "Rap", 1999, true, false, 240));
         } else {
@@ -254,6 +269,7 @@ public class LibraryViewController implements LibraryObserver {
             Library.getInstance().removeTrack(selected);
         }
     }
+
     private ContextMenu createActionMenu(TableRow<Track> row) {
         ContextMenu contextMenu = new ContextMenu();
 
@@ -348,33 +364,50 @@ public class LibraryViewController implements LibraryObserver {
         }
     }
 
+
+    /**
+     * Carica dinamicamente la vista del Player musicale (playerView.fxml),
+     * assegna la traccia selezionata al suo controller e inserisce la vista
+     * all'interno del contenitore principale (rootPane), sostituendo quella precedente.
+     *
+     * @param track la traccia musicale da passare al player per la riproduzione
+     * @throws IOException qualora il file non esistesse/percorso errato
+     */
     private void openPlayerView(Track track) {
         try {
+            // Creazione del caricatore FXML, specificando il path della view del Player
             FXMLLoader loader = new FXMLLoader(
                     getClass().getResource("/views/playerView.fxml"));
 
+            // Caricamento del contenuto del file fxml, l'albero dei nodi
             Parent playerView = loader.load();
 
+            // Caricamento del controller associato alla view del Player (PlayerController).
             PlayerController playerController = loader.getController();
+
+            // Passaggio dell'oggetto 'Track' selezionato al controller del player
             playerController.setTrack(track);
 
-            // Rimuove il player precedente
+            // Per rimuovere eventuali istanze di player aperti in precedenza, viene pulito il contenitore principale
+            // per evitare sovrapposizioni
             rootPane.getChildren().clear();
 
-            // Aggiunge il nuovo player
+            // Inject della view del player nel contenitore principale
             rootPane.getChildren().add(playerView);
 
-            currentPlayerView = playerView;
+            //currentPlayerView = playerView;
 
         } catch (IOException e) {
+
             e.printStackTrace();
 
+            // Usando l'Alert viene mostrato un messaggio di errore a schermo per avvisare l'utente
             Alert alert = new Alert(
                     Alert.AlertType.ERROR,
-                    "Impossibile aprire il Player Musicale.",
+                    "Impossibile aprire il Player Musicale",
                     ButtonType.OK);
 
-            alert.showAndWait();
+            alert.showAndWait(); // Serve a bloccare l'interfaccia fintanto che l'utente clicca sul pulsante di conferma
         }
     }
 
