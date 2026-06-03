@@ -79,19 +79,12 @@ public class PlaylistController implements Initializable {
             playlistComboBox.setOnAction(event -> {
                 Playlist selectedPlaylist = playlistComboBox.getValue();
 
+
                 // Controlliamo che la ListView esista prima di usarla
                 if (playlistTracksListView != null) {
 
                     // Svuota la lista visualizzata prima di caricare le nuove tracce
                     playlistTracksListView.getItems().clear();
-
-                    // Se l'utente ha selezionato una playlist valida,
-                    // mostra nella ListView tutte le sue tracce
-                 /*   if (selectedPlaylist != null) {
-                        playlistTracksListView.getItems().setAll(
-                                selectedPlaylist.getTracks()
-                        );
-                    }*/
 
                     // aggiorna la ListView con le tracce della playlist selezionata
                     playlistTracksListView.getItems().setAll(

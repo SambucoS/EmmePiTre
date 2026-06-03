@@ -6,6 +6,13 @@ import javafx.scene.control.*;
 import javafx.stage.Stage;
 import models.Track;
 
+/**
+ * Gestisce l'interfaccia utente per la modifica dei dettagli di una traccia musicale.
+ * Questa classe funge da controller per la vista di modifica e permette di
+ * convalidare e aggiornare i dati di un oggetto {@link Track} esistente.
+ * * @author GRUPPO_14_SAD
+ * @version 1.0
+ */
 public class ModifyController {
 
     @FXML private Button btnAnnulla;
@@ -21,7 +28,11 @@ public class ModifyController {
 
     private Track track;
 
-
+    /**
+     * Inizializza il controller. Questo metodo viene chiamato automaticamente
+     * da JavaFX dopo il caricamento del file FXML.
+     * Si occupa di popolare la tendina dei generi musicali.
+     */
     @FXML
     public void initialize() {
         cmbGenre.getItems().addAll(
@@ -29,11 +40,21 @@ public class ModifyController {
         );
     }
 
+    /**
+     * Imposta la traccia musicale che l'utente desidera modificare.
+     * Richiama automaticamente il caricamento dei dati nell'interfaccia.
+     *
+     * @param track la traccia {@link Track} da modificare
+     */
     public void setTrack(Track track) {
         this.track = track;
         loadData();
     }
 
+    /**
+     * Carica i dettagli della traccia selezionata e li inserisce nei
+     * rispettivi campi di testo e controlli dell'interfaccia utente.
+     */
     private void loadData() {
         txtName.setText(track.getName());
         txtArtist.setText(track.getArtist());
@@ -47,11 +68,17 @@ public class ModifyController {
         cmbGenre.setValue(track.getGenre());
     }
 
+    /**
+     * Gestisce l'evento di salvataggio delle modifiche.
+     * Se l'input risulta valido, aggiorna i dati dell'oggetto {@link Track},
+     * sincronizza la libreria musicale, notifica gli observer e chiude la finestra.
+     *
+     * @param event l'evento generato dalla pressione del pulsante "Salva"
+     */
     @FXML
     void handleSalva(ActionEvent event) {
         if (!isValid()) return;
 
-        // 1. Aggiorna l'oggetto Track in RAM (Codice che hai già scritto)
         track.setName(txtName.getText());
         track.setArtist(txtArtist.getText());
         track.setAlbum(txtAlbum.getText());
@@ -70,17 +97,35 @@ public class ModifyController {
         closeWindow();
     }
 
+    /**
+     * Gestisce l'evento di annullamento.
+     * Interrompe l'operazione di modifica e chiude la finestra corrente.
+     *
+     * @param event l'evento generato dalla pressione del pulsante "Annulla"
+     */
     @FXML
     void handleAnnulla(ActionEvent event) {
         closeWindow();
     }
 
+    /**
+     * Recupera lo stage attuale e lo chiude definitivamente,
+     * nascondendo la finestra e liberando le risorse.
+     */
     private void closeWindow() {
-        // Recupera lo stage attuale e lo chiude definitivamente, liberando le risorse
+
         Stage stage = (Stage) btnSalva.getScene().getWindow();
         stage.close();
     }
 
+    /**
+     * Valida i dati inseriti dall'utente nei campi dell'interfaccia.
+     * Controlla che i campi testuali non siano vuoti e che anno e durata
+     * siano formattati correttamente come numeri interi. Mostra un {@link Alert}
+     * in caso di errori di validazione.
+     *
+     * @return {@code true} se tutti i parametri inseriti sono validi, {@code false} in caso contrario
+     */
     private boolean isValid() {
         String errorMessage = "";
 
@@ -100,9 +145,6 @@ public class ModifyController {
             errorMessage += "Genere non valido!\n";
         }
 
-
-
-        // Validazione Anno
         if (txtYear.getText() == null || txtYear.getText().isBlank()) {
             errorMessage += "Anno non valido!\n";
         } else {
@@ -113,7 +155,6 @@ public class ModifyController {
             }
         }
 
-        // Validazione Durata
         if (txtDuration.getText() == null || txtDuration.getText().isBlank()) {
             errorMessage += "Durata non valida!\n";
         } else {
@@ -124,7 +165,6 @@ public class ModifyController {
             }
         }
 
-        // Se non ci sono errori, l'input è valido
         if (errorMessage.length() == 0) {
             return true;
         } else {

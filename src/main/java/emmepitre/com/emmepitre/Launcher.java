@@ -15,7 +15,7 @@ public class Launcher extends Application {
     public void start(Stage stage) throws Exception {
         Application.setUserAgentStylesheet(new CupertinoDark().getUserAgentStylesheet());
         Parent root = FXMLLoader.load(
-                Objects.requireNonNull(getClass().getResource("/views/modify.fxml"))
+                Objects.requireNonNull(getClass().getResource("/views/managePlaylist.fxml"))
         );
 
         Scene scene = new Scene(root);
