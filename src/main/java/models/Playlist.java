@@ -113,7 +113,7 @@ public class Playlist implements TrackList {
      * @throws IllegalArgumentException se la traccia è null.
      */
     @Override
-    public void addTrack(Track track) {
+    public  void addTrack(Track track) {
         if (track == null) { // Controlliamo che la traccia non sia null
             throw new IllegalArgumentException("La traccia non può essere null.");
         }

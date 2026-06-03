@@ -1,45 +1,290 @@
 package controllers;
 
-import javafx.event.ActionEvent;
-import javafx.fxml.FXML;
-import javafx.fxml.Initializable;
 import javafx.scene.Node;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.ListView;
-import javafx.scene.control.TextField;
+import javafx.event.ActionEvent;
+import javafx.scene.control.*;
 import javafx.stage.Stage;
+
+// Import necessario per collegare gli elementi dell'FXML al controller
+import javafx.fxml.FXML;
+
+// Import necessario perché il controller usa il metodo initialize()
+import javafx.fxml.Initializable;
+
+// Componenti grafici JavaFX usati negli FXML
+
+// Classi del modello usate dal controller
 import models.Playlist;
 import models.PlaylistManager;
 import models.Track;
 
+// Import richiesti dall'interfaccia Initializable
 import java.net.URL;
 import java.util.ResourceBundle;
 
 public class PlaylistController implements Initializable {
 
     // Campo di testo usato nella schermata createPlaylist.fxml
+    // Serve per inserire il nome della nuova playlist
     @FXML
     private TextField playlistNameField;
 
     // Label usata per mostrare messaggi di conferma o errore
+    // È presente sia nella schermata di creazione sia in quella di rimozione
     @FXML
     private Label messageLabel;
 
     // ComboBox usata nella schermata managePlaylist.fxml
-    // Serve per selezionare la playlist da gestire
+    // Serve per selezionare la playlist da cui rimuovere una traccia
     @FXML
     private ComboBox<Playlist> playlistComboBox;
 
-    // ListView delle tracce presenti nella playlist selezionata
+    // ListView usata nella schermata managePlaylist.fxml
+    // Mostra le tracce contenute nella playlist selezionata
     @FXML
     private ListView<Track> playlistTracksListView;
 
-    // Campo per rinominare la playlist, per ora solo grafico
+    @FXML
+    private Button buttonAggiungiTraccia;
+
+    /*
+     * Metodo chiamato automaticamente da JavaFX quando viene caricato l'FXML.
+     *
+     * Poiché questo controller viene usato da più schermate FXML,
+     * alcuni elementi potrebbero essere null.
+     *
+     * Ad esempio:
+     * - in createPlaylist.fxml non esistono playlistComboBox e playlistTracksListView
+     * - in managePlaylist.fxml non esiste playlistNameField
+     *
+     * Per questo motivo controlliamo che playlistComboBox non sia null
+     * prima di inizializzare la parte relativa alla rimozione da playlist.
+     */
+    @Override
+    public void initialize(URL url, ResourceBundle resourceBundle) {
+
+        // Se la ComboBox esiste, significa che stiamo caricando la schermata managePlaylist.fxml
+        if (playlistComboBox != null) {
+
+            playlistComboBox.setConverter(new javafx.util.StringConverter<Playlist>() {
+                @Override
+                public String toString(Playlist playlist) {
+                    if (playlist == null) {
+                        return null;
+                    }
+                    // Usa getName() come hai fatto più sotto per la label
+                    return playlist.getName();
+                }
+
+                @Override
+                public Playlist fromString(String string) {
+                    return null;
+                }
+            });
+
+            // Carica nella ComboBox tutte le playlist presenti nel PlaylistManager
+            playlistComboBox.getItems().setAll(
+                    PlaylistManager.getInstance().getPlaylists()
+            );
+
+            /*
+             * Quando l'utente seleziona una playlist dalla ComboBox,
+             * la ListView viene aggiornata mostrando le tracce contenute
+             * in quella playlist.
+             */
+            playlistComboBox.setOnAction(event -> {
+                Playlist selectedPlaylist = playlistComboBox.getValue();
+
+
+                // Controlliamo che la ListView esista prima di usarla
+                if (playlistTracksListView != null) {
+
+                    // Svuota la lista visualizzata prima di caricare le nuove tracce
+                    playlistTracksListView.getItems().clear();
+
+                    // aggiorna la ListView con le tracce della playlist selezionata
+                    playlistTracksListView.getItems().setAll(
+                            selectedPlaylist.getTracks()
+                    );
+
+                    messageLabel.setText("Playlist caricata: " + selectedPlaylist.getName());
+
+                }
+            });
+        }
+    }
+
+    /*
+     * Metodo collegato al pulsante "Crea" della schermata createPlaylist.fxml.
+     * Legge il nome inserito dall'utente e chiede al PlaylistManager
+     * di creare una nuova playlist.
+     */
+    @FXML
+    private void handleCreatePlaylist() {
+
+        // Recupera il testo scritto dall'utente nel campo nome playlist
+        String playlistName = playlistNameField.getText();
+
+        try {
+            // Crea la playlist usando il manager
+            PlaylistManager.getInstance().createPlaylist(playlistName);
+
+            // Se la creazione va a buon fine, mostra un messaggio verde
+            messageLabel.setStyle("-fx-text-fill: green;");
+            messageLabel.setText("Playlist creata correttamente.");
+
+            // Pulisce il campo di testo dopo la creazione
+            playlistNameField.clear();
+
+        } catch (IllegalArgumentException e) {
+
+            // Se ci sono errori, ad esempio nome vuoto,
+            // mostra il messaggio di errore in rosso
+            messageLabel.setStyle("-fx-text-fill: red;");
+            messageLabel.setText(e.getMessage());
+        }
+    }
+
+    /*
+     * Metodo collegato al pulsante "Annulla" della schermata createPlaylist.fxml.
+     * Svuota il campo di testo e cancella eventuali messaggi.
+     */
+    @FXML
+    private void handleCancel(ActionEvent event) {
+        // Pulisce il campo di testo, se presente
+        if (playlistNameField != null) {
+            playlistNameField.clear();
+        }
+
+        // Pulisce eventuali messaggi di errore o conferma
+        if (messageLabel != null) {
+            messageLabel.setText("");
+        }
+
+        // Chiude la finestra/modale corrente
+        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+        stage.close();
+    }
+
+    /*
+     * Metodo collegato al pulsante "Rimuovi" della schermata managePlaylist.fxml.
+     * Rimuove dalla playlist selezionata la traccia scelta nella ListView.
+     */
+    @FXML
+    private void handleRemoveTrackFromPlaylist() {
+
+        // Recupera la playlist selezionata nella ComboBox
+        Playlist selectedPlaylist = playlistComboBox.getValue();
+
+        // Recupera la traccia selezionata nella ListView
+        Track selectedTrack = playlistTracksListView.getSelectionModel().getSelectedItem();
+
+        try {
+            /*
+             * Chiede al PlaylistManager di rimuovere la traccia dalla playlist.
+             * Questa operazione NON elimina la traccia dalla libreria principale,
+             * ma solo dalla playlist selezionata.
+             */
+            PlaylistManager.getInstance().removeTrackFromPlaylist(selectedTrack, selectedPlaylist);
+
+            // Aggiorna anche la ListView rimuovendo visivamente la traccia
+            playlistTracksListView.getItems().remove(selectedTrack);
+
+            // Messaggio di successo
+            messageLabel.setStyle("-fx-text-fill: green;");
+            messageLabel.setText("Traccia rimossa correttamente dalla playlist.");
+
+        } catch (IllegalArgumentException e) {
+
+            // Se qualcosa non va, ad esempio nessuna playlist o traccia selezionata,
+            // mostra il messaggio di errore in rosso
+            messageLabel.setStyle("-fx-text-fill: red;");
+            messageLabel.setText(e.getMessage());
+        }
+    }
+
+    /*
+     * Metodo collegato al pulsante "Annulla" della schermata managePlaylist.fxml.
+     * Azzera la selezione della playlist, svuota la lista delle tracce
+     * e cancella eventuali messaggi.
+     */
+    @FXML
+    private void handleCancelRemove() {
+
+        // Deseleziona la playlist scelta
+        if (playlistComboBox != null) {
+            playlistComboBox.setValue(null);
+        }
+
+        // Svuota la ListView delle tracce
+        if (playlistTracksListView != null) {
+            playlistTracksListView.getItems().clear();
+        }
+
+        // Cancella eventuali messaggi di errore o conferma
+        if (messageLabel != null) {
+            messageLabel.setText("");
+        }
+
+
+    }
+
+    @FXML
+    void handleAggiungiTraccia(ActionEvent event) {
+
+        Playlist selectedPlaylist = playlistComboBox.getValue();
+
+        if (selectedPlaylist == null) {
+            messageLabel.setStyle("-fx-text-fill: red;");
+            messageLabel.setText("Seleziona una playlist.");
+            return;
+        }
+
+        try {
+            // 1. leggi dati
+            String title = trackTitleField.getText();
+            String artist = trackArtistField.getText();
+            String album = trackAlbumField.getText();
+            String genre = trackGenreField.getText();
+            int year = Integer.parseInt(trackYearField.getText());
+            int duration = Integer.parseInt(trackDurationField.getText());
+
+            // 2. crea track
+            Track newTrack = new Track(title, artist, album, genre, year, duration);
+
+            // 3. aggiungi alla playlist
+            selectedPlaylist.addTrack(newTrack);
+
+            // (opzionale ma corretto se usi manager)
+            // PlaylistManager.getInstance().addTrackToPlaylist(newTrack, selectedPlaylist);
+
+            // 4. aggiorna ListView
+            playlistTracksListView.getItems().setAll(selectedPlaylist.getTracks());
+
+            // 6. messaggio
+            messageLabel.setStyle("-fx-text-fill: green;");
+            messageLabel.setText("Traccia aggiunta alla playlist.");
+
+            // 7. pulizia campi
+            trackTitleField.clear();
+            trackArtistField.clear();
+            trackAlbumField.clear();
+            trackGenreField.clear();
+            trackYearField.clear();
+            trackDurationField.clear();
+
+        } catch (NumberFormatException e) {
+            messageLabel.setStyle("-fx-text-fill: red;");
+            messageLabel.setText("Anno e durata devono essere numeri.");
+        } catch (Exception e) {
+            messageLabel.setStyle("-fx-text-fill: red;");
+            messageLabel.setText("Errore: " + e.getMessage());
+        }
+    }
+
     @FXML
     private TextField renamePlaylistField;
 
-    // Campi del form "Aggiungi traccia", per ora solo grafici
     @FXML
     private TextField trackTitleField;
 
@@ -57,194 +302,4 @@ public class PlaylistController implements Initializable {
 
     @FXML
     private TextField trackDurationField;
-
-    /*
-     * Metodo chiamato automaticamente da JavaFX quando viene caricato un FXML.
-     *
-     * Questo controller viene usato sia da createPlaylist.fxml sia da managePlaylist.fxml.
-     * Per questo alcuni elementi possono essere null:
-     * - createPlaylist.fxml usa playlistNameField e messageLabel
-     * - managePlaylist.fxml usa playlistComboBox e playlistTracksListView
-     */
-    @Override
-    public void initialize(URL url, ResourceBundle resourceBundle) {
-
-        /*
-         * Se playlistComboBox non è null, significa che stiamo caricando
-         * la schermata managePlaylist.fxml.
-         *
-         * Qui carichiamo tutte le playlist disponibili nella ComboBox.
-         */
-        if (playlistComboBox != null) {
-            playlistComboBox.getItems().setAll(
-                    PlaylistManager.getInstance().getPlaylists()
-            );
-
-            /*
-             * Quando l'utente seleziona una playlist dalla ComboBox,
-             * aggiorniamo la ListView centrale con le tracce contenute
-             * nella playlist selezionata.
-             */
-            playlistComboBox.setOnAction(event -> {
-                Playlist selectedPlaylist = playlistComboBox.getValue();
-                updateTracksList(selectedPlaylist);
-            });
-        }
-    }
-    /*
-    * Aggiorna la ListView delle tracce in base alla playlist selezionata.
-            *
-            * Se la playlist selezionata è null, la lista delle tracce viene semplicemente svuotata.
-     * Se invece la playlist è valida, vengono mostrate tutte le tracce contenute al suo interno.
-            *
-            * @param selectedPlaylist playlist selezionata dall'utente.
-            */
-    private void updateTracksList(Playlist selectedPlaylist) {
-        // Controllo necessario perché la ListView esiste solo in managePlaylist.fxml.
-        if (playlistTracksListView != null) {
-
-            // Svuota la lista prima di caricare le tracce della nuova playlist selezionata.
-            playlistTracksListView.getItems().clear();
-
-            // Se è stata selezionata una playlist valida, mostra le sue tracce.
-            if (selectedPlaylist != null) {
-                playlistTracksListView.getItems().setAll(
-                        selectedPlaylist.getTracks()
-                );
-            }
-        }
-    }
-
-    /**
-     * Gestisce il click sul pulsante "Crea" della schermata createPlaylist.fxml.
-     *
-     * Legge il nome inserito dall'utente, chiama il PlaylistManager per creare
-     * una nuova playlist e mostra un messaggio di conferma o errore.
-     *
-     * Eventuali errori di validazione, come il nome vuoto, vengono intercettati
-     * e mostrati nella GUI tramite messageLabel.
-     */
-    @FXML
-    private void handleCreatePlaylist() {
-
-        // Recupera il nome della playlist scritto dall'utente.
-        String playlistName = playlistNameField.getText();
-
-        try {
-            // Crea la nuova playlist attraverso il manager.
-            PlaylistManager.getInstance().createPlaylist(playlistName);
-
-            // Messaggio di conferma in caso di creazione corretta.
-            messageLabel.setStyle("-fx-text-fill: green;");
-            messageLabel.setText("Playlist creata correttamente.");
-            // Pulisce il campo di input dopo la creazione.
-            playlistNameField.clear();
-
-        } catch (IllegalArgumentException e) {
-
-            // Mostra nella GUI eventuali errori di validazione.
-            messageLabel.setStyle("-fx-text-fill: red;");
-            messageLabel.setText(e.getMessage());
-        }
-    }
-
-    /**
-     * Gestisce il click sul pulsante "Annulla" della schermata createPlaylist.fxml.
-     *
-     * Pulisce eventuali dati inseriti, cancella i messaggi mostrati nella GUI
-     * e chiude la finestra/modale corrente.
-     *
-     * @param event evento generato dal click sul pulsante Annulla.
-     */
-    @FXML
-    private void handleCancel(ActionEvent event) {
-
-        // Pulisce il campo del nome, se presente.
-        if (playlistNameField != null) {
-            playlistNameField.clear();
-        }
-
-        // Cancella eventuali messaggi di errore o conferma.
-        if (messageLabel != null) {
-            messageLabel.setText("");
-        }
-
-        // Recupera la finestra corrente a partire dal pulsante cliccato.
-        Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
-
-        // Chiude la finestra/modale.
-        stage.close();
-    }
-
-    /**
-     * Gestisce il click sul pulsante "Rimuovi traccia" della schermata managePlaylist.fxml.
-     *
-     * Recupera la playlist selezionata e la traccia selezionata nella ListView,
-     * poi chiede al PlaylistManager di rimuovere la traccia dalla playlist.
-     *
-     * La traccia viene rimossa solo dalla playlist selezionata e non dalla libreria principale.
-     * Eventuali errori, come playlist non selezionata o traccia non selezionata,
-     * vengono intercettati e mostrati nella GUI.
-     */
-    @FXML
-    private void handleRemoveTrackFromPlaylist() {
-        Playlist selectedPlaylist = null;
-
-        // Recupera la playlist selezionata nella ComboBox.
-        if (playlistComboBox != null) {
-            selectedPlaylist = playlistComboBox.getValue();
-        }
-
-        Track selectedTrack = null;
-
-        // Recupera la traccia selezionata nella ListView.
-        if (playlistTracksListView != null) {
-            selectedTrack = playlistTracksListView.getSelectionModel().getSelectedItem();
-        }
-
-        try {
-            // Rimuove la traccia dalla playlist attraverso il PlaylistManager.
-            PlaylistManager.getInstance().removeTrackFromPlaylist(selectedTrack, selectedPlaylist);
-
-            // Aggiorna anche la ListView, rimuovendo visivamente la traccia.
-            if (playlistTracksListView != null) {
-                playlistTracksListView.getItems().remove(selectedTrack);
-            }
-
-            // Messaggio di conferma.
-            messageLabel.setStyle("-fx-text-fill: green;");
-            messageLabel.setText("Traccia rimossa correttamente dalla playlist.");
-
-        } catch (IllegalArgumentException e) {
-
-            // Mostra eventuali errori nella GUI.
-            messageLabel.setStyle("-fx-text-fill: red;");
-            messageLabel.setText(e.getMessage());
-        }
-    }
-
-    /**
-     * Gestisce il click sul pulsante "Annulla" della schermata managePlaylist.fxml.
-     *
-     * Azzera la playlist selezionata, svuota la lista delle tracce mostrata
-     * e cancella eventuali messaggi di conferma o errore.
-     */
-    @FXML
-    private void handleCancelRemove() {
-
-        // Deseleziona la playlist scelta nella ComboBox.
-        if (playlistComboBox != null) {
-            playlistComboBox.setValue(null);
-        }
-
-        // Svuota la ListView delle tracce.
-        if (playlistTracksListView != null) {
-            playlistTracksListView.getItems().clear();
-        }
-
-        // Cancella eventuali messaggi mostrati all'utente.
-        if (messageLabel != null) {
-            messageLabel.setText("");
-        }
-    }
 }
