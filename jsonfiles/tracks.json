@@ -255,7 +255,7 @@
   "album" : null,
   "genre" : "Rock",
   "year" : 2003,
-  "favourite" : false,
+  "favourite" : true,
   "explicit" : false,
   "duration" : 187
 }, {
@@ -268,4 +268,14 @@
   "favourite" : false,
   "explicit" : true,
   "duration" : 236
+}, {
+  "pathname" : "gtfzfgdzgtfd",
+  "name" : "ghchgchg",
+  "artist" : "khvbjhv",
+  "album" : "jhcvfjcjgcgh",
+  "genre" : "ufugtchgc",
+  "year" : 123,
+  "favourite" : false,
+  "explicit" : false,
+  "duration" : 180
 } ]

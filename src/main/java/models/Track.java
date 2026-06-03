@@ -1,5 +1,6 @@
 package models;
-
+// ========== CLASSE TRACK ================
+//
 public class Track {
 
     private String pathname;
@@ -12,10 +13,10 @@ public class Track {
     private boolean explicit;
     private int duration; // in seconds
 
-    // Empty constructor
+    // Costruttore vuoto
     public Track() {}
 
-    // Full constructor
+    // Costruttore completo
     public Track(String pathname, String name, String artist, String album, String genre,
                  int year, boolean favourite, boolean explicit, int duration) {
         this.pathname = pathname;
@@ -29,7 +30,7 @@ public class Track {
         this.duration = duration;
     }
 
-    // Getters and Setters
+    // Getters e Setters
     public String getPathname() {
         return pathname;
     }
@@ -101,7 +102,11 @@ public class Track {
         this.duration = duration;
     }
 
-    // viene usato Objects.equals(...) per gestire automaticamente i null
+
+    /** viene usato Objects.equals(...) per gestire automaticamente i null
+     * il metodo si occupa di verificare se due oggetti (Track) sono uguali
+     * @params obj la traccia con cui effettuare la verifica di uguaglianza
+     */
     @Override
     public boolean equals(Object obj) {
         if (this == obj) {
@@ -145,6 +150,7 @@ public class Track {
         return "Track{" +
                 "name='" + name + '\'' +
                 ", artist='" + artist + '\'' +
+                ", album=" + album + '\'' +
                 ", genre='" + genre + '\'' +
                 ", year=" + year +
                 ", favourite=" + favourite +
