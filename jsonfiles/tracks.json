@@ -295,4 +295,14 @@
   "favourite" : false,
   "explicit" : true,
   "duration" : 239
+}, {
+  "pathname" : "mckmldsk",
+  "name" : "cvdfsfd",
+  "artist" : "fgefd",
+  "album" : "vfdfd",
+  "genre" : "rock",
+  "year" : 2020,
+  "favourite" : true,
+  "explicit" : true,
+  "duration" : 155
 } ]
