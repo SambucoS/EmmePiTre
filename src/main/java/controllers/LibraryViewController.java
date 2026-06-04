@@ -300,7 +300,7 @@ public class LibraryViewController implements LibraryObserver {
         editItem.setOnAction(event -> {
             Track currentTrack = row.getItem();
             modifyTrack(currentTrack);
-            });
+        });
 
         // 2. Logica per l'ELIMINAZIONE (Apertura Modale)
         deleteItem.setOnAction(event -> {
@@ -396,7 +396,7 @@ public class LibraryViewController implements LibraryObserver {
         try {
             // Creazione del caricatore FXML, specificando il path della view del Player
             FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/views/libraryView.fxml"));
+                    getClass().getResource("/views/playerView.fxml"));
 
 
             // Caricamento del contenuto del file fxml, l'albero dei nodi
