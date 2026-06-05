@@ -3,8 +3,16 @@ package controllers;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.stage.Stage;
 import models.Track;
 
+/**
+ * Gestisce l'interfaccia utente per la modifica dei dettagli di una traccia musicale.
+ * Questa classe funge da controller per la vista di modifica e permette di
+ * convalidare e aggiornare i dati di un oggetto {@link Track} esistente.
+ * * @author GRUPPO_14_SAD
+ * @version 1.0
+ */
 public class ModifyController {
 
     @FXML private Button btnAnnulla;
@@ -20,6 +28,11 @@ public class ModifyController {
 
     private Track track;
 
+    /**
+     * Inizializza il controller. Questo metodo viene chiamato automaticamente
+     * da JavaFX dopo il caricamento del file FXML.
+     * Si occupa di popolare la tendina dei generi musicali.
+     */
     @FXML
     public void initialize() {
         cmbGenre.getItems().addAll(
@@ -27,11 +40,21 @@ public class ModifyController {
         );
     }
 
+    /**
+     * Imposta la traccia musicale che l'utente desidera modificare.
+     * Richiama automaticamente il caricamento dei dati nell'interfaccia.
+     *
+     * @param track la traccia {@link Track} da modificare
+     */
     public void setTrack(Track track) {
         this.track = track;
         loadData();
     }
 
+    /**
+     * Carica i dettagli della traccia selezionata e li inserisce nei
+     * rispettivi campi di testo e controlli dell'interfaccia utente.
+     */
     private void loadData() {
         txtName.setText(track.getName());
         txtArtist.setText(track.getArtist());
@@ -45,15 +68,21 @@ public class ModifyController {
         cmbGenre.setValue(track.getGenre());
     }
 
+    /**
+     * Gestisce l'evento di salvataggio delle modifiche.
+     * Se l'input risulta valido, aggiorna i dati dell'oggetto {@link Track},
+     * sincronizza la libreria musicale, notifica gli observer e chiude la finestra.
+     *
+     * @param event l'evento generato dalla pressione del pulsante "Salva"
+     */
     @FXML
     void handleSalva(ActionEvent event) {
-
         if (!isValid()) return;
 
         track.setName(txtName.getText());
         track.setArtist(txtArtist.getText());
         track.setAlbum(txtAlbum.getText());
-        track.setGenre((String) cmbGenre.getValue());
+        track.setGenre(cmbGenre.getValue());
 
         track.setExplicit(chkExplicit.isSelected());
         track.setFavourite(chkFavourite.isSelected());
@@ -61,38 +90,92 @@ public class ModifyController {
         track.setYear(Integer.parseInt(txtYear.getText()));
         track.setDuration(Integer.parseInt(txtDuration.getText()));
 
+        models.Library.getInstance().sync();
+
+        models.Library.getInstance().notifyObservers();
+
         closeWindow();
     }
 
+    /**
+     * Gestisce l'evento di annullamento.
+     * Interrompe l'operazione di modifica e chiude la finestra corrente.
+     *
+     * @param event l'evento generato dalla pressione del pulsante "Annulla"
+     */
     @FXML
     void handleAnnulla(ActionEvent event) {
         closeWindow();
     }
 
-    private boolean isValid() {
+    /**
+     * Recupera lo stage attuale e lo chiude definitivamente,
+     * nascondendo la finestra e liberando le risorse.
+     */
+    private void closeWindow() {
 
-        if (txtName.getText().isEmpty() ||
-                txtArtist.getText().isEmpty()) {
-            return false;
-        }
-
-        try {
-            int year = Integer.parseInt(txtYear.getText());
-            int duration = Integer.parseInt(txtDuration.getText());
-
-            if (year < 1900 || duration <= 0) {
-                return false;
-            }
-
-        } catch (NumberFormatException e) {
-            return false;
-        }
-
-        return true;
+        Stage stage = (Stage) btnSalva.getScene().getWindow();
+        stage.close();
     }
 
-    private void closeWindow() {
-        btnSalva.getScene().getWindow().hide();
+    /**
+     * Valida i dati inseriti dall'utente nei campi dell'interfaccia.
+     * Controlla che i campi testuali non siano vuoti e che anno e durata
+     * siano formattati correttamente come numeri interi. Mostra un {@link Alert}
+     * in caso di errori di validazione.
+     *
+     * @return {@code true} se tutti i parametri inseriti sono validi, {@code false} in caso contrario
+     */
+    private boolean isValid() {
+        String errorMessage = "";
+
+        if (txtName.getText() == null || txtName.getText().isBlank()) {
+            errorMessage += "Titolo non valido!\n";
+        }
+
+        if (txtArtist.getText() == null || txtArtist.getText().isBlank()) {
+            errorMessage += "Artista non valido!\n";
+        }
+
+        if (txtAlbum.getText() == null || txtAlbum.getText().isBlank()) {
+            errorMessage += "Album non valido!\n";
+        }
+
+        if (cmbGenre.getValue() == null || cmbGenre.getValue().isBlank()) {
+            errorMessage += "Genere non valido!\n";
+        }
+
+        if (txtYear.getText() == null || txtYear.getText().isBlank()) {
+            errorMessage += "Anno non valido!\n";
+        } else {
+            try {
+                Integer.parseInt(txtYear.getText());
+            } catch (NumberFormatException e) {
+                errorMessage += "L'anno deve essere un numero intero!\n";
+            }
+        }
+
+        if (txtDuration.getText() == null || txtDuration.getText().isBlank()) {
+            errorMessage += "Durata non valida!\n";
+        } else {
+            try {
+                Integer.parseInt(txtDuration.getText());
+            } catch (NumberFormatException e) {
+                errorMessage += "La durata deve essere un numero intero (in secondi)!\n";
+            }
+        }
+
+        if (errorMessage.length() == 0) {
+            return true;
+        } else {
+            // Mostra una finestra di avviso in caso di errore
+            Alert alert = new Alert(Alert.AlertType.ERROR);
+            alert.setTitle("Campi non validi");
+            alert.setHeaderText("Per favore, correggi i campi errati");
+            alert.setContentText(errorMessage);
+            alert.showAndWait();
+            return false;
+        }
     }
 }
 
