@@ -1,25 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.geometry.Insets?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.control.Label?>
-<?import javafx.scene.control.Slider?>
-<?import javafx.scene.layout.Region?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.VBox?>
+<?import javafx.geometry.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
 
-<HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="700.0" spacing="15.0" xmlns="http://javafx.com/javafx/21"
-      style="-fx-border-color: black; -fx-border-width: 1px;" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.PlayerController">
+<HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="700.0" spacing="15.0" style="-fx-border-color: black; -fx-border-width: 1px;" xmlns="http://javafx.com/javafx/17.0.12" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.PlayerController">
     <padding>
         <Insets bottom="10.0" left="15.0" right="15.0" top="10.0" />
     </padding>
     <children>
 
-        <Label fx:id="tnameLbl" text="Nome Traccia.mp3" prefWidth="150.0" />
+        <Label fx:id="tnameLbl" prefWidth="150.0" text="Nome Traccia.mp3" />
 
         <Region HBox.hgrow="ALWAYS" />
 
-        <VBox alignment="CENTER" spacing="8.0" prefWidth="350.0">
+        <VBox alignment="CENTER" prefWidth="350.0" spacing="8.0">
             <children>
                 <HBox alignment="CENTER" spacing="15.0">
                     <Button fx:id="prevButton" onAction="#handlePrev" text="⏮ Prev" />
@@ -30,14 +25,15 @@
                     <children>
                         <Label fx:id="currentTime" text="00:00" />
                         <Slider fx:id="progressSlider" HBox.hgrow="ALWAYS" />
-                        <Label fx:id="durationLbl"/>
+                        <Label fx:id="durationLbl" />
                     </children>
                 </HBox>
             </children>
         </VBox>
 
         <Region HBox.hgrow="ALWAYS" />
-        <HBox alignment="CENTER" prefWidth="200.0"><Label text="Volume" alignment="CENTER_RIGHT" prefWidth="150.0" /> <Slider></Slider></HBox>
+        <HBox alignment="CENTER" prefWidth="200.0"><Label alignment="CENTER_RIGHT" prefWidth="150.0" text="Volume" /> <Slider /></HBox>
+      <Separator orientation="VERTICAL" prefHeight="200.0" />
 
 
     </children>

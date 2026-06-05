@@ -322,7 +322,7 @@ public class LibraryViewController implements LibraryObserver {
         editItem.setOnAction(event -> {
             Track currentTrack = row.getItem();
             modifyTrack(currentTrack);
-            });
+        });
 
         // 2. Logica per l'ELIMINAZIONE (Apertura Modale)
         deleteItem.setOnAction(event -> {
