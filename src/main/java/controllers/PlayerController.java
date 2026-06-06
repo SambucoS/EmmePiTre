@@ -68,9 +68,9 @@ public class PlayerController {
         this.track = track;
         this.currentPlaylist = playlist;
         this.currentIndex = playlist.indexOf(track); // Trova in che posizione siamo
-        this.tnameLbl.setText(track.getName());
+        this.tnameLbl.setText("🎵   " + track.getName());
         this.durationLbl.setText(durationFormatter(track.getDuration()));
-        this.statusButton.setText("Play"); // Resetta il bottone se cambia la canzone
+        this.statusButton.setText("⏸"); // Resetta il bottone se cambia la canzone
         seconds = 0;
         currentTime.setText("00:00");
         progressSlider.setMin(0);
@@ -81,6 +81,7 @@ public class PlayerController {
     @FXML
     public void handlePrev(ActionEvent event) {
         timeline.stop();
+        progressSlider.setValue(0);
         if (currentPlaylist != null && !currentPlaylist.isEmpty()) {
             currentIndex--;
             if (currentIndex < 0) {
@@ -94,6 +95,7 @@ public class PlayerController {
     @FXML
     public void handleNext(ActionEvent event) {
         timeline.stop(); // viene fermata la Timeline
+        progressSlider.setValue(0);
         if (currentPlaylist != null && !currentPlaylist.isEmpty()) {
             currentIndex++;
             if (currentIndex >= currentPlaylist.size()) {
@@ -108,12 +110,12 @@ public class PlayerController {
      * @param actionEvent è l'evento che genera il cambio di stato (la pressione del pulsante "Play"|"Pause")
      */
     public void handleStatus(ActionEvent actionEvent) {
-        if (statusButton.getText().equals("Play")){
-            statusButton.setText("Pause");
-            timeline.pause();
-        } else if (statusButton.getText().equals("Pause")) {
-            statusButton.setText("Play");
+        if (statusButton.getText().equals("▶")){
+            statusButton.setText("⏸");
             timeline.play();
+        } else if (statusButton.getText().equals("⏸")) {
+            statusButton.setText("▶");
+            timeline.pause();
         }
     }
 
