@@ -25,6 +25,11 @@ public class PlaylistManager {
     }
 
     // METODI CRUD PLAYLIST -
+    // Metodo helper per il Command Pattern
+    public void addPlaylist(Playlist playlist) {
+        this.playlists.add(playlist);
+        this.sync();
+    }
     public List<Playlist> getPlaylists() {
         return this.playlists; // Restituisce la lista in RAM
     }

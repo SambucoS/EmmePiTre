@@ -17,6 +17,7 @@ import javafx.fxml.Initializable;
 import models.Playlist;
 import models.PlaylistManager;
 import models.Track;
+import models.commands.*;
 
 // Import richiesti dall'interfaccia Initializable
 import java.net.URL;
@@ -127,7 +128,9 @@ public class PlaylistController implements Initializable {
 
         try {
             // Crea la playlist usando il manager
-            PlaylistManager.getInstance().createPlaylist(playlistName);
+            Playlist nuovaPlaylist = new Playlist(playlistName);
+            Command addPlaylistCmd = new AddPlaylistCommand(nuovaPlaylist);
+            CommandManager.getInstance().executeCommand(addPlaylistCmd);
 
             // Se la creazione va a buon fine, mostra un messaggio verde
             messageLabel.setStyle("-fx-text-fill: green;");
@@ -180,15 +183,16 @@ public class PlaylistController implements Initializable {
         Track selectedTrack = playlistTracksListView.getSelectionModel().getSelectedItem();
 
         try {
-            /*
-             * Chiede al PlaylistManager di rimuovere la traccia dalla playlist.
-             * Questa operazione NON elimina la traccia dalla libreria principale,
-             * ma solo dalla playlist selezionata.
-             */
-            PlaylistManager.getInstance().removeTrackFromPlaylist(selectedTrack, selectedPlaylist);
+            // 1. Creiamo il comando
+            Command removeTrackFromPlCmd = new RemoveTrackFromPlaylistCommand(selectedPlaylist, selectedTrack);
 
-            // Aggiorna anche la ListView rimuovendo visivamente la traccia
-            playlistTracksListView.getItems().remove(selectedTrack);
+            // 2. Lo eseguiamo e lo salviamo nello Stack
+            CommandManager.getInstance().executeCommand(removeTrackFromPlCmd);
+
+            // 3. AGGIORNAMENTO GRAFICO "A PROVA DI UNDO":
+            // Invece di rimuovere l'elemento a mano, diciamo alla ListView di
+            // rileggere l'intera lista aggiornata dalla playlist!
+            playlistTracksListView.getItems().setAll(selectedPlaylist.getTracks());
 
             // Messaggio di successo
             messageLabel.setStyle("-fx-text-fill: green;");
@@ -249,14 +253,20 @@ public class PlaylistController implements Initializable {
             int year = Integer.parseInt(trackYearField.getText());
             int duration = Integer.parseInt(trackDurationField.getText());
 
-            // 2. crea track
-            Track newTrack = new Track(null,title, artist, album, genre, year,true, true, duration);
+            // 2. crea track (QUESTO RESTA IDENTICO)
+            Track newTrack = new Track(null, title, artist, album, genre, year, true, true, duration);
 
-            // 3. aggiungi alla playlist
-            selectedPlaylist.addTrack(newTrack);
+            // 3. Aggiungi alla playlist tramite il Command Pattern
+            // Invece di chiamare direttamente la playlist o il manager, creiamo l'azione:
+            Command addTrackCmd = new AddTrackToPlaylistCommand(selectedPlaylist, newTrack);
 
-            // (opzionale ma corretto se usi manager)
-            // PlaylistManager.getInstance().addTrackToPlaylist(newTrack, selectedPlaylist);
+            // Chiediamo al gestore di eseguirla e salvarla in cronologia!
+            CommandManager.getInstance().executeCommand(addTrackCmd);
+
+            // 4. AGGIORNAMENTO GRAFICO (Fondamentale)
+            // Ricordati di ricaricare la lista visiva per far apparire subito la nuova canzone
+            // (e per farla riapparire correttamente in caso di futuri "Redo")
+            playlistTracksListView.getItems().setAll(selectedPlaylist.getTracks());
 
             // 4. aggiorna ListView
             playlistTracksListView.getItems().setAll(selectedPlaylist.getTracks());

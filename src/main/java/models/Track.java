@@ -1,8 +1,12 @@
 package models;
 // ========== CLASSE TRACK ================
-//
+// versione 2.0 ( Aggiunta identificativi )
+
+import services.IdGenerator;
+
 public class Track {
 
+    private String id;
     private String pathname;
     private String name;
     private String artist;
@@ -19,6 +23,8 @@ public class Track {
     // Costruttore completo
     public Track(String pathname, String name, String artist, String album, String genre,
                  int year, boolean favourite, boolean explicit, int duration) {
+        this.id = IdGenerator.generateId();
+        System.out.println(id);
         this.pathname = pathname;
         this.name = name;
         this.artist = artist;
@@ -31,6 +37,8 @@ public class Track {
     }
 
     // Getters e Setters
+    public String getId(){ return id;}
+
     public String getPathname() {
         return pathname;
     }
