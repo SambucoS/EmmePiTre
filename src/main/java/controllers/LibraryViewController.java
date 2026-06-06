@@ -17,8 +17,11 @@ import models.Track;
 import models.commands.Command;
 import models.commands.CommandManager;
 import models.commands.RemoveTrackCommand;
-
 import java.io.IOException;
+import javafx.application.Platform;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 
 public class LibraryViewController implements LibraryObserver {
 
@@ -221,6 +224,28 @@ public class LibraryViewController implements LibraryObserver {
                 } else {
                     setGraphic(dotsLabel);
                 }
+            }
+        });
+        // =========================================================
+        // SCORCIATOIE DA TASTIERA (Ctrl+Z e Ctrl+Y)
+        // =========================================================
+        Platform.runLater(() -> {
+            Scene scene = trackList.getScene(); // Recuperiamo la scena usando un elemento della GUI
+
+            if (scene != null) {
+                // Scorciatoia per UNDO: Ctrl + Z
+                // Nota: Usiamo SHORTCUT_DOWN invece di CONTROL_DOWN. È una best practice di JavaFX
+                // perché si adatta automaticamente: usa 'Ctrl' su Windows/Linux e 'Cmd' su Mac.
+                scene.getAccelerators().put(
+                        new KeyCodeCombination(KeyCode.Z, KeyCombination.SHORTCUT_DOWN),
+                        this::onUndo
+                );
+
+                // Scorciatoia per REDO: Ctrl + Y
+                scene.getAccelerators().put(
+                        new KeyCodeCombination(KeyCode.Y, KeyCombination.SHORTCUT_DOWN),
+                        this::onRedo
+                );
             }
         });
     }
