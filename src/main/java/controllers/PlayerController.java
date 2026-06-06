@@ -1,11 +1,15 @@
 package controllers;
 
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TableColumn;
+import javafx.util.Duration;
 import models.Track;
 
 public class PlayerController {
@@ -21,11 +25,38 @@ public class PlayerController {
     private Label tnameLbl;
 
     @FXML
-    private Label durationLbl;;
+    private Label durationLbl;
 
+    @FXML
+    private Label currentTime;
+
+
+    private Timeline timeline;
+    private int seconds = 0;
     private Track track;
     private java.util.List<Track> currentPlaylist; // Lista delle canzoni
     private int currentIndex; // Posizione della canzone attuale
+
+
+    /**
+     * Per il {@link PlayerController} viene inizializzata una Timeline, al
+     * fine di gestire la riproduzione simulata della traccia selezionata
+     */
+    @FXML
+    public void initialize() {
+
+        timeline = new Timeline(
+                new KeyFrame(Duration.seconds(1), e -> {
+                    seconds++;
+                    currentTime.setText(durationFormatter(seconds));
+                    progressSlider.setValue(seconds);
+                })
+        );
+
+        timeline.setCycleCount(Animation.INDEFINITE);
+    }
+
+
 
     /**
      * Serve a impostare i parametri da visualizzare durante la riproduzione,
@@ -37,14 +68,19 @@ public class PlayerController {
         this.track = track;
         this.currentPlaylist = playlist;
         this.currentIndex = playlist.indexOf(track); // Trova in che posizione siamo
-
         this.tnameLbl.setText(track.getName());
         this.durationLbl.setText(durationFormatter(track.getDuration()));
         this.statusButton.setText("Play"); // Resetta il bottone se cambia la canzone
+        seconds = 0;
+        currentTime.setText("00:00");
+        progressSlider.setMin(0);
+        progressSlider.setMax(track.getDuration());
+        timeline.play();
     }
 
     @FXML
     public void handlePrev(ActionEvent event) {
+        timeline.stop();
         if (currentPlaylist != null && !currentPlaylist.isEmpty()) {
             currentIndex--;
             if (currentIndex < 0) {
@@ -57,6 +93,7 @@ public class PlayerController {
 
     @FXML
     public void handleNext(ActionEvent event) {
+        timeline.stop(); // viene fermata la Timeline
         if (currentPlaylist != null && !currentPlaylist.isEmpty()) {
             currentIndex++;
             if (currentIndex >= currentPlaylist.size()) {
@@ -73,8 +110,10 @@ public class PlayerController {
     public void handleStatus(ActionEvent actionEvent) {
         if (statusButton.getText().equals("Play")){
             statusButton.setText("Pause");
+            timeline.pause();
         } else if (statusButton.getText().equals("Pause")) {
             statusButton.setText("Play");
+            timeline.play();
         }
     }
 
@@ -87,6 +126,8 @@ public class PlayerController {
     public String durationFormatter(int seconds) {
         int minutes = seconds / 60; // corrisponde al lato dei minuti "'MM':SS"
         int secondsLeft = seconds % 60; // corrsisponde al lato dei secondi "MM:'SS'"
-        return String.format("%d:%02d", minutes, secondsLeft);
+        return String.format("%02d:%02d", minutes, secondsLeft);
     }
+
+
 }
