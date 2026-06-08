@@ -14,8 +14,14 @@ import javafx.stage.Modality;
 import javafx.stage.Stage;
 import models.Library;
 import models.Track;
-
+import models.commands.Command;
+import models.commands.CommandManager;
+import models.commands.RemoveTrackCommand;
 import java.io.IOException;
+import javafx.application.Platform;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 
 public class LibraryViewController implements LibraryObserver {
 
@@ -49,6 +55,8 @@ public class LibraryViewController implements LibraryObserver {
     private TextField researchBar;
     @FXML
     private Button addButton;
+    @FXML private Button undoButton;
+    @FXML private Button redoButton;
 
     @FXML
     public void initialize() {
@@ -218,6 +226,28 @@ public class LibraryViewController implements LibraryObserver {
                 }
             }
         });
+        // =========================================================
+        // SCORCIATOIE DA TASTIERA (Ctrl+Z e Ctrl+Y)
+        // =========================================================
+        Platform.runLater(() -> {
+            Scene scene = trackList.getScene(); // Recuperiamo la scena usando un elemento della GUI
+
+            if (scene != null) {
+                // Scorciatoia per UNDO: Ctrl + Z
+                // Nota: Usiamo SHORTCUT_DOWN invece di CONTROL_DOWN. È una best practice di JavaFX
+                // perché si adatta automaticamente: usa 'Ctrl' su Windows/Linux e 'Cmd' su Mac.
+                scene.getAccelerators().put(
+                        new KeyCodeCombination(KeyCode.Z, KeyCombination.SHORTCUT_DOWN),
+                        this::onUndo
+                );
+
+                // Scorciatoia per REDO: Ctrl + Y
+                scene.getAccelerators().put(
+                        new KeyCodeCombination(KeyCode.Y, KeyCombination.SHORTCUT_DOWN),
+                        this::onRedo
+                );
+            }
+        });
     }
 
     // =========================================================
@@ -269,15 +299,7 @@ public class LibraryViewController implements LibraryObserver {
 
         // E. Mostriamo il modale e mettiamo "in pausa" questo codice finché non viene chiuso
         dialogStage.showAndWait();
-    }
-
-    @FXML
-    public void onRemoveTrack() {
-        Track selected = trackList.getSelectionModel().getSelectedItem();
-        if (selected != null) {
-            // Chiamiamo il metodo di rimozione della Library, l'interfaccia si adeguerà da sola via notifica
-            Library.getInstance().removeTrack(selected);
-        }
+        updateUndoRedoButtons();
     }
 
     private ContextMenu createActionMenu(TableRow<Track> row) {
@@ -335,7 +357,9 @@ public class LibraryViewController implements LibraryObserver {
                 if (dialogController.isConfirmed()) {
                     // Se ha cliccato "Sono sicuro", eliminiamo la traccia dal modello centrale!
                     // Grazie all'Observer Pattern, la riga sparirà automaticamente dalla TableView
-                    Library.getInstance().removeTrack(currentTrack);
+                    Command removeCmd = new RemoveTrackCommand(Library.getInstance(), currentTrack);
+                    CommandManager.getInstance().executeCommand(removeCmd);
+                    updateUndoRedoButtons();
                     System.out.println("Traccia eliminata definitivamente: " + currentTrack.getName());
                 } else {
                     System.out.println("Eliminazione annullata.");
@@ -370,6 +394,15 @@ public class LibraryViewController implements LibraryObserver {
 
             // D. Mostra il modale e attendi la chiusura
             dialogStage.showAndWait();
+
+            // ========================================================
+            // IL MODALE SI È CHIUSO: AGGIORNIAMO I TASTI UNDO/REDO
+            // ========================================================
+            updateUndoRedoButtons();
+
+            // Se hai un menù laterale o una lista visiva delle playlist,
+            // questo è il punto esatto in cui dovresti ricaricarla!
+            // Esempio: sideBarPlaylists.getItems().setAll(models.PlaylistManager.getInstance().getPlaylists());
 
             // E. Verifica per il debug: stampa su console le playlist attualmente esistenti
             System.out.println("--- STATO ATTUALE PLAYLIST ---");
@@ -455,5 +488,42 @@ public class LibraryViewController implements LibraryObserver {
             e.printStackTrace();
         }
     }
+    // =========================================================
+    // GESTIONE UNDO / REDO GRAFICO
+    // =========================================================
 
+    @FXML
+    public void onUndo() {
+        // 1. Chiediamo al manager di annullare l'ultima azione
+        models.commands.CommandManager.getInstance().undo();
+
+        // 2. Aggiorniamo i colori/stati dei bottoncini
+        updateUndoRedoButtons();
+
+        // 3. Ricarichiamo la grafica della tabella per far apparire/sparire i dati
+        trackList.getItems().setAll(Library.getInstance().getTracks());
+    }
+
+    @FXML
+    public void onRedo() {
+        // 1. Chiediamo al manager di ripristinare l'azione annullata
+        models.commands.CommandManager.getInstance().redo();
+
+        // 2. Aggiorniamo i bottoni
+        updateUndoRedoButtons();
+
+        // 3. Ricarichiamo la grafica
+        trackList.getItems().setAll(Library.getInstance().getTracks());
+    }
+
+    /**
+     * Controlla lo stato degli stack nel CommandManager e accende/spegne i bottoni
+     */
+    public void updateUndoRedoButtons() {
+        // Se non ci sono azioni da annullare (canUndo = false), il bottone è disabilitato (true)
+        undoButton.setDisable(!models.commands.CommandManager.getInstance().canUndo());
+
+        // Se non ci sono azioni da ripristinare (canRedo = false), il bottone è disabilitato (true)
+        redoButton.setDisable(!models.commands.CommandManager.getInstance().canRedo());
+    }
 }

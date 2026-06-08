@@ -10,6 +10,9 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import models.Library;
 import models.Track;
+import models.commands.AddTrackCommand;
+import models.commands.Command;
+import models.commands.CommandManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -72,7 +75,8 @@ public class AddTrackController {
             trackAdded = new Track(pathname, name, artist, album, genre, year, favourite, explicit, duration);
 
             // Aggiunta alla libreria
-            Library.getInstance().addTrack(trackAdded);
+            Command addCmd = new AddTrackCommand(Library.getInstance(), trackAdded);
+            CommandManager.getInstance().executeCommand(addCmd);
 
             // Chiusura della modale
             closeStage();

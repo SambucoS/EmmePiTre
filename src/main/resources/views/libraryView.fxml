@@ -21,11 +21,14 @@
                 </font>
             </Label>
             <Region prefHeight="36.0" prefWidth="100.0" HBox.hgrow="ALWAYS" />
+
+            <Button fx:id="undoButton" disable="true" mnemonicParsing="false" onAction="#onUndo" prefHeight="35.0" text="↶ Undo" />
+            <Button fx:id="redoButton" disable="true" mnemonicParsing="false" onAction="#onRedo" prefHeight="35.0" text="Redo ↷" />
+
             <TextField fx:id="researchBar" prefHeight="35.0" prefWidth="178.0" promptText="What vibes are we looking for?" />
             <Button fx:id="createPlaylistButton" mnemonicParsing="false" onAction="#onCreatePlaylist" prefHeight="46.0" prefWidth="110.0" text="Create Playlist" />
 
-            <Button fx:id="addButton" mnemonicParsing="false" onAction="#onAddTrack" prefHeight="46.0" prefWidth="79.0" text="Add a Track" />
-        </HBox>
+            <Button fx:id="addButton" mnemonicParsing="false" onAction="#onAddTrack" prefHeight="46.0" prefWidth="79.0" text="Add a Track" />        </HBox>
         <TableView fx:id="trackList" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
 
             <columns>
