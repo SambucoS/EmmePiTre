@@ -13,7 +13,7 @@ public class Launcher extends Application {
         try {
             // 1. Carica il file FXML della modale
             // Nota: Assicurati che il percorso rifletta la posizione reale del tuo FXML
-            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/addTrackModal.fxml"));
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/managePlaylist.fxml"));
             VBox root = loader.load();
 
             // 2. Crea la scena con il nodo radice caricato

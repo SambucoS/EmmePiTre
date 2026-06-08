@@ -296,6 +296,7 @@
   "explicit" : true,
   "duration" : 239
 }, {
+  "id" : null,
   "pathname" : "mckmldsk",
   "name" : "cvdfsfd",
   "artist" : "fgefd",
@@ -306,13 +307,14 @@
   "explicit" : true,
   "duration" : 155
 }, {
-  "pathname" : "iudfsiudsiu",
-  "name" : "r8ye",
-  "artist" : "trseetr",
-  "album" : "trsetre",
+  "id" : "5a712503-f118-4562-857d-c7b999168db8",
+  "pathname" : "dsaas",
+  "name" : "fedes",
+  "artist" : "fsds",
+  "album" : "2",
   "genre" : "pop",
-  "year" : 2024,
+  "year" : 1980,
   "favourite" : false,
   "explicit" : false,
-  "duration" : 112
+  "duration" : 10
 } ]

@@ -12,9 +12,18 @@ import javafx.scene.control.TableColumn;
 import javafx.util.Duration;
 import models.Track;
 
+import java.util.Random;
+
 public class PlayerController {
     @FXML
     private TableColumn<Track, Void> actionsColumn;
+
+    @FXML
+    private Button loopbutton;
+
+    @FXML
+    private Button shufflebutton;
+
     @FXML
     private Button statusButton;
 
@@ -37,6 +46,8 @@ public class PlayerController {
     private java.util.List<Track> currentPlaylist; // Lista delle canzoni
     private int currentIndex; // Posizione della canzone attuale
 
+    private boolean isLoopActive = false;
+    private boolean isShuffleActive = false;
 
     /**
      * Per il {@link PlayerController} viene inizializzata una Timeline, al
@@ -45,16 +56,35 @@ public class PlayerController {
     @FXML
     public void initialize() {
 
-        timeline = new Timeline(
-                new KeyFrame(Duration.seconds(1), e -> {
-                    seconds++;
-                    currentTime.setText(durationFormatter(seconds));
-                    progressSlider.setValue(seconds);
-                })
-        );
+            timeline = new Timeline(
+                    new KeyFrame(Duration.seconds(1), new javafx.event.EventHandler<javafx.event.ActionEvent>() {
+                        @Override
+                        public void handle(javafx.event.ActionEvent event) {
+                            // 1. Aggiorna i secondi
+                            seconds++;
+                            currentTime.setText(durationFormatter(seconds));
+                            progressSlider.setValue(seconds);
 
-        timeline.setCycleCount(Animation.INDEFINITE);
-    }
+                            // 2. LOGICA FINE CANZONE AUTOMATICA
+                            if (track != null && seconds >= track.getDuration()) {
+
+                                if (isLoopActive) {
+                                    // Caso 1: Il LOOP è attivo -> La canzone ricomincia da capo
+                                    seconds = 0;
+                                    currentTime.setText("00:00");
+                                    progressSlider.setValue(0);
+                                    System.out.println("Loop attivo: la canzone ricomincia da capo.");
+                                } else {
+                                    // Caso 2: Il LOOP NON è attivo -> Passa alla prossima
+                                    System.out.println("Canzone finita, passo alla traccia successiva.");
+                                    handleNext(null);
+                                }
+                            }
+                        }
+                    })
+            );
+            timeline.setCycleCount(Animation.INDEFINITE);
+        }
 
 
 
@@ -82,28 +112,70 @@ public class PlayerController {
     public void handlePrev(ActionEvent event) {
         timeline.stop();
         progressSlider.setValue(0);
-        if (currentPlaylist != null && !currentPlaylist.isEmpty()) {
+
+
+        // RIPRODUZIONE CASUALE DELLE CANZONI (francesca)
+
+        if (isShuffleActive) {
+            // RIPRODUZIONE CASUALE: Anche andando indietro, genera un indice a caso
+            Random random = new Random();
+            currentIndex = random.nextInt(currentPlaylist.size());
+        } else {
+
+            // RIPRODUZIONE NORMALE: Va alla traccia precedente
             currentIndex--;
+
+            // Se scendiamo sotto l'inizio della playlist (indice minore di 0)...
             if (currentIndex < 0) {
-                currentIndex = currentPlaylist.size() - 1; // Se sei alla prima, riparti dall'ultima
+                if (isLoopActive) {
+                    // Se il LOOP è attivo, ricomincia dall'ultima canzone della playlist
+                    currentIndex = currentPlaylist.size() - 1;
+                } else {
+                    // Altrimenti si ferma alla prima canzone (indice 0) o resetta
+                    currentIndex = 0;
+                    System.out.println("Sei già all'inizio della playlist.");
+                    return;
+                }
             }
-            // Richiama setTrack con la nuova canzone per aggiornare la UI
-            setTrack(currentPlaylist.get(currentIndex), currentPlaylist);
         }
+
+        setTrack(currentPlaylist.get(currentIndex), currentPlaylist);
+
     }
 
     @FXML
     public void handleNext(ActionEvent event) {
         timeline.stop(); // viene fermata la Timeline
+
         progressSlider.setValue(0);
-        if (currentPlaylist != null && !currentPlaylist.isEmpty()) {
+
+
+        // RIPRODUZIONE CASUALE DELLE CANZONI (francesca)
+
+        if (isShuffleActive) {
+            // RIPRODUZIONE CASUALE: Genera un indice a caso tra 0 e la fine della playlist
+            Random random = new Random();
+            currentIndex = random.nextInt(currentPlaylist.size());
+        } else {
+
+            // RIPRODUZIONE NORMALE: Va alla traccia successiva
             currentIndex++;
+
+            // Se arriviamo alla fine della playlist...
             if (currentIndex >= currentPlaylist.size()) {
-                currentIndex = 0; // Se sei all'ultima, riparti dalla prima
+                if (isLoopActive) {
+                    // Se il LOOP è attivo, ricomincia dalla prima canzone (indice 0)
+                    currentIndex = 0;
+                } else {
+                    // Altrimenti si ferma all'ultima canzone o resetta senza riprodurre
+                    currentIndex = currentPlaylist.size() - 1;
+                    System.out.println("Playlist terminata.");
+                    return;
+                }
             }
-            // Richiama setTrack con la nuova canzone per aggiornare la UI
-            setTrack(currentPlaylist.get(currentIndex), currentPlaylist);
         }
+
+        setTrack(currentPlaylist.get(currentIndex), currentPlaylist);
     }
     /**
      * Attualmente serve per cambiare visivamente lo stato del bottone
@@ -130,6 +202,34 @@ public class PlayerController {
         int secondsLeft = seconds % 60; // corrsisponde al lato dei secondi "MM:'SS'"
         return String.format("%02d:%02d", minutes, secondsLeft);
     }
+
+    // Francesca
+    @FXML
+    void onhandleloop(ActionEvent event) {
+        isLoopActive = !isLoopActive;
+
+        if (isLoopActive) {
+            // Colore quando è SELEZIONATO (es. un grigio chiaro semitrasparente o un colore a tua scelta)
+            loopbutton.setStyle("-fx-background-color: #d3d3d3; -fx-background-radius: 5;");
+        } else {
+            // Torna TRASPARENTE quando viene deselezionato
+            loopbutton.setStyle("-fx-background-color: transparent;");
+        }
+    }
+
+
+    // Francesca
+    @FXML
+    void onhandleshuffle(ActionEvent event) {
+        isShuffleActive = !isShuffleActive;
+
+        if (isShuffleActive) {
+            shufflebutton.setStyle("-fx-background-color: #d3d3d3; -fx-background-radius: 5;");
+        } else {
+            shufflebutton.setStyle("-fx-background-color: transparent;");
+        }
+    }
+
 
 
 }
