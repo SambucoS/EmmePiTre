@@ -15,7 +15,7 @@ public class PlayerLauncher extends Application{
                     getClass().getResource("/views/modify.fxml")
             );
 
-            Scene scene = new Scene(root, 600, 400);
+            Scene scene = new Scene(root, 800, 600);
 
             primaryStage.setTitle("Media Player");
             primaryStage.setScene(scene);
