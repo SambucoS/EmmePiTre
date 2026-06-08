@@ -11,7 +11,7 @@
 <?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="700.0" spacing="15.0" style="-fx-border-color: black; -fx-border-width: 1px;" xmlns="http://javafx.com/javafx/26" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.PlayerController">
+<HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="700.0" spacing="15.0" style="-fx-border-color: black; -fx-border-width: 1px;" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.PlayerController">
     <padding>
         <Insets bottom="10.0" left="15.0" right="15.0" top="10.0" />
     </padding>

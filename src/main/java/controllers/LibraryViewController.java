@@ -61,6 +61,8 @@ public class LibraryViewController implements LibraryObserver {
     @FXML private Button redoButton;
     @FXML
     private ListView<Playlist> sidebarPlaylistListView;
+    @FXML
+    private Button homeLibraryButton;
 
     private void refreshSidebarPlaylists() {
         if (sidebarPlaylistListView != null) {
@@ -723,5 +725,19 @@ public class LibraryViewController implements LibraryObserver {
             e.printStackTrace();
             System.out.println("Errore durante il caricamento di modifyPlaylist.fxml");
         }
+    }
+
+    @FXML
+    private void onShowFullLibrary() {
+        // Deseleziona eventuali playlist selezionate nella sidebar
+        if (sidebarPlaylistListView != null) {
+            sidebarPlaylistListView.getSelectionModel().clearSelection();
+        }
+
+        // Ricarica nella tabella tutte le tracce presenti nella libreria principale
+        trackList.getItems().setAll(Library.getInstance().getTracks());
+        trackList.refresh();
+
+        System.out.println("Vista Home: visualizzazione completa della libreria.");
     }
 }
