@@ -1,6 +1,7 @@
 package controllers;
 
 import interfaces.LibraryObserver;
+import javafx.application.Platform;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
@@ -8,26 +9,27 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.KeyCodeCombination;
+import javafx.scene.input.KeyCombination;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 import models.Library;
+import models.Playlist;
+import models.PlaylistManager;
 import models.Track;
 import models.commands.Command;
 import models.commands.CommandManager;
 import models.commands.RemoveTrackCommand;
+
 import java.io.IOException;
-import javafx.application.Platform;
-import javafx.scene.input.KeyCode;
-import javafx.scene.input.KeyCodeCombination;
-import javafx.scene.input.KeyCombination;
 
 public class LibraryViewController implements LibraryObserver {
 
     public Label titleBar;
     public HBox mainBar;
-    private Parent currentPlayerView;
 
     @FXML
     private StackPane rootPane;
@@ -57,6 +59,16 @@ public class LibraryViewController implements LibraryObserver {
     private Button addButton;
     @FXML private Button undoButton;
     @FXML private Button redoButton;
+    @FXML
+    private ListView<Playlist> sidebarPlaylistListView;
+
+    private void refreshSidebarPlaylists() {
+        if (sidebarPlaylistListView != null) {
+            sidebarPlaylistListView.getItems().setAll(
+                    PlaylistManager.getInstance().getPlaylists()
+            );
+        }
+    }
 
     @FXML
     public void initialize() {
@@ -163,6 +175,9 @@ public class LibraryViewController implements LibraryObserver {
         // MENU A TENDINA (Modifica/Elimina) - Task 1.4
         // =========================================================
 
+        // Caricamento iniziale delle playlist nella sidebar
+        setupSidebarPlaylistListView();
+
         // Configurazione del Click Destro sulla riga intera (Metodo Nativo JavaFX)
         trackList.setRowFactory(tv -> {
             TableRow<Track> row = new TableRow<>();
@@ -250,6 +265,102 @@ public class LibraryViewController implements LibraryObserver {
         });
     }
 
+    /**
+     * Configura la sidebar laterale delle playlist.
+     *
+     * Carica le playlist disponibili dal PlaylistManager e imposta la visualizzazione
+     * in modo che nella ListView venga mostrato solo il nome della playlist.
+     * Inoltre aggiunge un menu contestuale con tasto destro per modificare
+     * o eliminare una playlist.
+     *
+     * @param nessun parametro in ingresso.
+     * @return nessun valore di ritorno.
+     * @throws nessuna eccezione prevista.
+     */
+    private void setupSidebarPlaylistListView() {
+        if (sidebarPlaylistListView == null) {
+            return;
+        }
+
+        // Carica nella sidebar tutte le playlist presenti nel PlaylistManager.
+        refreshSidebarPlaylists();
+
+        if (sidebarPlaylistListView != null) {
+            sidebarPlaylistListView.getSelectionModel().clearSelection();
+        }
+
+        trackList.getItems().setAll(Library.getInstance().getTracks());
+        trackList.refresh();
+
+        // Testo mostrato quando non ci sono playlist disponibili.
+        sidebarPlaylistListView.setPlaceholder(
+                new Label("Nessuna playlist disponibile")
+        );
+
+        /*
+         * Personalizza ogni cella della ListView.
+         * In questo modo:
+         * - viene mostrato solo il nome della playlist;
+         * - ogni playlist ha un menu contestuale con tasto destro.
+         */
+        sidebarPlaylistListView.setCellFactory(listView -> new ListCell<>() {
+
+            @Override
+            protected void updateItem(Playlist playlist, boolean empty) {
+                super.updateItem(playlist, empty);
+
+                if (empty || playlist == null) {
+                    setText(null);
+                    setContextMenu(null);
+                } else {
+                    // Mostra nella sidebar solo il nome della playlist.
+                    setText(playlist.getName());
+
+                    // Voce del menu per la modifica.
+                    MenuItem modifyItem = new MenuItem("Modifica playlist");
+
+                    // Voce del menu per l'eliminazione.
+                    MenuItem deleteItem = new MenuItem("Elimina playlist");
+
+                    /*
+                     * Per ora la modifica seleziona la playlist e stampa un messaggio.
+                     * Più avanti potrete collegarla alla modale o alla schermata di modifica.
+                     */
+                    modifyItem.setOnAction(event -> {
+                        sidebarPlaylistListView.getSelectionModel().select(playlist);
+                        openModifyPlaylistModal(playlist);
+                    });
+
+                    /*
+                     * L'eliminazione apre la modale di conferma removePlaylist.fxml.
+                     * La playlist verrà eliminata solo se l'utente conferma nella modale.
+                     */
+                    deleteItem.setOnAction(event -> {
+                        sidebarPlaylistListView.getSelectionModel().select(playlist);
+                        openRemovePlaylistModal(playlist);
+                    });
+
+                    ContextMenu contextMenu = new ContextMenu(modifyItem, deleteItem);
+                    setContextMenu(contextMenu);
+                }
+            }
+        });
+
+        /*
+         * Quando l'utente clicca normalmente su una playlist nella sidebar,
+         * la TableView mostra le tracce contenute in quella playlist.
+         */
+        sidebarPlaylistListView.getSelectionModel().selectedItemProperty().addListener(
+                (observable, oldPlaylist, selectedPlaylist) -> {
+                    if (selectedPlaylist != null) {
+                        trackList.getItems().setAll(selectedPlaylist.getTracks());
+                        trackList.refresh();
+
+                        System.out.println("Playlist selezionata dalla sidebar: " + selectedPlaylist.getName());
+                    }
+                }
+        );
+    }
     // =========================================================
     // AGGIORNAMENTO AUTOMATICO OBSERVER (Task 1.2.5)
     // =========================================================
@@ -395,13 +506,15 @@ public class LibraryViewController implements LibraryObserver {
             // D. Mostra il modale e attendi la chiusura
             dialogStage.showAndWait();
 
+            // Se hai un menù laterale o una lista visiva delle playlist,
+            // questo è il punto esatto in cui dovresti ricaricarla!
+            refreshSidebarPlaylists();
+
             // ========================================================
             // IL MODALE SI È CHIUSO: AGGIORNIAMO I TASTI UNDO/REDO
             // ========================================================
             updateUndoRedoButtons();
 
-            // Se hai un menù laterale o una lista visiva delle playlist,
-            // questo è il punto esatto in cui dovresti ricaricarla!
             // Esempio: sideBarPlaylists.getItems().setAll(models.PlaylistManager.getInstance().getPlaylists());
 
             // E. Verifica per il debug: stampa su console le playlist attualmente esistenti
@@ -525,5 +638,90 @@ public class LibraryViewController implements LibraryObserver {
 
         // Se non ci sono azioni da ripristinare (canRedo = false), il bottone è disabilitato (true)
         redoButton.setDisable(!models.commands.CommandManager.getInstance().canRedo());
+    }
+
+    /**
+     * Apre la modale di conferma eliminazione playlist.
+     *
+     * Il metodo carica removePlaylist.fxml, passa al relativo controller
+     * la playlist selezionata e mostra una finestra modale.
+     *
+     * @param playlist playlist che l'utente vuole eliminare.
+     * @return nessun valore di ritorno.
+     * @throws RuntimeException non viene lanciata direttamente, ma eventuali errori
+     *                          di caricamento dell'FXML vengono gestiti nel catch.
+     */
+    private void openRemovePlaylistModal(Playlist playlist) {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/views/removePlaylist.fxml")
+            );
+
+            Parent root = loader.load();
+
+            RemovePlaylistController controller = loader.getController();
+            controller.setPlaylistToRemove(playlist);
+
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Conferma eliminazione playlist");
+            dialogStage.initModality(Modality.APPLICATION_MODAL);
+            dialogStage.setResizable(false);
+
+            Scene scene = new Scene(root, 400, 200);
+            dialogStage.setScene(scene);
+
+            dialogStage.showAndWait();
+
+            /*
+             * Dopo la chiusura della modale aggiorniamo la sidebar.
+             * Se la playlist è stata eliminata, sparirà dall'elenco.
+             * Se l'utente ha annullato, la lista rimarrà uguale.
+             */
+            refreshSidebarPlaylists();
+
+            /*
+             * Dopo l'eliminazione puliamo la TableView.
+             * Questo evita che restino visibili le tracce di una playlist
+             * che non esiste più.
+             */
+            trackList.getItems().setAll(Library.getInstance().getTracks());
+            trackList.refresh();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Errore durante il caricamento di removePlaylist.fxml");
+        }
+    }
+
+    private void openModifyPlaylistModal(Playlist playlist) {
+        try {
+            FXMLLoader loader = new FXMLLoader(
+                    getClass().getResource("/views/modifyPlaylist.fxml")
+            );
+
+            Parent root = loader.load();
+
+            ModifyPlaylistController controller = loader.getController();
+            controller.setPlaylistToModify(playlist);
+
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Modifica playlist");
+            dialogStage.initModality(Modality.APPLICATION_MODAL);
+            dialogStage.setResizable(false);
+
+            Scene scene = new Scene(root, 400, 220);
+            dialogStage.setScene(scene);
+
+            dialogStage.showAndWait();
+
+            if (controller.isSaved()) {
+                refreshSidebarPlaylists();
+                sidebarPlaylistListView.getSelectionModel().select(playlist);
+            }
+
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Errore durante il caricamento di modifyPlaylist.fxml");
+        }
     }
 }

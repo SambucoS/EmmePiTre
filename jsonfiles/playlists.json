@@ -1,12 +1,4 @@
 [ {
-  "name" : "ciao",
-  "tracks" : [ ],
-  "size" : 0
-}, {
-  "name" : "ciao2",
-  "tracks" : [ ],
-  "size" : 0
-}, {
   "name" : "Playlist",
   "tracks" : [ ],
   "size" : 0
@@ -23,7 +15,7 @@
   "tracks" : [ ],
   "size" : 0
 }, {
-  "name" : "ciaoooooo",
+  "name" : "SAD",
   "tracks" : [ ],
   "size" : 0
 }, {
@@ -36,6 +28,18 @@
   "size" : 0
 }, {
   "name" : "asd",
+  "tracks" : [ ],
+  "size" : 0
+}, {
+  "name" : "playlist6",
+  "tracks" : [ ],
+  "size" : 0
+}, {
+  "name" : "ffr",
+  "tracks" : [ ],
+  "size" : 0
+}, {
+  "name" : "hello",
   "tracks" : [ ],
   "size" : 0
 } ]
