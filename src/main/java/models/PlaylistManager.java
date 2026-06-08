@@ -45,6 +45,15 @@ public class PlaylistManager {
         this.sync();                     //Salva sul disco
     }
 
+    public void renamePlaylist(Playlist playlist, String newName) {
+        if (playlist == null) {
+            throw new IllegalArgumentException("La playlist non può essere null.");
+        }
+
+        playlist.setName(newName);
+        this.sync();
+    }
+
     // GESTIONE TRACCE NELLE PLAYLIST
     public void addTrackToPlaylist(Track track, Playlist playlist) {
         playlist.addTrack(track); //Aggiunge la traccia alla playlist in RAM
