@@ -12,6 +12,8 @@ import javafx.scene.control.TableColumn;
 import javafx.util.Duration;
 import models.Track;
 
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Random;
 
 public class PlayerController {
@@ -38,6 +40,11 @@ public class PlayerController {
 
     @FXML
     private Label currentTime;
+
+    // Modifica per shuffle
+
+    // Aggiungi questo tra le variabili della tua classe (es. vicino a currentIndex)
+    private List<Integer> playbackHistory = new ArrayList<>();
 
 
     private Timeline timeline;
@@ -113,7 +120,42 @@ public class PlayerController {
         timeline.stop();
         progressSlider.setValue(0);
 
+        // Modifica Francesca per shuffle all'indietro
 
+        // RIPRODUZIONE CASUALE DELLE CANZONI (francesca)
+        if (isShuffleActive) {
+            // Controlliamo se c'è effettivamente una canzone precedente nella cronologia
+            if (!playbackHistory.isEmpty()) {
+                // Prendi l'ultimo indice salvato nella cronologia e rimuovilo
+                currentIndex = playbackHistory.remove(playbackHistory.size() - 1);
+            } else {
+                // Se la cronologia è vuota, significa che siamo all'inizio dello shuffle.
+                // Possiamo generare un indice a caso o semplicemente dire che siamo all'inizio.
+                Random random = new Random();
+                currentIndex = random.nextInt(currentPlaylist.size());
+            }
+        } else {
+            // RIPRODUZIONE NORMALE: Va alla traccia precedente
+            currentIndex--;
+
+            // Se scendiamo sotto l'inizio della playlist (indice minore di 0)...
+            if (currentIndex < 0) {
+                if (isLoopActive) {
+                    // Se il LOOP è attivo, ricomincia dall'ultima canzone della playlist
+                    currentIndex = currentPlaylist.size() - 1;
+                } else {
+                    // Altrimenti si ferma alla prima canzone (indice 0) o resetta
+                    currentIndex = 0;
+                    System.out.println("Sei già all'inizio della playlist.");
+                    return;
+                }
+            }
+        }
+
+        setTrack(currentPlaylist.get(currentIndex), currentPlaylist);
+    }
+
+        /*
         // RIPRODUZIONE CASUALE DELLE CANZONI (francesca)
 
         if (isShuffleActive) {
@@ -141,7 +183,7 @@ public class PlayerController {
 
         setTrack(currentPlaylist.get(currentIndex), currentPlaylist);
 
-    }
+    }*/
 
     @FXML
     public void handleNext(ActionEvent event) {
@@ -153,6 +195,12 @@ public class PlayerController {
         // RIPRODUZIONE CASUALE DELLE CANZONI (francesca)
 
         if (isShuffleActive) {
+
+            // Cambio per shuffle all'indietro
+
+            // PRIMA di cambiare traccia, salviamo quella attuale nella cronologia
+            playbackHistory.add(currentIndex);
+
             // RIPRODUZIONE CASUALE: Genera un indice a caso tra 0 e la fine della playlist
             Random random = new Random();
             currentIndex = random.nextInt(currentPlaylist.size());
