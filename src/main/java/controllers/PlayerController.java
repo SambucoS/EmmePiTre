@@ -15,6 +15,7 @@ import models.Track;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
+import java.util.function.Consumer;
 
 public class PlayerController {
     @FXML
@@ -55,6 +56,12 @@ public class PlayerController {
 
     private boolean isLoopActive = false;
     private boolean isShuffleActive = false;
+
+    private Consumer<Track> onTrackChanged;
+
+    public void setOnTrackChanged(Consumer<Track> callback) {
+        this.onTrackChanged = callback;
+    }
 
     /**
      * Per il {@link PlayerController} viene inizializzata una Timeline, al
@@ -113,6 +120,9 @@ public class PlayerController {
         progressSlider.setMin(0);
         progressSlider.setMax(track.getDuration());
         timeline.play();
+        if (onTrackChanged != null) {
+            onTrackChanged.accept(track);
+        }
     }
 
     @FXML

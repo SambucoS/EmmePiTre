@@ -41,7 +41,7 @@
             <Label fx:id="titleBar"
                    alignment="CENTER"
                    prefHeight="36.0"
-                   prefWidth="219.0"
+                   prefWidth="130.0"
                    text="EmmePiTre"
                    wrapText="true">
                 <font>
@@ -83,7 +83,7 @@
                     mnemonicParsing="false"
                     onAction="#onAddTrack"
                     prefHeight="46.0"
-                    prefWidth="79.0"
+                    prefWidth="140.0"
                     text="Add a Track" />
         </HBox>
 

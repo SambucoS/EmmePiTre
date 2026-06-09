@@ -2,6 +2,8 @@ package controllers;
 
 import interfaces.LibraryObserver;
 import javafx.application.Platform;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
@@ -25,6 +27,7 @@ import models.commands.CommandManager;
 import models.commands.RemoveTrackCommand;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class LibraryViewController implements LibraryObserver {
 
@@ -64,6 +67,7 @@ public class LibraryViewController implements LibraryObserver {
 
     private Playlist currentPlaylist = null;
     private boolean suppressSidebarListener = false;
+    private final ObjectProperty<Track> currentPlayingTrack = new SimpleObjectProperty<>(null);
 
     private void refreshSidebarPlaylists() {
         if (sidebarPlaylistListView == null) return;
@@ -194,20 +198,30 @@ public class LibraryViewController implements LibraryObserver {
         trackList.setRowFactory(tv -> {
             TableRow<Track> row = new TableRow<>();
 
-            // Creiamo un UNICO menu per questa riga
             ContextMenu rowMenu = createActionMenu(row);
 
-            // Invece di gestire a mano il click destro, usiamo la proprietà nativa.
-            // Il listener assicura che il menu esista solo se la riga contiene effettivamente una canzone.
-            row.itemProperty().addListener((obs, oldItem, newItem) -> {
-                if (newItem == null) {
+            // Aggiorna il contesto menu e l'evidenziazione della riga
+            Runnable updateRow = () -> {
+                Track item = row.getItem();
+                if (item == null) {
                     row.setContextMenu(null);
+                    row.setStyle("");
                 } else {
                     row.setContextMenu(rowMenu);
+                    boolean isPlaying = Objects.equals(item, currentPlayingTrack.get());
+                    row.setStyle(isPlaying
+                            ? "-fx-background-color: #eaf7ee; -fx-border-color: transparent;"
+                            : "");
                 }
-            });
+            };
+
+            // Ri-valuta quando la riga riceve un item diverso
+            row.itemProperty().addListener((obs, oldItem, newItem) -> updateRow.run());
+
+            // Ri-valuta quando cambia la traccia in riproduzione
+            currentPlayingTrack.addListener((obs, oldTrack, newTrack) -> updateRow.run());
+
             row.setOnMouseClicked(event -> {
-                // Controllo fondamentale: !row.isEmpty() evita crash se fai doppio click su una riga vuota
                 if (event.getButton() == javafx.scene.input.MouseButton.PRIMARY && event.getClickCount() == 2 && !row.isEmpty()) {
                     Track selectedTrack = row.getItem();
                     openPlayerView(selectedTrack);
@@ -613,6 +627,9 @@ public class LibraryViewController implements LibraryObserver {
 
             // Caricamento del controller associato alla view del Player (PlayerController).
             PlayerController playerController = loader.getController();
+
+            // Registra il callback PRIMA di setTrack, così il primo aggiornamento viene catturato
+            playerController.setOnTrackChanged(currentPlayingTrack::set);
 
             // Passaggio dell'oggetto 'Track' selezionato E dell'intera lista in tabella al controller del player
             playerController.setTrack(track, trackList.getItems());
