@@ -97,6 +97,13 @@
                   spacing="10.0"
                   style="-fx-background-color: #eeeeee; -fx-padding: 12;">
 
+                <Button text="🏠 Libreria"
+                        onAction="#onGoHome"
+                        prefWidth="176.0"
+                        style="-fx-background-color: #d0d0d0; -fx-cursor: hand;
+                               -fx-font-size: 13px; -fx-alignment: CENTER_LEFT;
+                               -fx-padding: 6 10 6 10;" />
+
                 <Label text="Playlist"
                        style="-fx-font-size: 18px; -fx-font-weight: bold;" />
 

@@ -1,7 +1,18 @@
 [ {
   "name" : "Playlist",
-  "tracks" : [ ],
-  "size" : 0
+  "tracks" : [ {
+    "id" : "7c2c1c7a-2f8a-4c2a-9c0e-0c9c6c8a1a01",
+    "pathname" : null,
+    "name" : "Blinding Lights",
+    "artist" : "The Weeknd",
+    "album" : null,
+    "genre" : "Pop",
+    "year" : 2019,
+    "favourite" : true,
+    "explicit" : true,
+    "duration" : 200
+  } ],
+  "size" : 1
 }, {
   "name" : "ciao",
   "tracks" : [ ],
