@@ -59,7 +59,7 @@ public class AddTrackController {
         if (isInputValid()) {
 
             // Vengono estratti i dati dai campi del form
-            String pathname = txtPathname.getText();
+            String pathname = txtPathname.getText().trim();
             String name = txtName.getText();
             String artist = txtArtist.getText();
             String album = txtAlbum.getText();
@@ -68,8 +68,8 @@ public class AddTrackController {
             boolean explicit = chkExplicit.isSelected();
 
             // Viene convertito il contenuto nei campi year e duration da String a Integer
-            int year = Integer.parseInt(txtYear.getText());
-            int duration = Integer.parseInt(txtDuration.getText());
+            int year = Integer.parseInt(txtYear.getText().trim());
+            int duration = Integer.parseInt(txtDuration.getText().trim());
 
             // Creazione della nuova traccia
             trackAdded = new Track(pathname, name, artist, album, genre, year, favourite, explicit, duration);
@@ -183,6 +183,7 @@ public class AddTrackController {
                 removeBorderRed(txtDuration);
             } catch (NumberFormatException e) {
                 errorMessages.add("La durata deve essere un numero intero (in secondi)!\n");
+                setBorderRed(txtDuration);
             }
         }
 

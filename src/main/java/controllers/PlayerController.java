@@ -11,6 +11,7 @@ import javafx.scene.control.Slider;
 import javafx.scene.control.TableColumn;
 import javafx.util.Duration;
 import models.Track;
+import org.w3c.dom.events.MouseEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -98,8 +99,29 @@ public class PlayerController {
                     })
             );
             timeline.setCycleCount(Animation.INDEFINITE);
+            progressSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+            updateUI(newVal.doubleValue());
+            seconds=newVal.intValue();
+
+        });
+        progressSlider.setOnMousePressed(e -> {
+            timeline.pause();
+        });
+
+        progressSlider.setOnMouseReleased(e -> {
+            seconds = (int) progressSlider.getValue();
+            timeline.play();
+        });
+
+
         }
 
+    private void updateUI(double v) {
+        progressSlider.setValue(v);
+        currentTime.setText(durationFormatter((int) v));
+
+
+    }
 
 
     /**
@@ -221,7 +243,8 @@ public class PlayerController {
 
             // Se arriviamo alla fine della playlist...
             if (currentIndex >= currentPlaylist.size()) {
-                if (isLoopActive) {
+                currentIndex = 0;
+                /*if (isLoopActive) {
                     // Se il LOOP è attivo, ricomincia dalla prima canzone (indice 0)
                     currentIndex = 0;
                 } else {
@@ -229,7 +252,7 @@ public class PlayerController {
                     currentIndex = currentPlaylist.size() - 1;
                     System.out.println("Playlist terminata.");
                     return;
-                }
+                }*/
             }
         }
 
