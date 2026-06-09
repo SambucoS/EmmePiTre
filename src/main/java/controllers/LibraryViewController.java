@@ -24,7 +24,8 @@ import models.PlaylistManager;
 import models.Track;
 import models.commands.Command;
 import models.commands.CommandManager;
-import models.commands.RemoveTrackCommand;
+import models.commands.RemoveTrackFromLibraryCommand;
+import models.commands.RemoveTrackFromPlaylistCommand;
 
 import java.io.IOException;
 import java.util.Objects;
@@ -198,16 +199,16 @@ public class LibraryViewController implements LibraryObserver {
         trackList.setRowFactory(tv -> {
             TableRow<Track> row = new TableRow<>();
 
-            ContextMenu rowMenu = createActionMenu(row);
-
-            // Aggiorna il contesto menu e l'evidenziazione della riga
+            // Aggiorna menu contestuale ed evidenziazione: il menu dipende dal contesto corrente
             Runnable updateRow = () -> {
                 Track item = row.getItem();
                 if (item == null) {
                     row.setContextMenu(null);
                     row.setStyle("");
                 } else {
-                    row.setContextMenu(rowMenu);
+                    row.setContextMenu(currentPlaylist != null
+                            ? createPlaylistContextMenu(row)
+                            : createLibraryContextMenu(row));
                     boolean isPlaying = Objects.equals(item, currentPlayingTrack.get());
                     row.setStyle(isPlaying
                             ? "-fx-background-color: #eaf7ee; -fx-border-color: transparent;"
@@ -483,12 +484,8 @@ public class LibraryViewController implements LibraryObserver {
         }
     }
 
-    private ContextMenu createActionMenu(TableRow<Track> row) {
+    private ContextMenu createLibraryContextMenu(TableRow<Track> row) {
         ContextMenu contextMenu = new ContextMenu();
-
-        // Applichiamo lo stile direttamente al contenitore del menu.
-        // -fx-selection-bar imposta il colore grigio quando ci passi sopra col mouse.
-        // -fx-selection-bar-text mantiene il testo nero quando è evidenziato.
         contextMenu.setStyle(
                 "-fx-selection-bar: #d0d0d0; " +
                         "-fx-selection-bar-text: #000000; " +
@@ -497,69 +494,89 @@ public class LibraryViewController implements LibraryObserver {
         );
 
         MenuItem editItem = new MenuItem("Modifica traccia");
-        MenuItem deleteItem = new MenuItem("Elimina traccia");
         MenuItem addToPlaylistItem = new MenuItem("Aggiungi a una playlist");
+        MenuItem deleteItem = new MenuItem("Elimina traccia");
 
-        // 1. Logica per la MODIFICA
-        editItem.setOnAction(event -> {
-            Track currentTrack = row.getItem();
-            modifyTrack(currentTrack);
-        });
+        editItem.setOnAction(event -> modifyTrack(row.getItem()));
 
-        // 2. Logica per l'AGGIUNTA A PLAYLIST
-        addToPlaylistItem.setOnAction(event -> {
-            Track currentTrack = row.getItem();
-            openAddToPlaylistsModal(currentTrack);
-        });
+        addToPlaylistItem.setOnAction(event -> openAddToPlaylistsModal(row.getItem()));
 
-        // 3. Logica per l'ELIMINAZIONE (Apertura Modale)
         deleteItem.setOnAction(event -> {
             Track currentTrack = row.getItem();
-
-            // Evidenzia visivamente la riga che stiamo per eliminare
             trackList.getSelectionModel().select(currentTrack);
-
             try {
-                // A. Carichiamo il file FXML del modale
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/deleteTrack.fxml"));
                 Parent root = loader.load();
 
-                // B. Recuperiamo il controller e impostiamo il contesto (true = da Libreria)
                 DeleteTrackController dialogController = loader.getController();
                 dialogController.setContext(true);
 
-                // C. Prepariamo la finestra (Stage)
                 Stage dialogStage = new Stage();
                 dialogStage.setTitle("Conferma Eliminazione");
-                dialogStage.initModality(Modality.APPLICATION_MODAL); // Rende la finestra bloccante
-                dialogStage.setResizable(false); // Blocca il ridimensionamento
-
-                // D. Impostiamo la scena con le dimensioni fisse 400x120
-                Scene scene = new Scene(root, 600, 150);
-                dialogStage.setScene(scene);
-
-                // E. Mostriamo il modale e mettiamo "in pausa" questo codice finché non viene chiuso
+                dialogStage.initModality(Modality.APPLICATION_MODAL);
+                dialogStage.setResizable(false);
+                dialogStage.setScene(new Scene(root, 600, 150));
                 dialogStage.showAndWait();
 
-                // F. Controlliamo cosa ha scelto l'utente
                 if (dialogController.isConfirmed()) {
-                    // Se ha cliccato "Sono sicuro", eliminiamo la traccia dal modello centrale!
-                    // Grazie all'Observer Pattern, la riga sparirà automaticamente dalla TableView
-                    Command removeCmd = new RemoveTrackCommand(Library.getInstance(), currentTrack);
+                    // Cascade: rimuove dalla libreria E da tutte le playlist che la contengono
+                    Command removeCmd = new RemoveTrackFromLibraryCommand(currentTrack);
                     CommandManager.getInstance().executeCommand(removeCmd);
                     updateUndoRedoButtons();
-                    System.out.println("Traccia eliminata definitivamente: " + currentTrack.getName());
-                } else {
-                    System.out.println("Eliminazione annullata.");
                 }
-
             } catch (Exception e) {
                 e.printStackTrace();
-                System.out.println("Errore durante il caricamento del modale deleteTrack.fxml");
             }
         });
 
         contextMenu.getItems().addAll(editItem, addToPlaylistItem, deleteItem);
+        return contextMenu;
+    }
+
+    private ContextMenu createPlaylistContextMenu(TableRow<Track> row) {
+        ContextMenu contextMenu = new ContextMenu();
+        contextMenu.setStyle(
+                "-fx-selection-bar: #d0d0d0; " +
+                        "-fx-selection-bar-text: #000000; " +
+                        "-fx-font-size: 12px; " +
+                        "-fx-font-weight: normal;"
+        );
+
+        MenuItem addToOtherPlaylistItem = new MenuItem("Aggiungi ad un'altra playlist");
+        MenuItem removeFromPlaylistItem = new MenuItem("Rimuovi dalla playlist");
+
+        addToOtherPlaylistItem.setOnAction(event -> openAddToPlaylistsModal(row.getItem()));
+
+        removeFromPlaylistItem.setOnAction(event -> {
+            Track currentTrack = row.getItem();
+            trackList.getSelectionModel().select(currentTrack);
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/deleteTrack.fxml"));
+                Parent root = loader.load();
+
+                DeleteTrackController dialogController = loader.getController();
+                dialogController.setContext(false); // false = "Rimuovi dalla playlist"
+
+                Stage dialogStage = new Stage();
+                dialogStage.setTitle("Rimuovi dalla playlist");
+                dialogStage.initModality(Modality.APPLICATION_MODAL);
+                dialogStage.setResizable(false);
+                dialogStage.setScene(new Scene(root, 600, 150));
+                dialogStage.showAndWait();
+
+                if (dialogController.isConfirmed()) {
+                    Command cmd = new RemoveTrackFromPlaylistCommand(currentPlaylist, currentTrack);
+                    CommandManager.getInstance().executeCommand(cmd);
+                    trackList.getItems().setAll(currentPlaylist.getTracks());
+                    trackList.refresh();
+                    updateUndoRedoButtons();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        contextMenu.getItems().addAll(addToOtherPlaylistItem, removeFromPlaylistItem);
         return contextMenu;
     }
 
