@@ -1,15 +1,48 @@
 [ {
-  "name" : "Playlist",
-  "tracks" : [ ],
-  "size" : 0
-}, {
   "name" : "ciao",
-  "tracks" : [ ],
-  "size" : 0
+  "tracks" : [ {
+    "id" : "8a4c5d6e-95a6-47b8-6f78-3c4d5e6f7a81",
+    "pathname" : null,
+    "name" : "Crazy in Love",
+    "artist" : "Beyoncé ft. Jay-Z",
+    "album" : "Album",
+    "genre" : "R&B",
+    "year" : 2003,
+    "favourite" : false,
+    "explicit" : true,
+    "duration" : 239
+  } ],
+  "size" : 1
 }, {
-  "name" : "lol",
-  "tracks" : [ ],
-  "size" : 0
+  "name" : "dhayad",
+  "tracks" : [ {
+    "id" : "8a4c5d6e-95a6-47b8-6f78-3c4d5e6f7a81",
+    "pathname" : null,
+    "name" : "Crazy in Love",
+    "artist" : "Beyoncé ft. Jay-Z",
+    "album" : "Album",
+    "genre" : "R&B",
+    "year" : 2003,
+    "favourite" : false,
+    "explicit" : true,
+    "duration" : 239
+  } ],
+  "size" : 1
+}, {
+  "name" : "provaprovaprova",
+  "tracks" : [ {
+    "id" : "8a4c5d6e-95a6-47b8-6f78-3c4d5e6f7a81",
+    "pathname" : null,
+    "name" : "Crazy in Love",
+    "artist" : "Beyoncé ft. Jay-Z",
+    "album" : "Album",
+    "genre" : "R&B",
+    "year" : 2003,
+    "favourite" : false,
+    "explicit" : true,
+    "duration" : 239
+  } ],
+  "size" : 1
 }, {
   "name" : "SAD",
   "tracks" : [ ],
@@ -36,6 +69,18 @@
   "size" : 0
 }, {
   "name" : "hello",
+  "tracks" : [ ],
+  "size" : 0
+}, {
+  "name" : "ciao",
+  "tracks" : [ ],
+  "size" : 0
+}, {
+  "name" : "ciao2",
+  "tracks" : [ ],
+  "size" : 0
+}, {
+  "name" : "Playlist123",
   "tracks" : [ ],
   "size" : 0
 } ]

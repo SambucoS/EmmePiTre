@@ -2,6 +2,8 @@ package controllers;
 
 import interfaces.LibraryObserver;
 import javafx.application.Platform;
+import javafx.beans.property.ObjectProperty;
+import javafx.beans.property.SimpleObjectProperty;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Cursor;
@@ -22,9 +24,11 @@ import models.PlaylistManager;
 import models.Track;
 import models.commands.Command;
 import models.commands.CommandManager;
-import models.commands.RemoveTrackCommand;
+import models.commands.RemoveTrackFromLibraryCommand;
+import models.commands.RemoveTrackFromPlaylistCommand;
 
 import java.io.IOException;
+import java.util.Objects;
 
 public class LibraryViewController implements LibraryObserver {
 
@@ -64,12 +68,25 @@ public class LibraryViewController implements LibraryObserver {
     @FXML
     private Button homeLibraryButton;
 
+    private Playlist currentPlaylist = null;
+    private boolean suppressSidebarListener = false;
+    private final ObjectProperty<Track> currentPlayingTrack = new SimpleObjectProperty<>(null);
+
     private void refreshSidebarPlaylists() {
-        if (sidebarPlaylistListView != null) {
-            sidebarPlaylistListView.getItems().setAll(
-                    PlaylistManager.getInstance().getPlaylists()
-            );
+        if (sidebarPlaylistListView == null) return;
+
+        suppressSidebarListener = true;
+        Playlist selected = sidebarPlaylistListView.getSelectionModel().getSelectedItem();
+        sidebarPlaylistListView.getItems().setAll(PlaylistManager.getInstance().getPlaylists());
+
+        if (selected != null && sidebarPlaylistListView.getItems().contains(selected)) {
+            sidebarPlaylistListView.getSelectionModel().select(selected);
+        } else if (selected != null) {
+            // La playlist era selezionata ma non esiste più (es. eliminata da undo)
+            currentPlaylist = null;
+            addButton.setText("Add a Track");
         }
+        suppressSidebarListener = false;
     }
 
     @FXML
@@ -184,20 +201,30 @@ public class LibraryViewController implements LibraryObserver {
         trackList.setRowFactory(tv -> {
             TableRow<Track> row = new TableRow<>();
 
-            // Creiamo un UNICO menu per questa riga
-            ContextMenu rowMenu = createActionMenu(row);
-
-            // Invece di gestire a mano il click destro, usiamo la proprietà nativa.
-            // Il listener assicura che il menu esista solo se la riga contiene effettivamente una canzone.
-            row.itemProperty().addListener((obs, oldItem, newItem) -> {
-                if (newItem == null) {
+            // Aggiorna menu contestuale ed evidenziazione: il menu dipende dal contesto corrente
+            Runnable updateRow = () -> {
+                Track item = row.getItem();
+                if (item == null) {
                     row.setContextMenu(null);
+                    row.setStyle("");
                 } else {
-                    row.setContextMenu(rowMenu);
+                    row.setContextMenu(currentPlaylist != null
+                            ? createPlaylistContextMenu(row)
+                            : createLibraryContextMenu(row));
+                    boolean isPlaying = Objects.equals(item, currentPlayingTrack.get());
+                    row.setStyle(isPlaying
+                            ? "-fx-background-color: #eaf7ee; -fx-border-color: transparent;"
+                            : "");
                 }
-            });
+            };
+
+            // Ri-valuta quando la riga riceve un item diverso
+            row.itemProperty().addListener((obs, oldItem, newItem) -> updateRow.run());
+
+            // Ri-valuta quando cambia la traccia in riproduzione
+            currentPlayingTrack.addListener((obs, oldTrack, newTrack) -> updateRow.run());
+
             row.setOnMouseClicked(event -> {
-                // Controllo fondamentale: !row.isEmpty() evita crash se fai doppio click su una riga vuota
                 if (event.getButton() == javafx.scene.input.MouseButton.PRIMARY && event.getClickCount() == 2 && !row.isEmpty()) {
                     Track selectedTrack = row.getItem();
                     openPlayerView(selectedTrack);
@@ -275,9 +302,7 @@ public class LibraryViewController implements LibraryObserver {
      * Inoltre aggiunge un menu contestuale con tasto destro per modificare
      * o eliminare una playlist.
      *
-     * @param nessun parametro in ingresso.
      * @return nessun valore di ritorno.
-     * @throws nessuna eccezione prevista.
      */
     private void setupSidebarPlaylistListView() {
         if (sidebarPlaylistListView == null) {
@@ -330,7 +355,7 @@ public class LibraryViewController implements LibraryObserver {
                      */
                     modifyItem.setOnAction(event -> {
                         sidebarPlaylistListView.getSelectionModel().select(playlist);
-                        openModifyPlaylistModal(playlist);
+                        openManagePlaylistModal(playlist);
                     });
 
                     /*
@@ -349,17 +374,24 @@ public class LibraryViewController implements LibraryObserver {
         });
 
         /*
-         * Quando l'utente clicca normalmente su una playlist nella sidebar,
-         * la TableView mostra le tracce contenute in quella playlist.
+         * Quando l'utente clicca su una playlist nella sidebar, la TableView mostra
+         * le tracce di quella playlist e il bottone diventa "Gestisci Playlist".
+         * Se la selezione viene azzerata, si torna alla vista Libreria.
          */
         sidebarPlaylistListView.getSelectionModel().selectedItemProperty().addListener(
                 (observable, oldPlaylist, selectedPlaylist) -> {
+                    if (suppressSidebarListener) return;
+
+                    currentPlaylist = selectedPlaylist;
                     if (selectedPlaylist != null) {
                         trackList.getItems().setAll(selectedPlaylist.getTracks());
-                        trackList.refresh();
-
-                        System.out.println("Playlist selezionata dalla sidebar: " + selectedPlaylist.getName());
+                        addButton.setText("Gestisci Playlist");
+                        System.out.println("Playlist selezionata: " + selectedPlaylist.getName());
+                    } else {
+                        trackList.getItems().setAll(Library.getInstance().getTracks());
+                        addButton.setText("Add a Track");
                     }
+                    trackList.refresh();
                 }
         );
     }
@@ -369,8 +401,10 @@ public class LibraryViewController implements LibraryObserver {
     @Override
     public void onLibraryChanged() {
         System.out.println("Notifica ricevuta dall'Observer: sto aggiornando la TableView!");
-        trackList.getItems().setAll(Library.getInstance().getTracks());
-        trackList.refresh();
+        if (currentPlaylist == null) {
+            trackList.getItems().setAll(Library.getInstance().getTracks());
+            trackList.refresh();
+        }
     }
 
     @FXML
@@ -387,40 +421,73 @@ public class LibraryViewController implements LibraryObserver {
 
     @FXML
     public void onAddTrack() throws IOException {
-        // Cliccando sul bottone "Add a Track", simuliamo l'aggiunta di un brano nel Modello globale.
-        // Grazie all'Observer Pattern, vedrai la riga aggiungersi da sola nella tabella!
+        if (currentPlaylist != null) {
+            openManagePlaylistModal(currentPlaylist);
+            return;
+        }
+
         FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/addTrackModal.fxml"));
-        Parent root = null;
+        Parent root;
         try {
             root = loader.load();
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
 
-        // B. Recuperiamo il controller e impostiamo il contesto (true = da Libreria)
-        AddTrackController dialogController = loader.getController();
-
-        // C. Prepariamo la finestra (Stage)
         Stage dialogStage = new Stage();
         dialogStage.setTitle("Form Aggiunta");
-        dialogStage.initModality(Modality.APPLICATION_MODAL); // Rende la finestra bloccante
-        dialogStage.setResizable(false); // Blocca il ridimensionamento
+        dialogStage.initModality(Modality.APPLICATION_MODAL);
+        dialogStage.setResizable(false);
 
-        // D. Impostiamo la scena con le dimensioni fisse 400x120
         Scene scene = new Scene(root, 600, 450);
         dialogStage.setScene(scene);
 
-        // E. Mostriamo il modale e mettiamo "in pausa" questo codice finché non viene chiuso
         dialogStage.showAndWait();
         updateUndoRedoButtons();
     }
 
-    private ContextMenu createActionMenu(TableRow<Track> row) {
-        ContextMenu contextMenu = new ContextMenu();
+    @FXML
+    public void onGoHome() {
+        sidebarPlaylistListView.getSelectionModel().clearSelection();
+        currentPlaylist = null;
+        trackList.getItems().setAll(Library.getInstance().getTracks());
+        trackList.refresh();
+        addButton.setText("Add a Track");
+    }
 
-        // Applichiamo lo stile direttamente al contenitore del menu.
-        // -fx-selection-bar imposta il colore grigio quando ci passi sopra col mouse.
-        // -fx-selection-bar-text mantiene il testo nero quando è evidenziato.
+    private void openManagePlaylistModal(Playlist playlist) {
+        try {
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/managePlaylistModal.fxml"));
+            Parent root = loader.load();
+
+            ManagePlaylistModalController controller = loader.getController();
+            controller.setPlaylist(playlist);
+
+            Stage dialogStage = new Stage();
+            dialogStage.setTitle("Gestisci Playlist");
+            dialogStage.initModality(Modality.APPLICATION_MODAL);
+            dialogStage.setResizable(false);
+
+            Scene scene = new Scene(root, 500, 560);
+            dialogStage.setScene(scene);
+
+            dialogStage.showAndWait();
+
+            if (controller.isSaved()) {
+                refreshSidebarPlaylists();
+                sidebarPlaylistListView.getSelectionModel().select(playlist);
+                trackList.getItems().setAll(playlist.getTracks());
+                trackList.refresh();
+                updateUndoRedoButtons();
+            }
+        } catch (IOException e) {
+            e.printStackTrace();
+            System.out.println("Errore durante il caricamento di managePlaylistModal.fxml");
+        }
+    }
+
+    private ContextMenu createLibraryContextMenu(TableRow<Track> row) {
+        ContextMenu contextMenu = new ContextMenu();
         contextMenu.setStyle(
                 "-fx-selection-bar: #d0d0d0; " +
                         "-fx-selection-bar-text: #000000; " +
@@ -429,62 +496,89 @@ public class LibraryViewController implements LibraryObserver {
         );
 
         MenuItem editItem = new MenuItem("Modifica traccia");
+        MenuItem addToPlaylistItem = new MenuItem("Aggiungi a una playlist");
         MenuItem deleteItem = new MenuItem("Elimina traccia");
 
-        // 1. Logica per la MODIFICA (Placeholder)
-        editItem.setOnAction(event -> {
-            Track currentTrack = row.getItem();
-            modifyTrack(currentTrack);
-        });
+        editItem.setOnAction(event -> modifyTrack(row.getItem()));
 
-        // 2. Logica per l'ELIMINAZIONE (Apertura Modale)
+        addToPlaylistItem.setOnAction(event -> openAddToPlaylistsModal(row.getItem()));
+
         deleteItem.setOnAction(event -> {
             Track currentTrack = row.getItem();
-
-            // Evidenzia visivamente la riga che stiamo per eliminare
             trackList.getSelectionModel().select(currentTrack);
-
             try {
-                // A. Carichiamo il file FXML del modale
                 FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/deleteTrack.fxml"));
                 Parent root = loader.load();
 
-                // B. Recuperiamo il controller e impostiamo il contesto (true = da Libreria)
                 DeleteTrackController dialogController = loader.getController();
                 dialogController.setContext(true);
 
-                // C. Prepariamo la finestra (Stage)
                 Stage dialogStage = new Stage();
                 dialogStage.setTitle("Conferma Eliminazione");
-                dialogStage.initModality(Modality.APPLICATION_MODAL); // Rende la finestra bloccante
-                dialogStage.setResizable(false); // Blocca il ridimensionamento
-
-                // D. Impostiamo la scena con le dimensioni fisse 400x120
-                Scene scene = new Scene(root, 600, 150);
-                dialogStage.setScene(scene);
-
-                // E. Mostriamo il modale e mettiamo "in pausa" questo codice finché non viene chiuso
+                dialogStage.initModality(Modality.APPLICATION_MODAL);
+                dialogStage.setResizable(false);
+                dialogStage.setScene(new Scene(root, 600, 150));
                 dialogStage.showAndWait();
 
-                // F. Controlliamo cosa ha scelto l'utente
                 if (dialogController.isConfirmed()) {
-                    // Se ha cliccato "Sono sicuro", eliminiamo la traccia dal modello centrale!
-                    // Grazie all'Observer Pattern, la riga sparirà automaticamente dalla TableView
-                    Command removeCmd = new RemoveTrackCommand(Library.getInstance(), currentTrack);
+                    // Cascade: rimuove dalla libreria E da tutte le playlist che la contengono
+                    Command removeCmd = new RemoveTrackFromLibraryCommand(currentTrack);
                     CommandManager.getInstance().executeCommand(removeCmd);
                     updateUndoRedoButtons();
-                    System.out.println("Traccia eliminata definitivamente: " + currentTrack.getName());
-                } else {
-                    System.out.println("Eliminazione annullata.");
                 }
-
             } catch (Exception e) {
                 e.printStackTrace();
-                System.out.println("Errore durante il caricamento del modale deleteTrack.fxml");
             }
         });
 
-        contextMenu.getItems().addAll(editItem, deleteItem);
+        contextMenu.getItems().addAll(editItem, addToPlaylistItem, deleteItem);
+        return contextMenu;
+    }
+
+    private ContextMenu createPlaylistContextMenu(TableRow<Track> row) {
+        ContextMenu contextMenu = new ContextMenu();
+        contextMenu.setStyle(
+                "-fx-selection-bar: #d0d0d0; " +
+                        "-fx-selection-bar-text: #000000; " +
+                        "-fx-font-size: 12px; " +
+                        "-fx-font-weight: normal;"
+        );
+
+        MenuItem addToOtherPlaylistItem = new MenuItem("Aggiungi ad un'altra playlist");
+        MenuItem removeFromPlaylistItem = new MenuItem("Rimuovi dalla playlist");
+
+        addToOtherPlaylistItem.setOnAction(event -> openAddToPlaylistsModal(row.getItem()));
+
+        removeFromPlaylistItem.setOnAction(event -> {
+            Track currentTrack = row.getItem();
+            trackList.getSelectionModel().select(currentTrack);
+            try {
+                FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/deleteTrack.fxml"));
+                Parent root = loader.load();
+
+                DeleteTrackController dialogController = loader.getController();
+                dialogController.setContext(false); // false = "Rimuovi dalla playlist"
+
+                Stage dialogStage = new Stage();
+                dialogStage.setTitle("Rimuovi dalla playlist");
+                dialogStage.initModality(Modality.APPLICATION_MODAL);
+                dialogStage.setResizable(false);
+                dialogStage.setScene(new Scene(root, 600, 150));
+                dialogStage.showAndWait();
+
+                if (dialogController.isConfirmed()) {
+                    Command cmd = new RemoveTrackFromPlaylistCommand(currentPlaylist, currentTrack);
+                    CommandManager.getInstance().executeCommand(cmd);
+                    trackList.getItems().setAll(currentPlaylist.getTracks());
+                    trackList.refresh();
+                    updateUndoRedoButtons();
+                }
+            } catch (Exception e) {
+                e.printStackTrace();
+            }
+        });
+
+        contextMenu.getItems().addAll(addToOtherPlaylistItem, removeFromPlaylistItem);
         return contextMenu;
     }
 
@@ -553,6 +647,9 @@ public class LibraryViewController implements LibraryObserver {
             // Caricamento del controller associato alla view del Player (PlayerController).
             PlayerController playerController = loader.getController();
 
+            // Registra il callback PRIMA di setTrack, così il primo aggiornamento viene catturato
+            playerController.setOnTrackChanged(currentPlayingTrack::set);
+
             // Passaggio dell'oggetto 'Track' selezionato E dell'intera lista in tabella al controller del player
             playerController.setTrack(track, trackList.getItems());
 
@@ -609,26 +706,27 @@ public class LibraryViewController implements LibraryObserver {
 
     @FXML
     public void onUndo() {
-        // 1. Chiediamo al manager di annullare l'ultima azione
-        models.commands.CommandManager.getInstance().undo();
-
-        // 2. Aggiorniamo i colori/stati dei bottoncini
+        CommandManager.getInstance().undo();
         updateUndoRedoButtons();
-
-        // 3. Ricarichiamo la grafica della tabella per far apparire/sparire i dati
-        trackList.getItems().setAll(Library.getInstance().getTracks());
+        refreshSidebarPlaylists();
+        refreshTrackList();
     }
 
     @FXML
     public void onRedo() {
-        // 1. Chiediamo al manager di ripristinare l'azione annullata
-        models.commands.CommandManager.getInstance().redo();
-
-        // 2. Aggiorniamo i bottoni
+        CommandManager.getInstance().redo();
         updateUndoRedoButtons();
+        refreshSidebarPlaylists();
+        refreshTrackList();
+    }
 
-        // 3. Ricarichiamo la grafica
-        trackList.getItems().setAll(Library.getInstance().getTracks());
+    private void refreshTrackList() {
+        if (currentPlaylist != null) {
+            trackList.getItems().setAll(currentPlaylist.getTracks());
+        } else {
+            trackList.getItems().setAll(Library.getInstance().getTracks());
+        }
+        trackList.refresh();
     }
 
     /**
@@ -695,35 +793,33 @@ public class LibraryViewController implements LibraryObserver {
         }
     }
 
-    private void openModifyPlaylistModal(Playlist playlist) {
+    private void openAddToPlaylistsModal(Track track) {
         try {
-            FXMLLoader loader = new FXMLLoader(
-                    getClass().getResource("/views/modifyPlaylist.fxml")
-            );
-
+            FXMLLoader loader = new FXMLLoader(getClass().getResource("/views/addToPlaylistsModal.fxml"));
             Parent root = loader.load();
 
-            ModifyPlaylistController controller = loader.getController();
-            controller.setPlaylistToModify(playlist);
+            AddToPlaylistsModalController controller = loader.getController();
+            controller.setTrack(track);
 
             Stage dialogStage = new Stage();
-            dialogStage.setTitle("Modifica playlist");
+            dialogStage.setTitle("Aggiungi a playlist");
             dialogStage.initModality(Modality.APPLICATION_MODAL);
             dialogStage.setResizable(false);
 
-            Scene scene = new Scene(root, 400, 220);
+            Scene scene = new Scene(root, 400, 440);
             dialogStage.setScene(scene);
 
             dialogStage.showAndWait();
+            updateUndoRedoButtons();
 
-            if (controller.isSaved()) {
-                refreshSidebarPlaylists();
-                sidebarPlaylistListView.getSelectionModel().select(playlist);
+            // Se si è in vista playlist, aggiorna la tracklist
+            if (currentPlaylist != null) {
+                trackList.getItems().setAll(currentPlaylist.getTracks());
+                trackList.refresh();
             }
-
         } catch (IOException e) {
             e.printStackTrace();
-            System.out.println("Errore durante il caricamento di modifyPlaylist.fxml");
+            System.out.println("Errore durante il caricamento di addToPlaylistsModal.fxml");
         }
     }
 

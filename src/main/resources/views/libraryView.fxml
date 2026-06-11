@@ -41,7 +41,7 @@
             <Label fx:id="titleBar"
                    alignment="CENTER"
                    prefHeight="36.0"
-                   prefWidth="219.0"
+                   prefWidth="150.0"
                    text="EmmePiTre"
                    wrapText="true">
                 <font>
@@ -50,7 +50,7 @@
             </Label>
 
             <Region prefHeight="36.0"
-                    prefWidth="100.0"
+                    prefWidth="70.0"
                     HBox.hgrow="ALWAYS" />
 
             <Button fx:id="undoButton"
@@ -83,7 +83,7 @@
                     mnemonicParsing="false"
                     onAction="#onAddTrack"
                     prefHeight="46.0"
-                    prefWidth="79.0"
+                    prefWidth="140.0"
                     text="Add a Track" />
         </HBox>
 
@@ -96,6 +96,13 @@
                   minWidth="180.0"
                   spacing="10.0"
                   style="-fx-background-color: #eeeeee; -fx-padding: 12;">
+
+                <Button text="🏠 Libreria"
+                        onAction="#onGoHome"
+                        prefWidth="176.0"
+                        style="-fx-background-color: #d0d0d0; -fx-cursor: hand;
+                               -fx-font-size: 13px; -fx-alignment: CENTER_LEFT;
+                               -fx-padding: 6 10 6 10;" />
 
                 <Label text="Playlist"
                        style="-fx-font-size: 18px; -fx-font-weight: bold;" />

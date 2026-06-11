@@ -1,15 +1,4 @@
 [ {
-  "id" : "7c2c1c7a-2f8a-4c2a-9c0e-0c9c6c8a1a01",
-  "pathname" : null,
-  "name" : "Blinding Lights",
-  "artist" : "The Weeknd",
-  "album" : null,
-  "genre" : "Pop",
-  "year" : 2019,
-  "favourite" : true,
-  "explicit" : true,
-  "duration" : 200
-}, {
   "id" : "1f3c9c4e-9d2a-4d1a-8c2b-2a9f0c3b4d11",
   "pathname" : null,
   "name" : "Shape of You",
@@ -42,17 +31,6 @@
   "favourite" : true,
   "explicit" : false,
   "duration" : 354
-}, {
-  "id" : "c23e4f5a-6b7c-4d8e-9f01-1a2b3c4d5e41",
-  "pathname" : null,
-  "name" : "Bad Guy",
-  "artist" : "Billie Eilish",
-  "album" : null,
-  "genre" : "Pop",
-  "year" : 2019,
-  "favourite" : false,
-  "explicit" : true,
-  "duration" : 194
 }, {
   "id" : "d34f5a6b-7c8d-4e9f-0123-2b3c4d5e6f51",
   "pathname" : null,
@@ -255,8 +233,8 @@
   "id" : "5d1f2a3b-6273-4485-3f45-0d1ea2b3c451",
   "pathname" : null,
   "name" : "Firework",
-  "artist" : "Katy Perryasdafd",
-  "album" : "adsadad",
+  "artist" : "Katy Perry",
+  "album" : "Album",
   "genre" : "Pop",
   "year" : 2010,
   "favourite" : true,
@@ -274,16 +252,27 @@
   "explicit" : false,
   "duration" : 216
 }, {
-  "id" : "7f3b4c5d-8495-46a7-5f67-2b3c4d5e6f71",
+  "id" : "7c2c1c7a-2f8a-4c2a-9c0e-0c9c6c8a1a01",
   "pathname" : null,
-  "name" : "Numb",
-  "artist" : "Linkin Park",
+  "name" : "Blinding Lights",
+  "artist" : "The Weeknd",
   "album" : null,
-  "genre" : "Rock",
-  "year" : 2003,
+  "genre" : "Pop",
+  "year" : 2019,
   "favourite" : true,
+  "explicit" : true,
+  "duration" : 200
+}, {
+  "id" : "c23e4f5a-6b7c-4d8e-9f01-1a2b3c4d5e41",
+  "pathname" : null,
+  "name" : "Bad Guy",
+  "artist" : "Billie Eilish",
+  "album" : null,
+  "genre" : "Pop",
+  "year" : 2019,
+  "favourite" : false,
   "explicit" : false,
-  "duration" : 187
+  "duration" : 194
 }, {
   "id" : "8a4c5d6e-95a6-47b8-6f78-3c4d5e6f7a81",
   "pathname" : null,
@@ -295,26 +284,4 @@
   "favourite" : false,
   "explicit" : true,
   "duration" : 239
-}, {
-  "id" : null,
-  "pathname" : "mckmldsk",
-  "name" : "cvdfsfd",
-  "artist" : "fgefd",
-  "album" : "vfdfd",
-  "genre" : "rock",
-  "year" : 2020,
-  "favourite" : true,
-  "explicit" : true,
-  "duration" : 155
-}, {
-  "id" : "5a712503-f118-4562-857d-c7b999168db8",
-  "pathname" : "dsaas",
-  "name" : "fedes",
-  "artist" : "fsds",
-  "album" : "2",
-  "genre" : "pop",
-  "year" : 1980,
-  "favourite" : false,
-  "explicit" : false,
-  "duration" : 10
 } ]
