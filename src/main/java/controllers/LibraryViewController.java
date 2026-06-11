@@ -28,7 +28,9 @@ import models.commands.RemoveTrackFromLibraryCommand;
 import models.commands.RemoveTrackFromPlaylistCommand;
 
 import java.io.IOException;
+import java.util.List;
 import java.util.Objects;
+import java.util.Optional;
 
 public class LibraryViewController implements LibraryObserver {
 
@@ -65,8 +67,6 @@ public class LibraryViewController implements LibraryObserver {
     @FXML private Button redoButton;
     @FXML
     private ListView<Playlist> sidebarPlaylistListView;
-    @FXML
-    private Button homeLibraryButton;
 
     private Playlist currentPlaylist = null;
     private boolean suppressSidebarListener = false;
@@ -499,7 +499,13 @@ public class LibraryViewController implements LibraryObserver {
         MenuItem addToPlaylistItem = new MenuItem("Aggiungi a una playlist");
         MenuItem deleteItem = new MenuItem("Elimina traccia");
 
-        editItem.setOnAction(event -> modifyTrack(row.getItem()));
+        //editItem.setOnAction(event -> modifyTrack(row.getItem()));
+
+        editItem.setOnAction(event -> {
+            Track selectedTrack = row.getItem();
+            onEdit(selectedTrack);
+
+        });
 
         addToPlaylistItem.setOnAction(event -> openAddToPlaylistsModal(row.getItem()));
 
@@ -525,6 +531,8 @@ public class LibraryViewController implements LibraryObserver {
                     Command removeCmd = new RemoveTrackFromLibraryCommand(currentTrack);
                     CommandManager.getInstance().executeCommand(removeCmd);
                     updateUndoRedoButtons();
+                    if (currentTrack.equals(currentPlayingTrack.get())){
+                        rootPane.getChildren().clear();}
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -558,7 +566,6 @@ public class LibraryViewController implements LibraryObserver {
 
                 DeleteTrackController dialogController = loader.getController();
                 dialogController.setContext(false); // false = "Rimuovi dalla playlist"
-
                 Stage dialogStage = new Stage();
                 dialogStage.setTitle("Rimuovi dalla playlist");
                 dialogStage.initModality(Modality.APPLICATION_MODAL);
@@ -572,6 +579,8 @@ public class LibraryViewController implements LibraryObserver {
                     trackList.getItems().setAll(currentPlaylist.getTracks());
                     trackList.refresh();
                     updateUndoRedoButtons();
+                    if (currentTrack.equals(currentPlayingTrack.get())){
+                    rootPane.getChildren().clear();}
                 }
             } catch (Exception e) {
                 e.printStackTrace();
@@ -695,7 +704,16 @@ public class LibraryViewController implements LibraryObserver {
             stage.setScene(new Scene(root));
             stage.setTitle("Modify Track");
             stage.show();
+            controller.setOnModifyDone(() -> {
+                List<Track> list = Library.getInstance().getTracks();
 
+                Track found = list.stream()
+                        .filter(t -> t.getId().equals(currentPlayingTrack.get().getId()))
+                        .findFirst()
+                        .orElse(null);
+
+                openPlayerView(found);
+            });
         } catch (IOException e) {
             e.printStackTrace();
         }
@@ -823,17 +841,35 @@ public class LibraryViewController implements LibraryObserver {
         }
     }
 
-    @FXML
-    private void onShowFullLibrary() {
-        // Deseleziona eventuali playlist selezionate nella sidebar
-        if (sidebarPlaylistListView != null) {
-            sidebarPlaylistListView.getSelectionModel().clearSelection();
+    private void onEdit(Track selectedTrack){
+        if (selectedTrack.equals(currentPlayingTrack.get())) {
+
+            Alert alert = new Alert(Alert.AlertType.CONFIRMATION);
+            alert.setTitle("Conferma modifica");
+            alert.setHeaderText(null);
+            alert.setContentText(
+                    "La traccia è attualmente in riproduzione.\n" +
+                            "Continuare la modifica interromperà la riproduzione.\n\n" +
+                            "Vuoi procedere?"
+            );
+
+            ButtonType yesButton = new ButtonType("Sì");
+            ButtonType noButton = new ButtonType("No", ButtonBar.ButtonData.CANCEL_CLOSE);
+
+            alert.getButtonTypes().setAll(yesButton, noButton);
+
+            Optional<ButtonType> result = alert.showAndWait();
+
+            if (result.isPresent() && result.get() == yesButton) {
+                // stop playback se necessario
+                rootPane.getChildren().clear();
+
+                modifyTrack(selectedTrack);
+            }
+
+        } else {
+
+            modifyTrack(selectedTrack);
         }
-
-        // Ricarica nella tabella tutte le tracce presenti nella libreria principale
-        trackList.getItems().setAll(Library.getInstance().getTracks());
-        trackList.refresh();
-
-        System.out.println("Vista Home: visualizzazione completa della libreria.");
     }
 }

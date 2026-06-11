@@ -27,7 +27,11 @@ public class ModifyController {
     @FXML private TextField txtYear;
 
     private Track track;
+    private Runnable onModifyDone;
 
+    public void setOnModifyDone(Runnable onModifyDone) {
+        this.onModifyDone = onModifyDone;
+    }
     /**
      * Inizializza il controller. Questo metodo viene chiamato automaticamente
      * da JavaFX dopo il caricamento del file FXML.
@@ -93,7 +97,9 @@ public class ModifyController {
         models.Library.getInstance().sync();
 
         models.Library.getInstance().notifyObservers();
-
+        if (onModifyDone != null) {
+            onModifyDone.run();
+        }
         closeWindow();
     }
 
