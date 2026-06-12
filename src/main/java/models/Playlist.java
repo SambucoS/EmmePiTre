@@ -180,6 +180,11 @@ public class Playlist implements TrackList {
         return tracks.contains(track);
     }
 
+    public void reorderTracks(List<Track> newOrder) {
+        tracks.clear();
+        tracks.addAll(newOrder);
+    }
+
     /**
      * Verifica se la playlist è vuota.
      *

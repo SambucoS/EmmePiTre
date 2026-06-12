@@ -77,6 +77,11 @@ public class PlaylistManager {
         this.sync();                 //Salva sul disco
     }
 
+    public void reorderPlaylist(Playlist playlist, List<Track> newOrder) {
+        playlist.reorderTracks(newOrder);
+        sync();
+    }
+
     // FUNZIONE DI SINCRONIZZAZIONE
     private void sync() {
         // Passa la lista aggiornata al service per la scrittura su file

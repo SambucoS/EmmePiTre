@@ -63,6 +63,13 @@ public class PlayerController {
         this.onTrackChanged = callback;
     }
 
+    public void syncCurrentIndex() {
+        if (track != null && currentPlaylist != null) {
+            int idx = currentPlaylist.indexOf(track);
+            if (idx >= 0) currentIndex = idx;
+        }
+    }
+
     /**
      * Per il {@link PlayerController} viene inizializzata una Timeline, al
      * fine di gestire la riproduzione simulata della traccia selezionata
