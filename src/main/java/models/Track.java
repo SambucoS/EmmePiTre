@@ -15,7 +15,8 @@ public class Track {
     private int year;
     private boolean favourite;
     private boolean explicit;
-    private int duration; // in seconds
+    private int duration; // in secondi
+    private int timesListened;
 
     // Costruttore vuoto
     public Track() {}
@@ -34,6 +35,7 @@ public class Track {
         this.favourite = favourite;
         this.explicit = explicit;
         this.duration = duration;
+        this.timesListened = 0;
     }
 
     // Getters e Setters
@@ -110,37 +112,39 @@ public class Track {
         this.duration = duration;
     }
 
+    public int getTimesListened(){ return timesListened; };
+
+    public void setTimesListened(){ this.timesListened++;}
+
 
     /** viene usato Objects.equals(...) per gestire automaticamente i null
      * il metodo si occupa di verificare se due oggetti (Track) sono uguali
+     * usando come paragone il solo id
      * @params obj la traccia con cui effettuare la verifica di uguaglianza
      */
     @Override
     public boolean equals(Object obj) {
-        if (this == obj) {
-            return true;
-        }
-
-        if (!(obj instanceof Track)) {
-            return false;
-        }
+        if (this == obj) return true;
+        if (!(obj instanceof Track)) return false;
 
         Track t = (Track) obj;
 
-        return this.year == t.year &&
-                this.favourite == t.favourite &&
-                this.explicit == t.explicit &&
-                this.duration == t.duration &&
-                java.util.Objects.equals(this.pathname, t.pathname) &&
-                java.util.Objects.equals(this.name, t.name) &&
-                java.util.Objects.equals(this.artist, t.artist) &&
-                java.util.Objects.equals(this.album, t.album) &&
-                java.util.Objects.equals(this.genre, t.genre);
+        return year == t.year &&
+                favourite == t.favourite &&
+                explicit == t.explicit &&
+                duration == t.duration &&
+                java.util.Objects.equals(id, t.id) &&
+                java.util.Objects.equals(pathname, t.pathname) &&
+                java.util.Objects.equals(name, t.name) &&
+                java.util.Objects.equals(artist, t.artist) &&
+                java.util.Objects.equals(album, t.album) &&
+                java.util.Objects.equals(genre, t.genre);
     }
 
     @Override
     public int hashCode() {
         return java.util.Objects.hash(
+                id,
                 pathname,
                 name,
                 artist,
@@ -156,6 +160,7 @@ public class Track {
     @Override
     public String toString() {
         return "Track{" +
+                "id=" + id + '\'' +
                 "name='" + name + '\'' +
                 ", artist='" + artist + '\'' +
                 ", album=" + album + '\'' +
