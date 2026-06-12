@@ -1,8 +1,7 @@
 package models;
 
-import interfaces.LibraryObserver;
-import interfaces.TrackList;
-import services.JsonStorageService;
+import observer.LibraryObserver;
+import persistence.JsonStorageService;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -82,10 +81,23 @@ public class Library implements TrackList {
         notifyObservers();
     }
 
+    public Track getTrackWithID(String id){
+
+        List<Track> list = Library.getInstance().getTracks();
+
+        Track found = list.stream()
+                .filter(t -> t.getId().equals(id))
+                .findFirst()
+                .orElse(null);
+        return found;
+    }
+
     // FUNZIONE DI SINCRONIZZAZIONE
     public void sync() {
         // Passa la lista aggiornata al service per la scrittura su file
         this.database.saveToFile(this.tracks);
         System.out.println("File JSON sovrascritto e aggiornato con i nuovi dati!");
     }
+
+
 }

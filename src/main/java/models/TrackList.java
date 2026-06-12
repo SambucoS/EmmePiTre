@@ -1,4 +1,4 @@
-package interfaces;
+package models;
 
 import models.Track;
 import java.util.List;

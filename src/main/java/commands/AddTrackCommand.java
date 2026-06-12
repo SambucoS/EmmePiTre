@@ -1,6 +1,6 @@
-package models.commands;
+package commands;
 
-import interfaces.TrackList;
+import models.TrackList;
 import models.Track;
 
 public class AddTrackCommand implements Command {

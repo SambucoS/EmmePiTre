@@ -1,4 +1,4 @@
-package models.commands;
+package commands;
 
 import models.Playlist;
 import models.PlaylistManager;

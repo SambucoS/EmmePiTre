@@ -11,8 +11,8 @@ import javafx.util.StringConverter;
 import models.Playlist;
 import models.PlaylistManager;
 import models.Track;
-import models.commands.CommandManager;
-import models.commands.ManageTrackPlaylistsCommand;
+import commands.CommandManager;
+import commands.ManageTrackPlaylistsCommand;
 
 import java.util.ArrayList;
 import java.util.LinkedHashMap;

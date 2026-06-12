@@ -2,7 +2,7 @@ package models;
 // ========== CLASSE TRACK ================
 // versione 2.0 ( Aggiunta identificativi )
 
-import services.IdGenerator;
+import util.IdGenerator;
 
 public class Track {
 
@@ -15,7 +15,8 @@ public class Track {
     private int year;
     private boolean favourite;
     private boolean explicit;
-    private int duration; // in seconds
+    private int duration; // in secondi
+    private int timesListened;
 
     // Costruttore vuoto
     public Track() {}
@@ -34,6 +35,7 @@ public class Track {
         this.favourite = favourite;
         this.explicit = explicit;
         this.duration = duration;
+        this.timesListened = 0;
     }
 
     // Getters e Setters
@@ -109,6 +111,10 @@ public class Track {
     public void setDuration(int duration) {
         this.duration = duration;
     }
+
+    public int getTimesListened(){ return timesListened; };
+
+    public void setTimesListened(){ this.timesListened++;}
 
 
     /** viene usato Objects.equals(...) per gestire automaticamente i null

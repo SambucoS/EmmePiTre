@@ -1,6 +1,5 @@
 package models;
 
-import interfaces.TrackList;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -178,6 +177,11 @@ public class Playlist implements TrackList {
      */
     public boolean containsTrack(Track track) {
         return tracks.contains(track);
+    }
+
+    public void reorderTracks(List<Track> newOrder) {
+        tracks.clear();
+        tracks.addAll(newOrder);
     }
 
     /**

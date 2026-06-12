@@ -5,9 +5,9 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import models.Playlist;
 import models.PlaylistManager;
-import models.commands.Command;
-import models.commands.CommandManager;
-import models.commands.RemovePlaylistCommand;
+import commands.Command;
+import commands.CommandManager;
+import commands.RemovePlaylistCommand;
 
 /**
  * Controller JavaFX della modale di conferma eliminazione playlist.

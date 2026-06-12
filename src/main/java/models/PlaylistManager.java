@@ -1,6 +1,6 @@
 package models;
 
-import services.JsonStorageService;
+import persistence.JsonStorageService;
 
 import java.util.List;
 
@@ -75,6 +75,11 @@ public class PlaylistManager {
 
         playlist.removeTrack(track); //Rimuove la traccia dalla playlist in RAM
         this.sync();                 //Salva sul disco
+    }
+
+    public void reorderPlaylist(Playlist playlist, List<Track> newOrder) {
+        playlist.reorderTracks(newOrder);
+        sync();
     }
 
     // FUNZIONE DI SINCRONIZZAZIONE

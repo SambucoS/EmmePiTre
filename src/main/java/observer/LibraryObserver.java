@@ -1,4 +1,4 @@
-package interfaces;
+package observer;
 
 public interface LibraryObserver {
     // Questo metodo viene notificato a tutte le viste registrate quando i dati cambiano
