@@ -11,9 +11,12 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.input.ClipboardContent;
+import javafx.scene.input.Dragboard;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyCodeCombination;
 import javafx.scene.input.KeyCombination;
+import javafx.scene.input.TransferMode;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.StackPane;
 import javafx.stage.Modality;
@@ -28,6 +31,7 @@ import models.commands.RemoveTrackFromLibraryCommand;
 import models.commands.RemoveTrackFromPlaylistCommand;
 
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.Optional;
@@ -71,6 +75,7 @@ public class LibraryViewController implements LibraryObserver {
     private Playlist currentPlaylist = null;
     private boolean suppressSidebarListener = false;
     private final ObjectProperty<Track> currentPlayingTrack = new SimpleObjectProperty<>(null);
+    private PlayerController playerController = null;
 
     private void refreshSidebarPlaylists() {
         if (sidebarPlaylistListView == null) return;
@@ -196,6 +201,7 @@ public class LibraryViewController implements LibraryObserver {
 
         // Caricamento iniziale delle playlist nella sidebar
         setupSidebarPlaylistListView();
+        researchBar.textProperty().addListener((obs, old, newText) -> applySearch(newText));
         currentPlayingTrack.addListener((obs, oldTrack, newTrack) -> {
             ;
             Library.getInstance().getTrackWithID(currentPlayingTrack.get().getId()).setTimesListened();
@@ -236,6 +242,46 @@ public class LibraryViewController implements LibraryObserver {
                     openPlayerView(selectedTrack);
                 }
             });
+
+            row.setOnDragDetected(event -> {
+                if (currentPlaylist == null || row.isEmpty() || !researchBar.getText().isBlank()) return;
+                Dragboard db = row.startDragAndDrop(TransferMode.MOVE);
+                ClipboardContent cc = new ClipboardContent();
+                cc.putString(String.valueOf(row.getIndex()));
+                db.setContent(cc);
+                db.setDragView(row.snapshot(null, null));
+                event.consume();
+            });
+
+            row.setOnDragOver(event -> {
+                if (currentPlaylist == null || !event.getDragboard().hasString()) return;
+                int draggedIndex = Integer.parseInt(event.getDragboard().getString());
+                if (draggedIndex != row.getIndex()) {
+                    event.acceptTransferModes(TransferMode.MOVE);
+                }
+                event.consume();
+            });
+
+            row.setOnDragDropped(event -> {
+                if (currentPlaylist == null || !event.getDragboard().hasString()) return;
+                int draggedIndex = Integer.parseInt(event.getDragboard().getString());
+                int dropIndex = row.isEmpty() ? trackList.getItems().size() - 1 : row.getIndex();
+                if (draggedIndex == dropIndex) {
+                    event.setDropCompleted(false);
+                    event.consume();
+                    return;
+                }
+                List<Track> newOrder = new ArrayList<>(currentPlaylist.getTracks());
+                Track dragged = newOrder.remove(draggedIndex);
+                newOrder.add(dropIndex, dragged);
+                PlaylistManager.getInstance().reorderPlaylist(currentPlaylist, newOrder);
+                refreshTrackList();
+                if (playerController != null) playerController.syncCurrentIndex();
+                event.setDropCompleted(true);
+                event.consume();
+            });
+
+            row.setOnDragDone(event -> event.consume());
 
             return row;
         });
@@ -323,8 +369,7 @@ public class LibraryViewController implements LibraryObserver {
             sidebarPlaylistListView.getSelectionModel().clearSelection();
         }
 
-        trackList.getItems().setAll(Library.getInstance().getTracks());
-        trackList.refresh();
+        refreshTrackList();
 
         // Testo mostrato quando non ci sono playlist disponibili.
         sidebarPlaylistListView.setPlaceholder(
@@ -391,14 +436,12 @@ public class LibraryViewController implements LibraryObserver {
 
                     currentPlaylist = selectedPlaylist;
                     if (selectedPlaylist != null) {
-                        trackList.getItems().setAll(selectedPlaylist.getTracks());
                         addButton.setText("Gestisci Playlist");
                         System.out.println("Playlist selezionata: " + selectedPlaylist.getName());
                     } else {
-                        trackList.getItems().setAll(Library.getInstance().getTracks());
                         addButton.setText("Add a Track");
                     }
-                    trackList.refresh();
+                    refreshTrackList();
                 }
         );
     }
@@ -409,8 +452,7 @@ public class LibraryViewController implements LibraryObserver {
     public void onLibraryChanged() {
         System.out.println("Notifica ricevuta dall'Observer: sto aggiornando la TableView!");
         if (currentPlaylist == null) {
-            trackList.getItems().setAll(Library.getInstance().getTracks());
-            trackList.refresh();
+            refreshTrackList();
         }
     }
 
@@ -422,7 +464,7 @@ public class LibraryViewController implements LibraryObserver {
             Library.getInstance().addTrack(new Track("C:/music/song2.mp3", "Brano Pulito", "Artista Indie", "Album", "Lo-fi", 2024, false, false, 180));
             Library.getInstance().addTrack(new Track("C:/music/song3.mp3", "Classico Greve", "Rapper Serio", "Album", "Rap", 1999, true, false, 240));
         } else {
-            trackList.getItems().setAll(Library.getInstance().getTracks());
+            refreshTrackList();
         }
     }
 
@@ -457,9 +499,8 @@ public class LibraryViewController implements LibraryObserver {
     public void onGoHome() {
         sidebarPlaylistListView.getSelectionModel().clearSelection();
         currentPlaylist = null;
-        trackList.getItems().setAll(Library.getInstance().getTracks());
-        trackList.refresh();
         addButton.setText("Add a Track");
+        refreshTrackList();
     }
 
     private void openManagePlaylistModal(Playlist playlist) {
@@ -483,8 +524,7 @@ public class LibraryViewController implements LibraryObserver {
             if (controller.isSaved()) {
                 refreshSidebarPlaylists();
                 sidebarPlaylistListView.getSelectionModel().select(playlist);
-                trackList.getItems().setAll(playlist.getTracks());
-                trackList.refresh();
+                refreshTrackList();
                 updateUndoRedoButtons();
             }
         } catch (IOException e) {
@@ -583,8 +623,7 @@ public class LibraryViewController implements LibraryObserver {
                 if (dialogController.isConfirmed()) {
                     Command cmd = new RemoveTrackFromPlaylistCommand(currentPlaylist, currentTrack);
                     CommandManager.getInstance().executeCommand(cmd);
-                    trackList.getItems().setAll(currentPlaylist.getTracks());
-                    trackList.refresh();
+                    refreshTrackList();
                     updateUndoRedoButtons();
                     if (currentTrack.equals(currentPlayingTrack.get())){
                     rootPane.getChildren().clear();}
@@ -661,7 +700,7 @@ public class LibraryViewController implements LibraryObserver {
             Parent playerView = loader.load();
 
             // Caricamento del controller associato alla view del Player (PlayerController).
-            PlayerController playerController = loader.getController();
+            playerController = loader.getController();
 
             // Registra il callback PRIMA di setTrack, così il primo aggiornamento viene catturato
             playerController.setOnTrackChanged(currentPlayingTrack::set);
@@ -735,6 +774,7 @@ public class LibraryViewController implements LibraryObserver {
         updateUndoRedoButtons();
         refreshSidebarPlaylists();
         refreshTrackList();
+        if (playerController != null) playerController.syncCurrentIndex();
     }
 
     @FXML
@@ -743,15 +783,35 @@ public class LibraryViewController implements LibraryObserver {
         updateUndoRedoButtons();
         refreshSidebarPlaylists();
         refreshTrackList();
+        if (playerController != null) playerController.syncCurrentIndex();
     }
 
     private void refreshTrackList() {
-        if (currentPlaylist != null) {
-            trackList.getItems().setAll(currentPlaylist.getTracks());
+        applySearch(researchBar.getText());
+    }
+
+    private void applySearch(String query) {
+        List<Track> source = currentPlaylist != null
+                ? currentPlaylist.getTracks()
+                : Library.getInstance().getTracks();
+        if (query == null || query.isBlank()) {
+            trackList.getItems().setAll(source);
         } else {
-            trackList.getItems().setAll(Library.getInstance().getTracks());
+            String q = query.toLowerCase();
+            trackList.getItems().setAll(
+                    source.stream()
+                            .filter(t -> matches(t.getName(), q)
+                                    || matches(t.getArtist(), q)
+                                    || matches(t.getAlbum(), q)
+                                    || matches(t.getGenre(), q))
+                            .toList()
+            );
         }
         trackList.refresh();
+    }
+
+    private boolean matches(String field, String query) {
+        return field != null && field.toLowerCase().contains(query);
     }
 
     /**
@@ -809,8 +869,7 @@ public class LibraryViewController implements LibraryObserver {
              * Questo evita che restino visibili le tracce di una playlist
              * che non esiste più.
              */
-            trackList.getItems().setAll(Library.getInstance().getTracks());
-            trackList.refresh();
+            refreshTrackList();
 
         } catch (IOException e) {
             e.printStackTrace();
@@ -839,8 +898,7 @@ public class LibraryViewController implements LibraryObserver {
 
             // Se si è in vista playlist, aggiorna la tracklist
             if (currentPlaylist != null) {
-                trackList.getItems().setAll(currentPlaylist.getTracks());
-                trackList.refresh();
+                refreshTrackList();
             }
         } catch (IOException e) {
             e.printStackTrace();
