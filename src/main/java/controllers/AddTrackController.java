@@ -10,9 +10,9 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import models.Library;
 import models.Track;
-import models.commands.AddTrackCommand;
-import models.commands.Command;
-import models.commands.CommandManager;
+import commands.AddTrackCommand;
+import commands.Command;
+import commands.CommandManager;
 
 import java.util.ArrayList;
 import java.util.List;

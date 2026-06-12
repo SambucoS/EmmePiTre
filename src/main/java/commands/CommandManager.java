@@ -1,4 +1,4 @@
-package models.commands;
+package commands;
 
 import java.util.Stack;
 

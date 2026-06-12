@@ -1,8 +1,7 @@
 package models;
 
-import interfaces.LibraryObserver;
-import interfaces.TrackList;
-import services.JsonStorageService;
+import observer.LibraryObserver;
+import persistence.JsonStorageService;
 import java.util.ArrayList;
 import java.util.List;
 

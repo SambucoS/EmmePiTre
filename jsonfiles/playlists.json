@@ -12,11 +12,7 @@
     "explicit" : true,
     "duration" : 239,
     "timesListened" : 0
-  } ],
-  "size" : 1
-}, {
-  "name" : "dhayad",
-  "tracks" : [ {
+  }, {
     "id" : "d34f5a6b-7c8d-4e9f-0123-2b3c4d5e6f51",
     "pathname" : null,
     "name" : "Smells Like Teen Spirit",
@@ -27,8 +23,12 @@
     "favourite" : true,
     "explicit" : true,
     "duration" : 301,
-    "timesListened" : 0
-  }, {
+    "timesListened" : 19
+  } ],
+  "size" : 2
+}, {
+  "name" : "dhayad",
+  "tracks" : [ {
     "id" : "1f3c9c4e-9d2a-4d1a-8c2b-2a9f0c3b4d11",
     "pathname" : null,
     "name" : "Shape of You",
@@ -51,6 +51,18 @@
     "favourite" : true,
     "explicit" : false,
     "duration" : 354,
+    "timesListened" : 0
+  }, {
+    "id" : "d34f5a6b-7c8d-4e9f-0123-2b3c4d5e6f51",
+    "pathname" : null,
+    "name" : "Smells Like Teen Spirit",
+    "artist" : "Nirvana",
+    "album" : null,
+    "genre" : "Rock",
+    "year" : 1991,
+    "favourite" : true,
+    "explicit" : true,
+    "duration" : 301,
     "timesListened" : 0
   }, {
     "id" : "a91c2b3d-4f5e-4a6b-8c7d-9e0f1a2b3c21",
@@ -92,8 +104,20 @@
     "explicit" : true,
     "duration" : 239,
     "timesListened" : 0
+  }, {
+    "id" : "d34f5a6b-7c8d-4e9f-0123-2b3c4d5e6f51",
+    "pathname" : null,
+    "name" : "Smells Like Teen Spirit",
+    "artist" : "Nirvana",
+    "album" : null,
+    "genre" : "Rock",
+    "year" : 1991,
+    "favourite" : true,
+    "explicit" : true,
+    "duration" : 301,
+    "timesListened" : 19
   } ],
-  "size" : 1
+  "size" : 2
 }, {
   "name" : "SAD",
   "tracks" : [ ],

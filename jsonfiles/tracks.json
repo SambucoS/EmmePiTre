@@ -9,7 +9,7 @@
   "favourite" : true,
   "explicit" : true,
   "duration" : 326,
-  "timesListened" : 58
+  "timesListened" : 59
 }, {
   "id" : "b12d3e4f-5a6b-4c7d-8e9f-0a1b2c3d4e31",
   "pathname" : null,
@@ -21,7 +21,7 @@
   "favourite" : true,
   "explicit" : false,
   "duration" : 354,
-  "timesListened" : 39
+  "timesListened" : 41
 }, {
   "id" : "d34f5a6b-7c8d-4e9f-0123-2b3c4d5e6f51",
   "pathname" : null,
@@ -33,7 +33,7 @@
   "favourite" : true,
   "explicit" : true,
   "duration" : 301,
-  "timesListened" : 18
+  "timesListened" : 19
 }, {
   "id" : "e45a6b7c-8d9e-4f01-1234-3c4d5e6f7a61",
   "pathname" : null,
@@ -45,7 +45,7 @@
   "favourite" : false,
   "explicit" : true,
   "duration" : 270,
-  "timesListened" : 18
+  "timesListened" : 20
 }, {
   "id" : "f56b7c8d-9e0f-4123-2345-4d5e6f7a8b71",
   "pathname" : null,
@@ -297,17 +297,5 @@
   "favourite" : false,
   "explicit" : true,
   "duration" : 239,
-  "timesListened" : 0
-}, {
-  "id" : "df2b25d4-e8df-4172-a3f9-839b6ad22b5f",
-  "pathname" : "Asd",
-  "name" : "asd1aaaaaa",
-  "artist" : "asd",
-  "album" : "asd",
-  "genre" : "asd",
-  "year" : 123,
-  "favourite" : true,
-  "explicit" : false,
-  "duration" : 123,
   "timesListened" : 0
 } ]

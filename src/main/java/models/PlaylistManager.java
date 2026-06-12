@@ -1,6 +1,6 @@
 package models;
 
-import services.JsonStorageService;
+import persistence.JsonStorageService;
 
 import java.util.List;
 
