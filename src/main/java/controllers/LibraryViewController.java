@@ -196,7 +196,12 @@ public class LibraryViewController implements LibraryObserver {
 
         // Caricamento iniziale delle playlist nella sidebar
         setupSidebarPlaylistListView();
+        currentPlayingTrack.addListener((obs, oldTrack, newTrack) -> {
+            ;
+            Library.getInstance().getTrackWithID(currentPlayingTrack.get().getId()).setTimesListened();
+            Library.getInstance().sync();
 
+        });
         // Configurazione del Click Destro sulla riga intera (Metodo Nativo JavaFX)
         trackList.setRowFactory(tv -> {
             TableRow<Track> row = new TableRow<>();
@@ -224,6 +229,7 @@ public class LibraryViewController implements LibraryObserver {
             // Ri-valuta quando cambia la traccia in riproduzione
             currentPlayingTrack.addListener((obs, oldTrack, newTrack) -> updateRow.run());
 
+
             row.setOnMouseClicked(event -> {
                 if (event.getButton() == javafx.scene.input.MouseButton.PRIMARY && event.getClickCount() == 2 && !row.isEmpty()) {
                     Track selectedTrack = row.getItem();
@@ -233,6 +239,7 @@ public class LibraryViewController implements LibraryObserver {
 
             return row;
         });
+
 
         // Configurazione Click Sinistro sui tre puntini
         actionsColumn.setCellFactory(column -> new TableCell<>() {
