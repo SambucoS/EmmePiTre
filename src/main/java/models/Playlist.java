@@ -27,6 +27,8 @@ public class Playlist implements TrackList {
      */
     private final List<Track> tracks;
 
+    private int timesListened;
+
     /**
      * Costruttore vuoto obbligatorio per la deserializzazione JSON tramite Jackson.
      *
@@ -52,6 +54,7 @@ public class Playlist implements TrackList {
     public Playlist(String name) {
         setName(name);
         this.tracks = new ArrayList<>(); // Crea una lista vuota di tracce
+        this.timesListened = 0;
     }
 
     /**
@@ -104,6 +107,8 @@ public class Playlist implements TrackList {
         this.name = name.trim(); // Salva il nome ripulito dagli spazi inutili
     }
 
+    public int getTimesListened(){ return this.timesListened;}
+    public void setTimesListened(){ this.timesListened ++;}
     /**
      * Aggiunge una traccia alla playlist.
      *
