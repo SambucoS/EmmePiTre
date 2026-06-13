@@ -34,7 +34,7 @@ public class PlaylistSidebarCell extends ListCell<Playlist> {
             setText(null);
             setContextMenu(null);
         } else {
-            // Mostra nella sidebar solo il nome della playlist.
+
             Label playlistNameLbl = new Label(playlist.getName());
 
             Button playButton = new Button("▶");
