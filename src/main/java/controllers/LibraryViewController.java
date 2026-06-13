@@ -35,10 +35,7 @@ import controllers.cells.PlaylistSidebarCell;
 import util.DialogLoader;
 
 import java.io.IOException;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
-import java.util.Optional;
+import java.util.*;
 
 public class LibraryViewController implements LibraryObserver {
 
@@ -90,9 +87,16 @@ public class LibraryViewController implements LibraryObserver {
 
         List<Playlist> ordered = new ArrayList<>(PlaylistManager.getInstance().getPlaylists());
 
+        Playlist mostPlayed = PlaylistManager.getInstance().getMostListenedPlaylist();
         ordered.sort((a, b) -> {
             if (a.getName().equals("🔥 Top 10 Tracks")) return -1;
             if (b.getName().equals("🔥 Top 10 Tracks")) return 1;
+
+            if (mostPlayed != null) {
+                if (a.equals(mostPlayed)) return -1;
+                if (b.equals(mostPlayed)) return 1;
+            }
+
             return 0;
         });
 

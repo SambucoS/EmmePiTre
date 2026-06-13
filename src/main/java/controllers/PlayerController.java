@@ -177,17 +177,10 @@ public class PlayerController {
             // RIPRODUZIONE NORMALE: Va alla traccia precedente
             currentIndex--;
 
-            // Se scendiamo sotto l'inizio della playlist (indice minore di 0)...
+            // Se scendiamo sotto l'inizio della playlist (indice minore di 0) vado all'ultima canzone della playlist
             if (currentIndex < 0) {
-                if (isLoopActive) {
-                    // Se il LOOP è attivo, ricomincia dall'ultima canzone della playlist
                     currentIndex = currentPlaylist.size() - 1;
-                } else {
-                    // Altrimenti si ferma alla prima canzone (indice 0) o resetta
-                    currentIndex = 0;
-                    System.out.println("Sei già all'inizio della playlist.");
-                    return;
-                }
+
             }
         }
 
