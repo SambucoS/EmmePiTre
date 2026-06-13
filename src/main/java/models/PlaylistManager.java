@@ -83,7 +83,7 @@ public class PlaylistManager {
     }
 
     // FUNZIONE DI SINCRONIZZAZIONE
-    private void sync() {
+    public void sync() {
         // Passa la lista aggiornata al service per la scrittura su file
         this.database.savePlaylistsToFile(this.playlists);
         System.out.println("Playlists salvate su file!");

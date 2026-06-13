@@ -9,7 +9,7 @@
   "favourite" : true,
   "explicit" : true,
   "duration" : 326,
-  "timesListened" : 59
+  "timesListened" : 60
 }, {
   "id" : "b12d3e4f-5a6b-4c7d-8e9f-0a1b2c3d4e31",
   "pathname" : null,
@@ -21,7 +21,7 @@
   "favourite" : true,
   "explicit" : false,
   "duration" : 354,
-  "timesListened" : 41
+  "timesListened" : 43
 }, {
   "id" : "d34f5a6b-7c8d-4e9f-0123-2b3c4d5e6f51",
   "pathname" : null,
@@ -33,7 +33,7 @@
   "favourite" : true,
   "explicit" : true,
   "duration" : 301,
-  "timesListened" : 19
+  "timesListened" : 24
 }, {
   "id" : "e45a6b7c-8d9e-4f01-1234-3c4d5e6f7a61",
   "pathname" : null,
@@ -285,17 +285,5 @@
   "favourite" : false,
   "explicit" : false,
   "duration" : 194,
-  "timesListened" : 0
-}, {
-  "id" : "8a4c5d6e-95a6-47b8-6f78-3c4d5e6f7a81",
-  "pathname" : null,
-  "name" : "Crazy in Love",
-  "artist" : "Beyoncé ft. Jay-Z",
-  "album" : "Album",
-  "genre" : "R&B",
-  "year" : 2003,
-  "favourite" : false,
-  "explicit" : true,
-  "duration" : 239,
   "timesListened" : 0
 } ]

@@ -290,7 +290,17 @@ public class LibraryViewController implements LibraryObserver {
                 playlist -> {
                     sidebarPlaylistListView.getSelectionModel().select(playlist);
                     openRemovePlaylistModal(playlist);
-                }
+                }, playlist -> {
+                    sidebarPlaylistListView.getSelectionModel().select(playlist);
+                    currentPlaylist = playlist;
+                    playlist.setTimesListened();
+                    refreshTrackList();
+                    PlaylistManager.getInstance().sync();
+                    if (!playlist.getTracks().isEmpty()) {
+                    openPlayerView(playlist.getTracks().getFirst());
+            }
+
+        }
         ));
 
         /*
