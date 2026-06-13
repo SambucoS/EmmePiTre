@@ -25,7 +25,7 @@
     "duration" : 354,
     "timesListened" : 42
   } ],
-  "timesListened" : 2,
+  "timesListened" : 4,
   "size" : 2
 }, {
   "name" : "dhayad",
@@ -83,7 +83,7 @@
     "duration" : 301,
     "timesListened" : 19
   } ],
-  "timesListened" : 0,
+  "timesListened" : 1,
   "size" : 1
 }, {
   "name" : "SAD",
@@ -183,4 +183,129 @@
   "tracks" : [ ],
   "timesListened" : 0,
   "size" : 0
+}, {
+  "name" : "\uD83D\uDD25 Top 10 Tracks",
+  "tracks" : [ {
+    "id" : "a91c2b3d-4f5e-4a6b-8c7d-9e0f1a2b3c21",
+    "pathname" : null,
+    "name" : "Lose Yourself",
+    "artist" : "Eminem",
+    "album" : null,
+    "genre" : "Hip Hop",
+    "year" : 2002,
+    "favourite" : true,
+    "explicit" : true,
+    "duration" : 326,
+    "timesListened" : 61
+  }, {
+    "id" : "b12d3e4f-5a6b-4c7d-8e9f-0a1b2c3d4e31",
+    "pathname" : null,
+    "name" : "Bohemian Rhapsody",
+    "artist" : "Queen",
+    "album" : null,
+    "genre" : "Rock",
+    "year" : 1975,
+    "favourite" : true,
+    "explicit" : false,
+    "duration" : 354,
+    "timesListened" : 45
+  }, {
+    "id" : "d34f5a6b-7c8d-4e9f-0123-2b3c4d5e6f51",
+    "pathname" : null,
+    "name" : "Smells Like Teen Spirit",
+    "artist" : "Nirvana",
+    "album" : null,
+    "genre" : "Rock",
+    "year" : 1991,
+    "favourite" : true,
+    "explicit" : true,
+    "duration" : 301,
+    "timesListened" : 28
+  }, {
+    "id" : "e45a6b7c-8d9e-4f01-1234-3c4d5e6f7a61",
+    "pathname" : null,
+    "name" : "Uptown Funk",
+    "artist" : "Mark Ronson ft. Bruno Mars",
+    "album" : null,
+    "genre" : "Funk",
+    "year" : 2014,
+    "favourite" : false,
+    "explicit" : true,
+    "duration" : 270,
+    "timesListened" : 21
+  }, {
+    "id" : "0a6c7d8e-1f2a-4b34-3456-5e6f7a8b9c81",
+    "pathname" : null,
+    "name" : "God's Plan",
+    "artist" : "Drake",
+    "album" : null,
+    "genre" : "Hip Hop",
+    "year" : 2018,
+    "favourite" : true,
+    "explicit" : true,
+    "duration" : 198,
+    "timesListened" : 3
+  }, {
+    "id" : "f56b7c8d-9e0f-4123-2345-4d5e6f7a8b71",
+    "pathname" : null,
+    "name" : "Rolling in the Deep",
+    "artist" : "Adele",
+    "album" : null,
+    "genre" : "Pop",
+    "year" : 2010,
+    "favourite" : true,
+    "explicit" : true,
+    "duration" : 228,
+    "timesListened" : 1
+  }, {
+    "id" : "1b7d8e9f-2a3b-4c45-4567-6f7a8b9c0d91",
+    "pathname" : null,
+    "name" : "Someone Like You",
+    "artist" : "Adele",
+    "album" : null,
+    "genre" : "Pop",
+    "year" : 2011,
+    "favourite" : true,
+    "explicit" : false,
+    "duration" : 285,
+    "timesListened" : 1
+  }, {
+    "id" : "2c8e9f0a-3b4c-4d56-5678-7a8b9c0d1ea1",
+    "pathname" : null,
+    "name" : "Hotel California",
+    "artist" : "Eagles",
+    "album" : null,
+    "genre" : "Rock",
+    "year" : 1976,
+    "favourite" : false,
+    "explicit" : false,
+    "duration" : 391,
+    "timesListened" : 1
+  }, {
+    "id" : "3d9f0a1b-4c5d-4e67-6789-8b9c0d1ea2b1",
+    "pathname" : null,
+    "name" : "HUMBLE.",
+    "artist" : "Kendrick Lamar",
+    "album" : null,
+    "genre" : "Hip Hop",
+    "year" : 2017,
+    "favourite" : true,
+    "explicit" : true,
+    "duration" : 177,
+    "timesListened" : 1
+  }, {
+    "id" : "4e0a1b2c-5d6e-4f78-789a-9c0d1ea2b3c1",
+    "pathname" : null,
+    "name" : "Levitating",
+    "artist" : "Dua Lipa",
+    "album" : null,
+    "genre" : "Pop",
+    "year" : 2020,
+    "favourite" : false,
+    "explicit" : false,
+    "duration" : 203,
+    "timesListened" : 1
+  } ],
+  "timesListened" : 1,
+  "size" : 10
 } ]

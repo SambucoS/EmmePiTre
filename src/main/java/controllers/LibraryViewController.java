@@ -85,16 +85,26 @@ public class LibraryViewController implements LibraryObserver {
         if (sidebarPlaylistListView == null) return;
 
         suppressSidebarListener = true;
-        Playlist selected = sidebarPlaylistListView.getSelectionModel().getSelectedItem();
-        sidebarPlaylistListView.getItems().setAll(PlaylistManager.getInstance().getPlaylists());
 
-        if (selected != null && sidebarPlaylistListView.getItems().contains(selected)) {
+        Playlist selected = sidebarPlaylistListView.getSelectionModel().getSelectedItem();
+
+        List<Playlist> ordered = new ArrayList<>(PlaylistManager.getInstance().getPlaylists());
+
+        ordered.sort((a, b) -> {
+            if (a.getName().equals("🔥 Top 10 Tracks")) return -1;
+            if (b.getName().equals("🔥 Top 10 Tracks")) return 1;
+            return 0;
+        });
+
+        sidebarPlaylistListView.getItems().setAll(ordered);
+
+        if (selected != null && ordered.contains(selected)) {
             sidebarPlaylistListView.getSelectionModel().select(selected);
-        } else if (selected != null) {
-            // La playlist era selezionata ma non esiste più (es. eliminata da undo)
+        } else {
             currentPlaylist = null;
             addButton.setText("Add a Track");
         }
+
         suppressSidebarListener = false;
     }
 
@@ -130,12 +140,26 @@ public class LibraryViewController implements LibraryObserver {
 
         // Caricamento iniziale dei dati finti per il test
         onLoadLibrary();
+        generateTop10Playlist();
         // =========================================================
         // MENU A TENDINA (Modifica/Elimina) - Task 1.4
         // =========================================================
 
         // Caricamento iniziale delle playlist nella sidebar
         setupSidebarPlaylistListView();
+        Playlist top10 = PlaylistManager.getInstance()
+                .getPlaylists()
+                .stream()
+                .filter(p -> p.getName().equals("🔥 Top 10 Tracks"))
+                .findFirst()
+                .orElse(null);
+
+        if (top10 != null) {
+            currentPlaylist = top10;
+            refreshTrackList();
+            sidebarPlaylistListView.getSelectionModel().select(top10);
+        }
+
         researchBar.textProperty().addListener((obs, old, newText) -> applySearch(newText));
         currentPlayingTrack.addListener((obs, oldTrack, newTrack) -> {
             ;
@@ -425,6 +449,7 @@ public class LibraryViewController implements LibraryObserver {
     }
 
     private ContextMenu createPlaylistContextMenu(TableRow<Track> row) {
+
         ContextMenu contextMenu = new ContextMenu();
         contextMenu.setStyle(
                 "-fx-selection-bar: #d0d0d0; " +
@@ -502,7 +527,7 @@ public class LibraryViewController implements LibraryObserver {
             playerController.setOnTrackChanged(currentPlayingTrack::set);
 
             // Passaggio dell'oggetto 'Track' selezionato E dell'intera lista in tabella al controller del player
-            playerController.setTrack(track, trackList.getItems());
+            playerController.setTrack(track, new ArrayList<>(trackList.getItems()));
 
             // Per rimuovere eventuali istanze di player aperti in precedenza, viene pulito il contenitore principale
             // per evitare sovrapposizioni
@@ -605,7 +630,31 @@ public class LibraryViewController implements LibraryObserver {
         }
         trackList.refresh();
     }
+    private void generateTop10Playlist() {
 
+        PlaylistManager pm = PlaylistManager.getInstance();
+
+        Playlist top10 = pm.getPlaylists()
+                .stream()
+                .filter(p -> p.getName().equals("🔥 Top 10 Tracks"))
+                .findFirst()
+                .orElseGet(() -> {
+                    Playlist p = new Playlist("🔥 Top 10 Tracks");
+                    pm.addPlaylist(p);
+                    return p;
+                });
+
+        List<Track> topTracks = Library.getInstance()
+                .getTracks()
+                .stream()
+                .sorted((t1, t2) ->
+                        Integer.compare(t2.getTimesListened(), t1.getTimesListened()))
+                .limit(10)
+                .toList();
+
+        top10.reorderTracks(topTracks);
+
+    }
     private boolean matches(String field, String query) {
         return field != null && field.toLowerCase().contains(query);
     }
