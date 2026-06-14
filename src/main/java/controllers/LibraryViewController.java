@@ -492,16 +492,20 @@ public class LibraryViewController implements LibraryObserver {
 
     @FXML
     public void onCreatePlaylist() {
-        DialogLoader.showModal("/views/createPlaylist.fxml", "Nuova Playlist", 400, 200, null);
+        DialogLoader.<PlaylistController>showModal(
+                "/views/createPlaylist.fxml",
+                "Nuova Playlist",
+                520,
+                250,
+                controller -> controller.setOnPlaylistCreated(() -> {
+                    refreshSidebarPlaylists();
+                    updateUndoRedoButtons();
 
-        // Il modale si è chiuso: ricarichiamo la sidebar e aggiorniamo i tasti Undo/Redo
-        refreshSidebarPlaylists();
-        updateUndoRedoButtons();
-
-        // Verifica per il debug: stampa su console le playlist attualmente esistenti
-        System.out.println("--- STATO ATTUALE PLAYLIST ---");
-        PlaylistManager.getInstance().getPlaylists().forEach(p ->
-                System.out.println("- " + p.getName())
+                    System.out.println("--- STATO ATTUALE PLAYLIST ---");
+                    PlaylistManager.getInstance().getPlaylists().forEach(p ->
+                            System.out.println("- " + p.getName())
+                    );
+                })
         );
     }
 

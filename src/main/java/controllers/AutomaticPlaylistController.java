@@ -3,9 +3,12 @@ package controllers;
 import javafx.fxml.FXML;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
 import javafx.stage.Stage;
+import models.Library;
 import models.PlaylistManager;
+import models.Track;
+
+import java.util.List;
 
 public class AutomaticPlaylistController {
 
@@ -13,10 +16,7 @@ public class AutomaticPlaylistController {
     private ComboBox<String> criteriaComboBox;
 
     @FXML
-    private TextField valueField;
-
-    @FXML
-    private ComboBox<String> tagComboBox;
+    private ComboBox<String> valueComboBox;
 
     @FXML
     private Label messageLabel;
@@ -28,37 +28,42 @@ public class AutomaticPlaylistController {
         criteriaComboBox.getItems().addAll("Genere", "Anno", "Tag");
         criteriaComboBox.setValue("Genere");
 
-        tagComboBox.getItems().addAll("Preferiti", "Explicit");
+        criteriaComboBox.setOnAction(event -> updateValueComboBox());
 
-        criteriaComboBox.setOnAction(event -> updateInputMode());
-
-        updateInputMode();
+        updateValueComboBox();
     }
 
-    private void updateInputMode() {
+    private void updateValueComboBox() {
+        valueComboBox.getItems().clear();
+        valueComboBox.setValue(null);
+
         String criteria = criteriaComboBox.getValue();
 
-        if ("Tag".equals(criteria)) {
-            valueField.setVisible(false);
-            valueField.setManaged(false);
+        if ("Genere".equals(criteria)) {
+            List<String> genres = Library.getInstance().getTracks()
+                    .stream()
+                    .map(Track::getGenre)
+                    .filter(genre -> genre != null && !genre.isBlank())
+                    .distinct()
+                    .toList();
 
-            tagComboBox.setVisible(true);
-            tagComboBox.setManaged(true);
+            valueComboBox.getItems().addAll(genres);
+            valueComboBox.setPromptText("Seleziona genere");
 
-            tagComboBox.setValue("Preferiti");
+        } else if ("Anno".equals(criteria)) {
+            List<String> years = Library.getInstance().getTracks()
+                    .stream()
+                    .map(track -> String.valueOf(track.getYear()))
+                    .distinct()
+                    .sorted()
+                    .toList();
 
-        } else {
-            tagComboBox.setVisible(false);
-            tagComboBox.setManaged(false);
+            valueComboBox.getItems().addAll(years);
+            valueComboBox.setPromptText("Seleziona anno");
 
-            valueField.setVisible(true);
-            valueField.setManaged(true);
-
-            if ("Genere".equals(criteria)) {
-                valueField.setPromptText("Inserisci genere");
-            } else if ("Anno".equals(criteria)) {
-                valueField.setPromptText("Inserisci anno");
-            }
+        } else if ("Tag".equals(criteria)) {
+            valueComboBox.getItems().addAll("Preferiti", "Explicit");
+            valueComboBox.setPromptText("Seleziona tag");
         }
 
         messageLabel.setText("");
@@ -71,47 +76,32 @@ public class AutomaticPlaylistController {
     @FXML
     private void handleGenerate() {
         String criteria = criteriaComboBox.getValue();
+        String value = valueComboBox.getValue();
 
         if (criteria == null) {
             showError("Seleziona un criterio di generazione.");
             return;
         }
 
+        if (value == null || value.trim().isEmpty()) {
+            showError("Seleziona un valore valido.");
+            return;
+        }
+
         try {
             if (criteria.equals("Genere")) {
-                String value = valueField.getText();
-
-                if (value == null || value.trim().isEmpty()) {
-                    showError("Inserisci un genere valido.");
-                    return;
-                }
-
                 PlaylistManager.getInstance()
                         .createAutomaticPlaylistByGenre(value);
 
             } else if (criteria.equals("Anno")) {
-                String value = valueField.getText();
-
-                if (value == null || value.trim().isEmpty()) {
-                    showError("Inserisci un anno valido.");
-                    return;
-                }
-
-                int year = Integer.parseInt(value.trim());
+                int year = Integer.parseInt(value);
 
                 PlaylistManager.getInstance()
                         .createAutomaticPlaylistByYear(year);
 
             } else if (criteria.equals("Tag")) {
-                String selectedTag = tagComboBox.getValue();
-
-                if (selectedTag == null || selectedTag.trim().isEmpty()) {
-                    showError("Seleziona un tag valido.");
-                    return;
-                }
-
                 PlaylistManager.getInstance()
-                        .createAutomaticPlaylistByTag(selectedTag);
+                        .createAutomaticPlaylistByTag(value);
             }
 
             created = true;
@@ -136,7 +126,7 @@ public class AutomaticPlaylistController {
     }
 
     private void closeWindow() {
-        Stage stage = (Stage) valueField.getScene().getWindow();
+        Stage stage = (Stage) valueComboBox.getScene().getWindow();
         stage.close();
     }
 }

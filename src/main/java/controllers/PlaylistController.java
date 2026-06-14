@@ -19,6 +19,12 @@ import javafx.application.Platform;
  */
 public class PlaylistController {
 
+    private Runnable onPlaylistCreated;
+
+    public void setOnPlaylistCreated(Runnable onPlaylistCreated) {
+        this.onPlaylistCreated = onPlaylistCreated;
+    }
+
     // Campo di testo usato per inserire il nome della nuova playlist
     @FXML
     private TextField playlistNameField;
@@ -30,13 +36,10 @@ public class PlaylistController {
     @FXML
     private void handleAutomaticPlaylist(ActionEvent event) {
 
-        // Recupera la finestra attuale, cioè la modale "Crea nuova playlist"
         Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
 
-        // Chiude la modale corrente
         currentStage.close();
 
-        // Aspetta il prossimo ciclo JavaFX prima di aprire la nuova modale
         Platform.runLater(() -> {
             AutomaticPlaylistController controller = DialogLoader.<AutomaticPlaylistController>showModal(
                     "/views/automaticPlaylist.fxml",
@@ -47,6 +50,10 @@ public class PlaylistController {
             );
 
             if (controller != null && controller.isCreated()) {
+                if (onPlaylistCreated != null) {
+                    onPlaylistCreated.run();
+                }
+
                 System.out.println("Playlist automatica creata correttamente.");
             }
         });
@@ -68,6 +75,10 @@ public class PlaylistController {
             Playlist nuovaPlaylist = new Playlist(playlistName);
             Command addPlaylistCmd = new AddPlaylistCommand(nuovaPlaylist);
             CommandManager.getInstance().executeCommand(addPlaylistCmd);
+
+            if (onPlaylistCreated != null) {
+                onPlaylistCreated.run();
+            }
 
             // Se la creazione va a buon fine, mostra un messaggio verde
             messageLabel.setStyle("-fx-text-fill: green;");

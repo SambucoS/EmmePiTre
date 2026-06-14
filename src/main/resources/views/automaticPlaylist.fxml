@@ -31,16 +31,9 @@
               promptText="Seleziona criterio"
               prefWidth="300"/>
 
-    <TextField fx:id="valueField"
-               promptText="Inserisci genere o anno"
-               prefWidth="300"
-               onAction="#handleGenerate"/>
-
-    <ComboBox fx:id="tagComboBox"
-              promptText="Seleziona tag"
-              prefWidth="300"
-              visible="false"
-              managed="false"/>
+    <ComboBox fx:id="valueComboBox"
+              promptText="Seleziona valore"
+              prefWidth="300"/>
 
     <Label fx:id="messageLabel"
            text=""

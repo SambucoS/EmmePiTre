@@ -294,17 +294,17 @@
     "duration" : 203,
     "timesListened" : 2
   }, {
-    "id" : "f56b7c8d-9e0f-4123-2345-4d5e6f7a8b71",
+    "id" : "6a2c3d4e-7f8a-4b9c-9abc-1ea2b3c4d5e1",
     "pathname" : null,
-    "name" : "Rolling in the Deep",
-    "artist" : "Adele",
+    "name" : "Radioactive",
+    "artist" : "Imagine Dragons",
     "album" : null,
-    "genre" : "Pop",
-    "year" : 2010,
+    "genre" : "Alternative",
+    "year" : 2012,
     "favourite" : true,
-    "explicit" : true,
-    "duration" : 228,
-    "timesListened" : 1
+    "explicit" : false,
+    "duration" : 186,
+    "timesListened" : 2
   } ],
   "timesListened" : 1,
   "size" : 10
@@ -780,4 +780,229 @@
   "tracks" : [ ],
   "timesListened" : 0,
   "size" : 0
+}, {
+  "name" : "burgman",
+  "tracks" : [ {
+    "id" : "b12d3e4f-5a6b-4c7d-8e9f-0a1b2c3d4e31",
+    "pathname" : null,
+    "name" : "Bohemian Rhapsody",
+    "artist" : "Queen",
+    "album" : null,
+    "genre" : "Rock",
+    "year" : 1975,
+    "favourite" : true,
+    "explicit" : false,
+    "duration" : 354,
+    "timesListened" : 48
+  }, {
+    "id" : "e45a6b7c-8d9e-4f01-1234-3c4d5e6f7a61",
+    "pathname" : null,
+    "name" : "Uptown Funk",
+    "artist" : "Mark Ronson ft. Bruno Mars",
+    "album" : null,
+    "genre" : "Funk",
+    "year" : 2014,
+    "favourite" : false,
+    "explicit" : true,
+    "duration" : 270,
+    "timesListened" : 21
+  }, {
+    "id" : "0a6c7d8e-1f2a-4b34-3456-5e6f7a8b9c81",
+    "pathname" : null,
+    "name" : "God's Plan",
+    "artist" : "Drake",
+    "album" : null,
+    "genre" : "Hip Hop",
+    "year" : 2018,
+    "favourite" : true,
+    "explicit" : true,
+    "duration" : 198,
+    "timesListened" : 3
+  } ],
+  "timesListened" : 0,
+  "size" : 3
+}, {
+  "name" : "Playlist Alternative",
+  "tracks" : [ {
+    "id" : "6a2c3d4e-7f8a-4b9c-9abc-1ea2b3c4d5e1",
+    "pathname" : null,
+    "name" : "Radioactive",
+    "artist" : "Imagine Dragons",
+    "album" : null,
+    "genre" : "Alternative",
+    "year" : 2012,
+    "favourite" : true,
+    "explicit" : false,
+    "duration" : 186,
+    "timesListened" : 2
+  }, {
+    "id" : "2a8c9d0e-3f40-4152-0f12-7a8b9c0d1e21",
+    "pathname" : null,
+    "name" : "Believer",
+    "artist" : "Imagine Dragons",
+    "album" : null,
+    "genre" : "Alternative",
+    "year" : 2017,
+    "favourite" : false,
+    "explicit" : false,
+    "duration" : 204,
+    "timesListened" : 0
+  } ],
+  "timesListened" : 2,
+  "size" : 2
+}, {
+  "name" : "Playlist Hip Hop",
+  "tracks" : [ {
+    "id" : "a91c2b3d-4f5e-4a6b-8c7d-9e0f1a2b3c21",
+    "pathname" : null,
+    "name" : "Lose Yourself",
+    "artist" : "Eminem",
+    "album" : null,
+    "genre" : "Hip Hop",
+    "year" : 2002,
+    "favourite" : true,
+    "explicit" : true,
+    "duration" : 326,
+    "timesListened" : 66
+  }, {
+    "id" : "0a6c7d8e-1f2a-4b34-3456-5e6f7a8b9c81",
+    "pathname" : null,
+    "name" : "God's Plan",
+    "artist" : "Drake",
+    "album" : null,
+    "genre" : "Hip Hop",
+    "year" : 2018,
+    "favourite" : true,
+    "explicit" : true,
+    "duration" : 198,
+    "timesListened" : 3
+  }, {
+    "id" : "3d9f0a1b-4c5d-4e67-6789-8b9c0d1ea2b1",
+    "pathname" : null,
+    "name" : "HUMBLE.",
+    "artist" : "Kendrick Lamar",
+    "album" : null,
+    "genre" : "Hip Hop",
+    "year" : 2017,
+    "favourite" : true,
+    "explicit" : true,
+    "duration" : 177,
+    "timesListened" : 3
+  }, {
+    "id" : "9d5f6a7b-0c1d-4e2f-cdef-4d5e6f7a8b91",
+    "pathname" : null,
+    "name" : "Sicko Mode",
+    "artist" : "Travis Scott",
+    "album" : null,
+    "genre" : "Hip Hop",
+    "year" : 2018,
+    "favourite" : false,
+    "explicit" : true,
+    "duration" : 312,
+    "timesListened" : 1
+  } ],
+  "timesListened" : 0,
+  "size" : 4
+}, {
+  "name" : "Playlist EDM",
+  "tracks" : [ {
+    "id" : "1f7b8c9d-2e3f-4041-ef01-6f7a8b9c0d11",
+    "pathname" : null,
+    "name" : "Wake Me Up",
+    "artist" : "Avicii",
+    "album" : null,
+    "genre" : "EDM",
+    "year" : 2013,
+    "favourite" : true,
+    "explicit" : false,
+    "duration" : 247,
+    "timesListened" : 0
+  }, {
+    "id" : "4c0e1f2a-5162-4374-2f34-9c0d1ea2b341",
+    "pathname" : null,
+    "name" : "Lose Control",
+    "artist" : "Meduza",
+    "album" : null,
+    "genre" : "EDM",
+    "year" : 2019,
+    "favourite" : false,
+    "explicit" : false,
+    "duration" : 165,
+    "timesListened" : 0
+  } ],
+  "timesListened" : 0,
+  "size" : 2
+}, {
+  "name" : "rrr",
+  "tracks" : [ ],
+  "timesListened" : 0,
+  "size" : 0
+}, {
+  "name" : "Playlist Latin",
+  "tracks" : [ {
+    "id" : "7b3d4e5f-8a9b-4c0d-abcd-2b3c4d5e6f71",
+    "pathname" : null,
+    "name" : "Despacito",
+    "artist" : "Luis Fonsi ft. Daddy Yankee",
+    "album" : null,
+    "genre" : "Latin",
+    "year" : 2017,
+    "favourite" : false,
+    "explicit" : false,
+    "duration" : 229,
+    "timesListened" : 1
+  } ],
+  "timesListened" : 0,
+  "size" : 1
+}, {
+  "name" : "Playlist 1975",
+  "tracks" : [ {
+    "id" : "b12d3e4f-5a6b-4c7d-8e9f-0a1b2c3d4e31",
+    "pathname" : null,
+    "name" : "Bohemian Rhapsody",
+    "artist" : "Queen",
+    "album" : null,
+    "genre" : "Rock",
+    "year" : 1975,
+    "favourite" : true,
+    "explicit" : false,
+    "duration" : 354,
+    "timesListened" : 48
+  } ],
+  "timesListened" : 0,
+  "size" : 1
+}, {
+  "name" : "Playlist Funk",
+  "tracks" : [ {
+    "id" : "e45a6b7c-8d9e-4f01-1234-3c4d5e6f7a61",
+    "pathname" : null,
+    "name" : "Uptown Funk",
+    "artist" : "Mark Ronson ft. Bruno Mars",
+    "album" : null,
+    "genre" : "Funk",
+    "year" : 2014,
+    "favourite" : false,
+    "explicit" : true,
+    "duration" : 270,
+    "timesListened" : 21
+  } ],
+  "timesListened" : 0,
+  "size" : 1
+}, {
+  "name" : "Playlist 1990",
+  "tracks" : [ {
+    "id" : "5f1b2c3d-6e7f-4a89-89ab-0d1ea2b3c4d1",
+    "pathname" : null,
+    "name" : "Thunderstruck",
+    "artist" : "AC/DC",
+    "album" : null,
+    "genre" : "Rock",
+    "year" : 1990,
+    "favourite" : false,
+    "explicit" : false,
+    "duration" : 292,
+    "timesListened" : 1
+  } ],
+  "timesListened" : 0,
+  "size" : 1
 } ]
