@@ -81,7 +81,18 @@ public class PlaylistManager {
         playlist.reorderTracks(newOrder);
         sync();
     }
-
+    public Playlist getMostListenedPlaylist() {
+        return playlists.stream()
+                .max((p1, p2) -> Integer.compare(
+                        p1.getTimesListened(),
+                        p2.getTimesListened()
+                ))
+                .orElse(null);
+    }
+    public boolean isMostListenedPlaylist(Playlist playlist) {
+        Playlist best = getMostListenedPlaylist();
+        return best != null && best.equals(playlist);
+    }
     // FUNZIONE DI SINCRONIZZAZIONE
     public void sync() {
         // Passa la lista aggiornata al service per la scrittura su file

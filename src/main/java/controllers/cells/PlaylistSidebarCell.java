@@ -7,6 +7,7 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.Priority;
 import javafx.scene.layout.Region;
 import models.Playlist;
+import models.PlaylistManager;
 
 /**
  * Cella della sidebar delle playlist: mostra il nome della playlist e un menu
@@ -34,9 +35,12 @@ public class PlaylistSidebarCell extends ListCell<Playlist> {
             setText(null);
             setContextMenu(null);
         } else {
-            // Mostra nella sidebar solo il nome della playlist.
-            Label playlistNameLbl = new Label(playlist.getName());
-
+            Label playlistNameLbl = new Label();
+           if(PlaylistManager.getInstance().isMostListenedPlaylist(playlist)) {
+               playlistNameLbl.setText(playlist.getName() + " \uD83D\uDC51");
+           }else{
+               playlistNameLbl.setText(playlist.getName());
+           }
             Button playButton = new Button("▶");
             playButton.setOnAction(event -> onPlay.accept(playlist));
 

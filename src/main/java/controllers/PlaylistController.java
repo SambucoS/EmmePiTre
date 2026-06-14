@@ -31,7 +31,7 @@ public class PlaylistController {
      * di creare una nuova playlist.
      */
     @FXML
-    private void handleCreatePlaylist() {
+    private void handleCreatePlaylist(ActionEvent event) {
 
         // Recupera il testo scritto dall'utente nel campo nome playlist
         String playlistName = playlistNameField.getText();
@@ -48,7 +48,8 @@ public class PlaylistController {
 
             // Pulisce il campo di testo dopo la creazione
             playlistNameField.clear();
-
+            Stage stage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+            stage.close();
         } catch (IllegalArgumentException e) {
 
             // Se ci sono errori, ad esempio nome vuoto,
