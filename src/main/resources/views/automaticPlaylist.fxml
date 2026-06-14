@@ -2,34 +2,45 @@
 
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
+<?import javafx.scene.control.ComboBox?>
 <?import javafx.scene.control.Label?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.VBox?>
 
-<VBox xmlns="http://javafx.com/javafx"
-      xmlns:fx="http://javafx.com/fxml"
-      fx:controller="controllers.PlaylistController"
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="controllers.AutomaticPlaylistController"
       spacing="15"
       alignment="CENTER"
-      prefWidth="400"
-      prefHeight="250"
+      prefWidth="420"
+      prefHeight="260"
       style="-fx-background-color: #f7f7f7;">
 
     <padding>
         <Insets top="25" right="25" bottom="25" left="25"/>
     </padding>
 
-    <Label text="Crea nuova playlist"
+    <Label text="Playlist automatica"
            style="-fx-font-size: 22px; -fx-font-weight: bold;"/>
 
-    <Label text="Inserisci il nome della playlist:"
+    <Label text="Scegli il criterio di generazione:"
            style="-fx-font-size: 14px;"/>
 
-    <TextField fx:id="playlistNameField"
-               promptText="Nome playlist"
-               maxWidth="300"
-               onAction="#handleCreatePlaylist"/>
+    <ComboBox fx:id="criteriaComboBox"
+              promptText="Seleziona criterio"
+              prefWidth="300"/>
+
+    <TextField fx:id="valueField"
+               promptText="Inserisci genere o anno"
+               prefWidth="300"
+               onAction="#handleGenerate"/>
+
+    <ComboBox fx:id="tagComboBox"
+              promptText="Seleziona tag"
+              prefWidth="300"
+              visible="false"
+              managed="false"/>
 
     <Label fx:id="messageLabel"
            text=""
@@ -40,15 +51,10 @@
                 onAction="#handleCancel"
                 prefWidth="100"/>
 
-        <Button text="Crea"
-                onAction="#handleCreatePlaylist"
+        <Button text="Genera"
+                onAction="#handleGenerate"
                 prefWidth="100"
                 defaultButton="true"
-                style="-fx-background-color: #6c5ce7; -fx-text-fill: white; -fx-font-weight: bold;"/>
-
-        <Button text="Playlist automatica"
-                onAction="#handleAutomaticPlaylist"
-                prefWidth="150"
                 style="-fx-background-color: #1DB954; -fx-text-fill: white; -fx-font-weight: bold;"/>
     </HBox>
 

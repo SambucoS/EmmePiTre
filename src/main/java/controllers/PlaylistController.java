@@ -10,6 +10,8 @@ import models.Playlist;
 import commands.AddPlaylistCommand;
 import commands.Command;
 import commands.CommandManager;
+import util.DialogLoader;
+import javafx.application.Platform;
 
 /**
  * Controller della schermata createPlaylist.fxml.
@@ -24,6 +26,31 @@ public class PlaylistController {
     // Label usata per mostrare messaggi di conferma o errore
     @FXML
     private Label messageLabel;
+
+    @FXML
+    private void handleAutomaticPlaylist(ActionEvent event) {
+
+        // Recupera la finestra attuale, cioè la modale "Crea nuova playlist"
+        Stage currentStage = (Stage) ((Node) event.getSource()).getScene().getWindow();
+
+        // Chiude la modale corrente
+        currentStage.close();
+
+        // Aspetta il prossimo ciclo JavaFX prima di aprire la nuova modale
+        Platform.runLater(() -> {
+            AutomaticPlaylistController controller = DialogLoader.<AutomaticPlaylistController>showModal(
+                    "/views/automaticPlaylist.fxml",
+                    "Playlist automatica",
+                    420,
+                    260,
+                    null
+            );
+
+            if (controller != null && controller.isCreated()) {
+                System.out.println("Playlist automatica creata correttamente.");
+            }
+        });
+    }
 
     /*
      * Metodo collegato al pulsante "Crea" della schermata createPlaylist.fxml.

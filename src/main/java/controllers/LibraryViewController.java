@@ -505,7 +505,6 @@ public class LibraryViewController implements LibraryObserver {
         );
     }
 
-
     /**
      * Carica dinamicamente la vista del Player musicale (playerView.fxml),
      * assegna la traccia selezionata al suo controller e inserisce la vista

@@ -24,20 +24,161 @@ public class PlaylistManager {
         return instance;
     }
 
+    private boolean playlistNameExists(String name, Playlist playlistToIgnore) {
+        if (name == null) {
+            return false;
+        }
+
+        String normalizedName = name.trim();
+
+        return playlists.stream()
+                .anyMatch(playlist ->
+                        playlist != playlistToIgnore &&
+                                playlist.getName().equalsIgnoreCase(normalizedName)
+                );
+    }
+
+    private void checkPlaylistNameAvailable(String name, Playlist playlistToIgnore) {
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Il nome della playlist non può essere vuoto.");
+        }
+
+        if (playlistNameExists(name, playlistToIgnore)) {
+            throw new IllegalArgumentException("Esiste già una playlist con questo nome.");
+        }
+    }
+
     // METODI CRUD PLAYLIST -
     // Metodo helper per il Command Pattern
     public void addPlaylist(Playlist playlist) {
+        if (playlist == null) {
+            throw new IllegalArgumentException("La playlist non può essere null.");
+        }
+
+        checkPlaylistNameAvailable(playlist.getName(), null);
+
         this.playlists.add(playlist);
         this.sync();
     }
+
     public List<Playlist> getPlaylists() {
         return this.playlists; // Restituisce la lista in RAM
     }
 
     public void createPlaylist(String name) {
+        checkPlaylistNameAvailable(name, null);
+
         Playlist newPlaylist = new Playlist(name);
-        this.playlists.add(newPlaylist); //Aggiunge la playlist alla RAM
-        this.sync();                     //Salva sul disco
+        this.playlists.add(newPlaylist);
+        this.sync();
+    }
+
+    public Playlist createAutomaticPlaylistByGenre(String genre) {
+        if (genre == null || genre.trim().isEmpty()) {
+            throw new IllegalArgumentException("Il genere non può essere vuoto.");
+        }
+
+        String selectedGenre = genre.trim();
+        String playlistName = "Playlist " + selectedGenre;
+
+        // Controlla che non esista già una playlist con lo stesso nome
+        checkPlaylistNameAvailable(playlistName, null);
+
+        Playlist automaticPlaylist = new Playlist(playlistName);
+
+        for (Track track : Library.getInstance().getTracks()) {
+            if (track.getGenre() != null &&
+                    track.getGenre().equalsIgnoreCase(selectedGenre)) {
+                automaticPlaylist.addTrack(track);
+            }
+        }
+
+        if (automaticPlaylist.isEmpty()) {
+            throw new IllegalArgumentException("Nessuna traccia trovata per il genere: " + selectedGenre);
+        }
+
+        this.playlists.add(automaticPlaylist);
+        this.sync();
+
+        return automaticPlaylist;
+    }
+
+    public Playlist createAutomaticPlaylistByYear(int year) {
+        String playlistName = "Playlist " + year;
+
+        // Controlla che non esista già una playlist con lo stesso nome
+        checkPlaylistNameAvailable(playlistName, null);
+
+        Playlist automaticPlaylist = new Playlist(playlistName);
+
+        for (Track track : Library.getInstance().getTracks()) {
+            if (track.getYear() == year) {
+                automaticPlaylist.addTrack(track);
+            }
+        }
+
+        if (automaticPlaylist.isEmpty()) {
+            throw new IllegalArgumentException("Nessuna traccia trovata per l'anno: " + year);
+        }
+
+        this.playlists.add(automaticPlaylist);
+        this.sync();
+
+        return automaticPlaylist;
+    }
+
+    public Playlist createAutomaticPlaylistByTag(String tag) {
+        if (tag == null || tag.trim().isEmpty()) {
+            throw new IllegalArgumentException("Il tag non può essere vuoto.");
+        }
+
+        String selectedTag = tag.trim().toLowerCase();
+        String playlistName;
+
+        if (selectedTag.equals("preferiti") ||
+                selectedTag.equals("favourite") ||
+                selectedTag.equals("favorite")) {
+            playlistName = "Playlist Preferiti";
+
+        } else if (selectedTag.equals("explicit") ||
+                selectedTag.equals("espliciti")) {
+            playlistName = "Playlist Explicit";
+
+        } else {
+            throw new IllegalArgumentException("Tag non valido. Usa: preferiti oppure explicit.");
+        }
+
+        // Controlla che non esista già una playlist con lo stesso nome
+        checkPlaylistNameAvailable(playlistName, null);
+
+        Playlist automaticPlaylist = new Playlist(playlistName);
+
+        for (Track track : Library.getInstance().getTracks()) {
+            if (selectedTag.equals("preferiti") ||
+                    selectedTag.equals("favourite") ||
+                    selectedTag.equals("favorite")) {
+
+                if (track.isFavourite()) {
+                    automaticPlaylist.addTrack(track);
+                }
+
+            } else if (selectedTag.equals("explicit") ||
+                    selectedTag.equals("espliciti")) {
+
+                if (track.isExplicit()) {
+                    automaticPlaylist.addTrack(track);
+                }
+            }
+        }
+
+        if (automaticPlaylist.isEmpty()) {
+            throw new IllegalArgumentException("Nessuna traccia trovata per il tag: " + tag);
+        }
+
+        this.playlists.add(automaticPlaylist);
+        this.sync();
+
+        return automaticPlaylist;
     }
 
     public void deletePlaylist(Playlist playlist) {
@@ -49,6 +190,8 @@ public class PlaylistManager {
         if (playlist == null) {
             throw new IllegalArgumentException("La playlist non può essere null.");
         }
+
+        checkPlaylistNameAvailable(newName, playlist);
 
         playlist.setName(newName);
         this.sync();
