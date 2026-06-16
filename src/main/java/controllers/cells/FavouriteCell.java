@@ -24,10 +24,10 @@ public class FavouriteCell extends TableCell<Track, Boolean> {
 
             if (currentTrack.isFavourite()) {
                 starLabel.setText("★");
-                starLabel.setStyle("-fx-text-fill: #1DB954; -fx-font-size: 18px;");
+                starLabel.setStyle("-fx-text-fill: -app-accent; -fx-font-size: 18px;");
             } else {
                 starLabel.setText("☆");
-                starLabel.setStyle("-fx-text-fill: #888888; -fx-font-size: 18px;");
+                starLabel.setStyle("-fx-text-fill: -app-muted; -fx-font-size: 18px;");
             }
 
             starLabel.setOnMouseClicked(event -> Library.getInstance().toggleFavourite(currentTrack));

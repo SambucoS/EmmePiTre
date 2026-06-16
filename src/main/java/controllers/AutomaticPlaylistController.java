@@ -1,23 +1,47 @@
 package controllers;
 
+import criteria.AndCriteria;
+import criteria.ExplicitCriteria;
+import criteria.FavouriteCriteria;
+import criteria.GenreCriteria;
+import criteria.NewReleaseCriteria;
+import criteria.YearCriteria;
 import javafx.fxml.FXML;
+import javafx.scene.control.CheckBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.Label;
+import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import models.Library;
 import models.PlaylistManager;
 import models.Track;
 
-import java.util.List;
+import java.util.function.Function;
 
+/**
+ * Controller della modale di creazione automatica di una playlist.
+ *
+ * I criteri scelti dall'utente (genere, anno, preferiti, explicit, new release)
+ * vengono combinati in AND tramite il Composite {@link AndCriteria}, costruito a
+ * partire dalle strategie concrete {@link criteria.TrackCriteria}. La selezione
+ * vera e propria e' delegata a {@link PlaylistManager#createAutomaticPlaylist}.
+ */
 public class AutomaticPlaylistController {
 
-    @FXML
-    private ComboBox<String> criteriaComboBox;
+    private static final String ANY = "Qualsiasi";
 
     @FXML
-    private ComboBox<String> valueComboBox;
-
+    private TextField nameField;
+    @FXML
+    private ComboBox<String> genreComboBox;
+    @FXML
+    private ComboBox<String> yearComboBox;
+    @FXML
+    private CheckBox favouriteCheck;
+    @FXML
+    private CheckBox explicitCheck;
+    @FXML
+    private CheckBox newReleaseCheck;
     @FXML
     private Label messageLabel;
 
@@ -25,48 +49,23 @@ public class AutomaticPlaylistController {
 
     @FXML
     public void initialize() {
-        criteriaComboBox.getItems().addAll("Genere", "Anno", "Tag");
-        criteriaComboBox.setValue("Genere");
-
-        criteriaComboBox.setOnAction(event -> updateValueComboBox());
-
-        updateValueComboBox();
+        populateCombo(genreComboBox, Track::getGenre);
+        populateCombo(yearComboBox, t -> String.valueOf(t.getYear()));
     }
 
-    private void updateValueComboBox() {
-        valueComboBox.getItems().clear();
-        valueComboBox.setValue(null);
-
-        String criteria = criteriaComboBox.getValue();
-
-        if ("Genere".equals(criteria)) {
-            List<String> genres = Library.getInstance().getTracks()
-                    .stream()
-                    .map(Track::getGenre)
-                    .filter(genre -> genre != null && !genre.isBlank())
-                    .distinct()
-                    .toList();
-
-            valueComboBox.getItems().addAll(genres);
-            valueComboBox.setPromptText("Seleziona genere");
-
-        } else if ("Anno".equals(criteria)) {
-            List<String> years = Library.getInstance().getTracks()
-                    .stream()
-                    .map(track -> String.valueOf(track.getYear()))
-                    .distinct()
-                    .sorted()
-                    .toList();
-
-            valueComboBox.getItems().addAll(years);
-            valueComboBox.setPromptText("Seleziona anno");
-
-        } else if ("Tag".equals(criteria)) {
-            valueComboBox.getItems().addAll("Preferiti", "Explicit");
-            valueComboBox.setPromptText("Seleziona tag");
-        }
-
-        messageLabel.setText("");
+    /**
+     * Popola una ComboBox con i valori distinti e ordinati ricavati dalle tracce
+     * della libreria tramite il mapper dato, anteponendo l'opzione "Qualsiasi".
+     */
+    private void populateCombo(ComboBox<String> combo, Function<Track, String> mapper) {
+        combo.getItems().add(ANY);
+        Library.getInstance().getTracks().stream()
+                .map(mapper)
+                .filter(v -> v != null && !v.isBlank())
+                .distinct()
+                .sorted()
+                .forEach(combo.getItems()::add);
+        combo.setValue(ANY);
     }
 
     public boolean isCreated() {
@@ -75,40 +74,44 @@ public class AutomaticPlaylistController {
 
     @FXML
     private void handleGenerate() {
-        String criteria = criteriaComboBox.getValue();
-        String value = valueComboBox.getValue();
+        // Composite: combina in AND tutti i criteri selezionati
+        AndCriteria criteria = new AndCriteria();
 
-        if (criteria == null) {
-            showError("Seleziona un criterio di generazione.");
+        String genre = genreComboBox.getValue();
+        if (genre != null && !ANY.equals(genre)) {
+            criteria.add(new GenreCriteria(genre));
+        }
+
+        String year = yearComboBox.getValue();
+        if (year != null && !ANY.equals(year)) {
+            criteria.add(new YearCriteria(Integer.parseInt(year)));
+        }
+
+        if (favouriteCheck.isSelected()) {
+            criteria.add(new FavouriteCriteria());
+        }
+        if (explicitCheck.isSelected()) {
+            criteria.add(new ExplicitCriteria());
+        }
+        if (newReleaseCheck.isSelected()) {
+            criteria.add(new NewReleaseCriteria());
+        }
+
+        if (criteria.isEmpty()) {
+            showError("Seleziona almeno un criterio.");
             return;
         }
 
-        if (value == null || value.trim().isEmpty()) {
-            showError("Seleziona un valore valido.");
+        String name = nameField.getText();
+        if (name == null || name.trim().isEmpty()) {
+            showError("Inserisci un nome per la playlist.");
             return;
         }
 
         try {
-            if (criteria.equals("Genere")) {
-                PlaylistManager.getInstance()
-                        .createAutomaticPlaylistByGenre(value);
-
-            } else if (criteria.equals("Anno")) {
-                int year = Integer.parseInt(value);
-
-                PlaylistManager.getInstance()
-                        .createAutomaticPlaylistByYear(year);
-
-            } else if (criteria.equals("Tag")) {
-                PlaylistManager.getInstance()
-                        .createAutomaticPlaylistByTag(value);
-            }
-
+            PlaylistManager.getInstance().createAutomaticPlaylist(name, criteria);
             created = true;
             closeWindow();
-
-        } catch (NumberFormatException e) {
-            showError("L'anno deve essere un numero intero.");
         } catch (IllegalArgumentException e) {
             showError(e.getMessage());
         }
@@ -126,7 +129,7 @@ public class AutomaticPlaylistController {
     }
 
     private void closeWindow() {
-        Stage stage = (Stage) valueComboBox.getScene().getWindow();
+        Stage stage = (Stage) nameField.getScene().getWindow();
         stage.close();
     }
 }

@@ -9,7 +9,6 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.scene.control.TableColumn;
-import javafx.scene.layout.HBox;
 import javafx.util.Duration;
 import models.Track;
 import org.w3c.dom.events.MouseEvent;
@@ -43,9 +42,6 @@ public class PlayerController {
 
     @FXML
     private Label currentTime;
-
-    @FXML
-    private HBox tagsContainer;
 
     // Modifica per shuffle
 
@@ -156,8 +152,6 @@ public class PlayerController {
         if (onTrackChanged != null) {
             onTrackChanged.accept(track);
         }
-        // Genera i tag visivi per questa traccia
-        renderTags(track);
     }
 
     @FXML
@@ -296,8 +290,8 @@ public class PlayerController {
         isLoopActive = !isLoopActive;
 
         if (isLoopActive) {
-            // Colore quando è SELEZIONATO (es. un grigio chiaro semitrasparente o un colore a tua scelta)
-            loopbutton.setStyle("-fx-background-color: #d3d3d3; -fx-background-radius: 5;");
+            // Colore quando è SELEZIONATO
+            loopbutton.setStyle("-fx-background-color: -app-surface-active; -fx-background-radius: 5;");
         } else {
             // Torna TRASPARENTE quando viene deselezionato
             loopbutton.setStyle("-fx-background-color: transparent;");
@@ -311,34 +305,9 @@ public class PlayerController {
         isShuffleActive = !isShuffleActive;
 
         if (isShuffleActive) {
-            shufflebutton.setStyle("-fx-background-color: #d3d3d3; -fx-background-radius: 5;");
+            shufflebutton.setStyle("-fx-background-color: -app-surface-active; -fx-background-radius: 5;");
         } else {
             shufflebutton.setStyle("-fx-background-color: transparent;");
-        }
-    }
-
-    private void renderTags(Track currentTrack) {
-        // Svuota il contenitore per evitare che i tag della canzone precedente rimangano visibili
-        tagsContainer.getChildren().clear();
-
-        if (currentTrack == null || currentTrack.getTags().isEmpty()) {
-            return;
-        }
-
-        // Crea un "badge" visivo per ogni tag
-        for (String tag : currentTrack.getTags()) {
-            Label tagLabel = new Label(tag.toUpperCase());
-
-            tagLabel.setStyle(
-                    "-fx-background-color: #d1e7dd; " +
-                            "-fx-text-fill: #0f5132; " +
-                            "-fx-padding: 2 6 2 6; " +
-                            "-fx-background-radius: 10; " +
-                            "-fx-font-size: 10px; " +
-                            "-fx-font-weight: bold;"
-            );
-
-            tagsContainer.getChildren().add(tagLabel);
         }
     }
 

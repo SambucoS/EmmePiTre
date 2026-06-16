@@ -33,6 +33,7 @@ import controllers.cells.ExplicitCell;
 import controllers.cells.FavouriteCell;
 import controllers.cells.PlaylistSidebarCell;
 import util.DialogLoader;
+import util.Theme;
 
 import java.io.IOException;
 import java.util.*;
@@ -70,6 +71,7 @@ public class LibraryViewController implements LibraryObserver {
     private Button addButton;
     @FXML private Button undoButton;
     @FXML private Button redoButton;
+    @FXML private Button themeButton;
     @FXML
     private ListView<Playlist> sidebarPlaylistListView;
 
@@ -116,9 +118,9 @@ public class LibraryViewController implements LibraryObserver {
     public void initialize() {
         // 1. Stile della barra di selezione (Grigio elegante, testo nero)
         trackList.setStyle(
-                "-fx-selection-bar: #e0e0e0; " +
-                        "-fx-selection-bar-text: #000000; " +
-                        "-fx-selection-bar-non-focused: #f0f0f0;"
+                "-fx-selection-bar: -app-sel-bar; " +
+                        "-fx-selection-bar-text: -app-text; " +
+                        "-fx-selection-bar-non-focused: -app-sel-bar;"
         );
 
         // 2. Correzione PropertyValueFactory (Tutti uniformati al POJO del tuo compagno)
@@ -187,7 +189,7 @@ public class LibraryViewController implements LibraryObserver {
                             : createLibraryContextMenu(row));
                     boolean isPlaying = Objects.equals(item, currentPlayingTrack.get());
                     row.setStyle(isPlaying
-                            ? "-fx-background-color: #eaf7ee; -fx-border-color: transparent;"
+                            ? "-fx-background-color: -app-row-highlight; -fx-border-color: transparent;"
                             : "");
                 }
             };
@@ -259,6 +261,10 @@ public class LibraryViewController implements LibraryObserver {
             Scene scene = trackList.getScene(); // Recuperiamo la scena usando un elemento della GUI
 
             if (scene != null) {
+                // Applica il tema corrente (chiaro/scuro) alla scena principale
+                Theme.apply(scene);
+                themeButton.setText(Theme.isDark() ? "☀ Chiaro" : "🌙 Scuro");
+
                 // Scorciatoia per UNDO: Ctrl + Z
                 // Nota: Usiamo SHORTCUT_DOWN invece di CONTROL_DOWN. È una best practice di JavaFX
                 // perché si adatta automaticamente: usa 'Ctrl' su Windows/Linux e 'Cmd' su Mac.
@@ -406,46 +412,54 @@ public class LibraryViewController implements LibraryObserver {
         }
     }
 
-    private ContextMenu createLibraryContextMenu(TableRow<Track> row) {
+    /** Crea un ContextMenu con lo stile uniforme dell'app. */
+    private ContextMenu newStyledContextMenu() {
         ContextMenu contextMenu = new ContextMenu();
         contextMenu.setStyle(
-                "-fx-selection-bar: #d0d0d0; " +
-                        "-fx-selection-bar-text: #000000; " +
+                "-fx-selection-bar: -app-row-highlight; " +
+                        "-fx-selection-bar-text: -app-text; " +
                         "-fx-font-size: 12px; " +
                         "-fx-font-weight: normal;"
         );
+        return contextMenu;
+    }
+
+    /**
+     * Mostra la conferma di eliminazione e, se confermata, esegue il comando di
+     * rimozione aggiornando tabella, pulsanti Undo/Redo ed eventuale player.
+     * Fattorizza la logica comune ai menu contestuali di libreria e playlist.
+     */
+    private void confirmAndRemove(Track track, boolean fromLibrary, String title, Command removeCmd) {
+        trackList.getSelectionModel().select(track);
+
+        DeleteTrackController dialogController = DialogLoader.showModal(
+                "/views/deleteTrack.fxml", title, 600, 150,
+                c -> c.setContext(fromLibrary));
+
+        if (dialogController != null && dialogController.isConfirmed()) {
+            CommandManager.getInstance().executeCommand(removeCmd);
+            refreshTrackList();
+            updateUndoRedoButtons();
+            if (track.equals(currentPlayingTrack.get())) {
+                rootPane.getChildren().clear();
+            }
+        }
+    }
+
+    private ContextMenu createLibraryContextMenu(TableRow<Track> row) {
+        ContextMenu contextMenu = newStyledContextMenu();
 
         MenuItem editItem = new MenuItem("Modifica traccia");
         MenuItem addToPlaylistItem = new MenuItem("Aggiungi a una playlist");
         MenuItem deleteItem = new MenuItem("Elimina traccia");
 
-        //editItem.setOnAction(event -> modifyTrack(row.getItem()));
-
-        editItem.setOnAction(event -> {
-            Track selectedTrack = row.getItem();
-            onEdit(selectedTrack);
-
-        });
-
+        editItem.setOnAction(event -> onEdit(row.getItem()));
         addToPlaylistItem.setOnAction(event -> openAddToPlaylistsModal(row.getItem()));
-
         deleteItem.setOnAction(event -> {
             Track currentTrack = row.getItem();
-            trackList.getSelectionModel().select(currentTrack);
-
-            DeleteTrackController dialogController = DialogLoader.showModal(
-                    "/views/deleteTrack.fxml", "Conferma Eliminazione", 600, 150,
-                    c -> c.setContext(true));
-
-            if (dialogController != null && dialogController.isConfirmed()) {
-                // Cascade: rimuove dalla libreria E da tutte le playlist che la contengono
-                Command removeCmd = new RemoveTrackFromLibraryCommand(currentTrack);
-                CommandManager.getInstance().executeCommand(removeCmd);
-                updateUndoRedoButtons();
-                if (currentTrack.equals(currentPlayingTrack.get())) {
-                    rootPane.getChildren().clear();
-                }
-            }
+            // Cascade: rimuove dalla libreria E da tutte le playlist che la contengono
+            confirmAndRemove(currentTrack, true, "Conferma Eliminazione",
+                    new RemoveTrackFromLibraryCommand(currentTrack));
         });
 
         contextMenu.getItems().addAll(editItem, addToPlaylistItem, deleteItem);
@@ -453,37 +467,16 @@ public class LibraryViewController implements LibraryObserver {
     }
 
     private ContextMenu createPlaylistContextMenu(TableRow<Track> row) {
-
-        ContextMenu contextMenu = new ContextMenu();
-        contextMenu.setStyle(
-                "-fx-selection-bar: #d0d0d0; " +
-                        "-fx-selection-bar-text: #000000; " +
-                        "-fx-font-size: 12px; " +
-                        "-fx-font-weight: normal;"
-        );
+        ContextMenu contextMenu = newStyledContextMenu();
 
         MenuItem addToOtherPlaylistItem = new MenuItem("Aggiungi ad un'altra playlist");
         MenuItem removeFromPlaylistItem = new MenuItem("Rimuovi dalla playlist");
 
         addToOtherPlaylistItem.setOnAction(event -> openAddToPlaylistsModal(row.getItem()));
-
         removeFromPlaylistItem.setOnAction(event -> {
             Track currentTrack = row.getItem();
-            trackList.getSelectionModel().select(currentTrack);
-
-            DeleteTrackController dialogController = DialogLoader.showModal(
-                    "/views/deleteTrack.fxml", "Rimuovi dalla playlist", 600, 150,
-                    c -> c.setContext(false)); // false = "Rimuovi dalla playlist"
-
-            if (dialogController != null && dialogController.isConfirmed()) {
-                Command cmd = new RemoveTrackFromPlaylistCommand(currentPlaylist, currentTrack);
-                CommandManager.getInstance().executeCommand(cmd);
-                refreshTrackList();
-                updateUndoRedoButtons();
-                if (currentTrack.equals(currentPlayingTrack.get())) {
-                    rootPane.getChildren().clear();
-                }
-            }
+            confirmAndRemove(currentTrack, false, "Rimuovi dalla playlist",
+                    new RemoveTrackFromPlaylistCommand(currentPlaylist, currentTrack));
         });
 
         contextMenu.getItems().addAll(addToOtherPlaylistItem, removeFromPlaylistItem);
@@ -575,7 +568,9 @@ public class LibraryViewController implements LibraryObserver {
             controller.setTrack(selected);
 
             Stage stage = new Stage();
-            stage.setScene(new Scene(root));
+            Scene modifyScene = new Scene(root);
+            Theme.apply(modifyScene);
+            stage.setScene(modifyScene);
             stage.setTitle("Modify Track");
             stage.show();
             controller.setOnModifyDone(() -> {
@@ -601,6 +596,30 @@ public class LibraryViewController implements LibraryObserver {
     // =========================================================
     // GESTIONE UNDO / REDO GRAFICO
     // =========================================================
+
+    @FXML
+    public void onToggleTheme() {
+        boolean dark = Theme.toggle(trackList.getScene());
+        themeButton.setText(dark ? "☀ Chiaro" : "🌙 Scuro");
+    }
+
+    /**
+     * Avvia la riproduzione della lista attualmente visualizzata (libreria o
+     * playlist, filtro di ricerca incluso), partendo dalla prima traccia.
+     */
+    @FXML
+    public void onPlayCurrent() {
+        if (trackList.getItems().isEmpty()) {
+            return;
+        }
+        // Se siamo in una playlist, contiamo l'ascolto (per la coroncina "piu' ascoltata")
+        if (currentPlaylist != null) {
+            currentPlaylist.setTimesListened();
+            PlaylistManager.getInstance().sync();
+            refreshSidebarPlaylists();
+        }
+        openPlayerView(trackList.getItems().getFirst());
+    }
 
     @FXML
     public void onUndo() {

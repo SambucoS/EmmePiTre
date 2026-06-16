@@ -81,27 +81,6 @@ public class Library implements TrackList {
         notifyObservers();
     }
 
-    // GESTIONE TAG (Tags Visivi)
-
-    public void addTagToTrack(Track track, String tag) {
-        // Controlla che la traccia esista e non abbia già quel tag
-        if (track != null && !track.getTags().contains(tag)) {
-
-            track.getTags().add(tag); // Aggiunge il tag in RAM
-            this.sync();              // Salva la modifica nel file JSON
-            notifyObservers();        // Aggiorna l'interfaccia grafica
-        }
-    }
-
-    public void removeTagFromTrack(Track track, String tag) {
-        // Controlla che la traccia esista e abbia effettivamente quel tag
-        if (track != null && track.getTags().contains(tag)) {
-
-            track.getTags().remove(tag); // Rimuove il tag dalla RAM
-            this.sync();                 // Salva la modifica nel file JSON
-            notifyObservers();           // Aggiorna l'interfaccia grafica
-        }
-    }
 
     public Track getTrackWithID(String id){
 

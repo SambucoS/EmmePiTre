@@ -66,8 +66,7 @@
                             <children>
                                 <CheckBox fx:id="chkFavourite" mnemonicParsing="false" text="Aggiungi ai Preferiti" />
                                 <CheckBox fx:id="chkExplicit" mnemonicParsing="false" text="Contenuto Esplicito" />
-                        <ComboBox fx:id="choisetTag" prefHeight="25.0" prefWidth="73.0" />
-                        <Button fx:id="AggiungiTag" mnemonicParsing="false" onAction="#onaggiuntaTag" text="AggiungiTag" />
+                                <CheckBox fx:id="chkNewRelease" mnemonicParsing="false" text="New Release" />
                             </children>
                         </HBox>
                     </children>

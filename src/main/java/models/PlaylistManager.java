@@ -1,5 +1,6 @@
 package models;
 
+import criteria.TrackCriteria;
 import persistence.JsonStorageService;
 
 import java.util.List;
@@ -73,13 +74,25 @@ public class PlaylistManager {
         this.sync();
     }
 
-    public Playlist createAutomaticPlaylistByGenre(String genre) {
-        if (genre == null || genre.trim().isEmpty()) {
-            throw new IllegalArgumentException("Il genere non può essere vuoto.");
+    /**
+     * Crea una playlist automatica selezionando dalla libreria le tracce che
+     * soddisfano il criterio dato (Strategy/Composite pattern). Il criterio puo'
+     * essere singolo o composto (es. {@link criteria.AndCriteria}).
+     *
+     * @param name     nome della nuova playlist
+     * @param criteria criterio di selezione delle tracce
+     * @return la playlist creata
+     * @throws IllegalArgumentException se il nome non e' valido o nessuna traccia soddisfa il criterio
+     */
+    public Playlist createAutomaticPlaylist(String name, TrackCriteria criteria) {
+        if (name == null || name.trim().isEmpty()) {
+            throw new IllegalArgumentException("Il nome della playlist non può essere vuoto.");
+        }
+        if (criteria == null) {
+            throw new IllegalArgumentException("Seleziona almeno un criterio.");
         }
 
-        String selectedGenre = genre.trim();
-        String playlistName = "Playlist " + selectedGenre;
+        String playlistName = name.trim();
 
         // Controlla che non esista già una playlist con lo stesso nome
         checkPlaylistNameAvailable(playlistName, null);
@@ -87,92 +100,13 @@ public class PlaylistManager {
         Playlist automaticPlaylist = new Playlist(playlistName);
 
         for (Track track : Library.getInstance().getTracks()) {
-            if (track.getGenre() != null &&
-                    track.getGenre().equalsIgnoreCase(selectedGenre)) {
+            if (criteria.matches(track)) {
                 automaticPlaylist.addTrack(track);
             }
         }
 
         if (automaticPlaylist.isEmpty()) {
-            throw new IllegalArgumentException("Nessuna traccia trovata per il genere: " + selectedGenre);
-        }
-
-        this.playlists.add(automaticPlaylist);
-        this.sync();
-
-        return automaticPlaylist;
-    }
-
-    public Playlist createAutomaticPlaylistByYear(int year) {
-        String playlistName = "Playlist " + year;
-
-        // Controlla che non esista già una playlist con lo stesso nome
-        checkPlaylistNameAvailable(playlistName, null);
-
-        Playlist automaticPlaylist = new Playlist(playlistName);
-
-        for (Track track : Library.getInstance().getTracks()) {
-            if (track.getYear() == year) {
-                automaticPlaylist.addTrack(track);
-            }
-        }
-
-        if (automaticPlaylist.isEmpty()) {
-            throw new IllegalArgumentException("Nessuna traccia trovata per l'anno: " + year);
-        }
-
-        this.playlists.add(automaticPlaylist);
-        this.sync();
-
-        return automaticPlaylist;
-    }
-
-    public Playlist createAutomaticPlaylistByTag(String tag) {
-        if (tag == null || tag.trim().isEmpty()) {
-            throw new IllegalArgumentException("Il tag non può essere vuoto.");
-        }
-
-        String selectedTag = tag.trim().toLowerCase();
-        String playlistName;
-
-        if (selectedTag.equals("preferiti") ||
-                selectedTag.equals("favourite") ||
-                selectedTag.equals("favorite")) {
-            playlistName = "Playlist Preferiti";
-
-        } else if (selectedTag.equals("explicit") ||
-                selectedTag.equals("espliciti")) {
-            playlistName = "Playlist Explicit";
-
-        } else {
-            throw new IllegalArgumentException("Tag non valido. Usa: preferiti oppure explicit.");
-        }
-
-        // Controlla che non esista già una playlist con lo stesso nome
-        checkPlaylistNameAvailable(playlistName, null);
-
-        Playlist automaticPlaylist = new Playlist(playlistName);
-
-        for (Track track : Library.getInstance().getTracks()) {
-            if (selectedTag.equals("preferiti") ||
-                    selectedTag.equals("favourite") ||
-                    selectedTag.equals("favorite")) {
-
-                if (track.isFavourite()) {
-                    automaticPlaylist.addTrack(track);
-                }
-
-            } else if (selectedTag.equals("explicit") ||
-                    selectedTag.equals("espliciti")) {
-
-                if (track.isExplicit()) {
-                    automaticPlaylist.addTrack(track);
-                }
-            }
-        }
-
-        if (automaticPlaylist.isEmpty()) {
-            throw new IllegalArgumentException("Nessuna traccia trovata per il tag: " + tag);
+            throw new IllegalArgumentException("Nessuna traccia trovata per i criteri selezionati.");
         }
 
         this.playlists.add(automaticPlaylist);

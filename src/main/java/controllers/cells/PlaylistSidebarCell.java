@@ -2,17 +2,18 @@ package controllers.cells;
 
 import java.util.function.Consumer;
 
-import javafx.scene.control.*;
-import javafx.scene.layout.HBox;
-import javafx.scene.layout.Priority;
-import javafx.scene.layout.Region;
+import javafx.scene.control.ContextMenu;
+import javafx.scene.control.ListCell;
+import javafx.scene.control.MenuItem;
+import javafx.scene.input.MouseButton;
 import models.Playlist;
 import models.PlaylistManager;
 
 /**
- * Cella della sidebar delle playlist: mostra il nome della playlist e un menu
- * contestuale con "Modifica" ed "Elimina". Le azioni sono delegate al chiamante
- * tramite i due callback passati nel costruttore.
+ * Cella della sidebar delle playlist: mostra il nome della playlist (con coroncina
+ * se e' la piu' ascoltata) e un menu contestuale con "Modifica" ed "Elimina".
+ * Il doppio click sul nome avvia la riproduzione della playlist.
+ * Le azioni sono delegate al chiamante tramite i callback passati nel costruttore.
  */
 public class PlaylistSidebarCell extends ListCell<Playlist> {
 
@@ -20,39 +21,36 @@ public class PlaylistSidebarCell extends ListCell<Playlist> {
     private final Consumer<Playlist> onDelete;
     private final Consumer<Playlist> onPlay;
 
-
     public PlaylistSidebarCell(Consumer<Playlist> onModify, Consumer<Playlist> onDelete, Consumer<Playlist> onPlay) {
         this.onModify = onModify;
         this.onDelete = onDelete;
         this.onPlay = onPlay;
+
+        // Doppio click sul nome della playlist -> avvia la riproduzione
+        setOnMouseClicked(event -> {
+            if (event.getButton() == MouseButton.PRIMARY
+                    && event.getClickCount() == 2
+                    && !isEmpty() && getItem() != null) {
+                onPlay.accept(getItem());
+            }
+        });
     }
 
     @Override
     protected void updateItem(Playlist playlist, boolean empty) {
         super.updateItem(playlist, empty);
+        setGraphic(null);
 
         if (empty || playlist == null) {
             setText(null);
             setContextMenu(null);
         } else {
-            Label playlistNameLbl = new Label();
-           if(PlaylistManager.getInstance().isMostListenedPlaylist(playlist)) {
-               playlistNameLbl.setText(playlist.getName() + " \uD83D\uDC51");
-           }else{
-               playlistNameLbl.setText(playlist.getName());
-           }
-            Button playButton = new Button("▶");
-            playButton.setOnAction(event -> onPlay.accept(playlist));
-
-            Region spacer = new Region();
-            HBox.setHgrow(spacer, Priority.ALWAYS);
-
-            HBox container = new HBox(5);
-            container.getChildren().addAll( playlistNameLbl, spacer, playButton);
-
-            setText(null);
-            setGraphic(container);
-
+            // Mostra il nome della playlist, con coroncina se e' la piu' ascoltata
+            if (PlaylistManager.getInstance().isMostListenedPlaylist(playlist)) {
+                setText(playlist.getName() + " 👑");
+            } else {
+                setText(playlist.getName());
+            }
 
             MenuItem modifyItem = new MenuItem("Modifica playlist");
             MenuItem deleteItem = new MenuItem("Elimina playlist");

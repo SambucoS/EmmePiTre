@@ -36,22 +36,37 @@
         <HBox fx:id="mainBar"
               alignment="CENTER_LEFT"
               prefHeight="55.0"
-              spacing="10.0">
+              spacing="10.0"
+              styleClass="top-bar">
 
             <Label fx:id="titleBar"
                    alignment="CENTER"
                    prefHeight="36.0"
                    prefWidth="150.0"
                    text="EmmePiTre"
+                   styleClass="app-title"
                    wrapText="true">
                 <font>
                     <Font name="System Bold Italic" size="25.0" />
                 </font>
             </Label>
 
+            <Button fx:id="playCurrentButton"
+                    mnemonicParsing="false"
+                    onAction="#onPlayCurrent"
+                    prefHeight="36.0"
+                    styleClass="accent-button"
+                    text="▶ Play" />
+
             <Region prefHeight="36.0"
                     prefWidth="70.0"
                     HBox.hgrow="ALWAYS" />
+
+            <Button fx:id="themeButton"
+                    mnemonicParsing="false"
+                    onAction="#onToggleTheme"
+                    prefHeight="35.0"
+                    text="🌙 Scuro" />
 
             <Button fx:id="undoButton"
                     disable="true"
@@ -69,7 +84,7 @@
 
             <TextField fx:id="researchBar"
                        prefHeight="35.0"
-                       prefWidth="178.0"
+                       prefWidth="250.0"
                        promptText="What vibes are we looking for?" />
 
             <Button fx:id="createPlaylistButton"
@@ -77,6 +92,7 @@
                     onAction="#onCreatePlaylist"
                     prefHeight="46.0"
                     prefWidth="110.0"
+                    styleClass="accent-outline"
                     text="Create Playlist" />
 
             <Button fx:id="addButton"
@@ -84,6 +100,7 @@
                     onAction="#onAddTrack"
                     prefHeight="46.0"
                     prefWidth="140.0"
+                    styleClass="accent-button"
                     text="Add a Track" />
         </HBox>
 
@@ -95,17 +112,15 @@
                   prefWidth="200.0"
                   minWidth="180.0"
                   spacing="10.0"
-                  style="-fx-background-color: #eeeeee; -fx-padding: 12;">
+                  styleClass="sidebar">
 
                 <Button text="🏠 Libreria"
                         onAction="#onGoHome"
                         prefWidth="176.0"
-                        style="-fx-background-color: #d0d0d0; -fx-cursor: hand;
-                               -fx-font-size: 13px; -fx-alignment: CENTER_LEFT;
-                               -fx-padding: 6 10 6 10;" />
+                        styleClass="home-button" />
 
                 <Label text="Playlist"
-                       style="-fx-font-size: 18px; -fx-font-weight: bold;" />
+                       styleClass="sidebar-title" />
 
 
                 <ListView fx:id="sidebarPlaylistListView"

@@ -9,7 +9,6 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import models.Library;
-import models.Tag;
 import models.Track;
 import commands.AddTrackCommand;
 import commands.Command;

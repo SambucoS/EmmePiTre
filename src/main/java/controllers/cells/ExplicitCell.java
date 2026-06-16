@@ -22,7 +22,7 @@ public class ExplicitCell extends TableCell<Track, Boolean> {
             Label explicitBadge = new Label("E");
             explicitBadge.setCursor(Cursor.HAND);
 
-            String baseStyle = "-fx-background-color: #888888; -fx-text-fill: white; -fx-padding: 1 5 1 5; -fx-background-radius: 3; -fx-font-size: 10px;";
+            String baseStyle = "-fx-background-color: -app-muted; -fx-text-fill: -app-bg; -fx-padding: 1 5 1 5; -fx-background-radius: 3; -fx-font-size: 10px;";
 
             if (currentTrack.isExplicit()) {
                 explicitBadge.setStyle(baseStyle + "-fx-font-weight: bold; -fx-opacity: 1.0;");

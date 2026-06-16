@@ -19,7 +19,7 @@ public class ActionsCell extends TableCell<Track, Void> {
 
     public ActionsCell() {
         dotsLabel.setCursor(Cursor.HAND);
-        dotsLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: #888888; -fx-padding: 0 5 0 5;");
+        dotsLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: -app-muted; -fx-padding: 0 5 0 5;");
 
         dotsLabel.setOnMouseClicked(event -> {
             if (event.getButton() == MouseButton.PRIMARY) {

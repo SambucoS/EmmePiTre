@@ -46,7 +46,9 @@ public final class DialogLoader {
             dialogStage.setTitle(title);
             dialogStage.initModality(Modality.APPLICATION_MODAL);
             dialogStage.setResizable(false);
-            dialogStage.setScene(new Scene(root, width, height));
+            Scene scene = new Scene(root, width, height);
+            Theme.apply(scene); // la modale segue il tema corrente (chiaro/scuro)
+            dialogStage.setScene(scene);
             dialogStage.showAndWait();
 
             return controller;

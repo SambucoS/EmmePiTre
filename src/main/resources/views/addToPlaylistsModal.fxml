@@ -13,7 +13,7 @@
       spacing="14"
       prefWidth="400"
       prefHeight="440"
-      style="-fx-background-color: #f7f7f7;">
+      style="-fx-background-color: -app-bg;">
 
     <padding>
         <Insets top="20" right="20" bottom="20" left="20"/>
@@ -36,8 +36,8 @@
     <ListView fx:id="playlistListView"
               VBox.vgrow="ALWAYS"
               prefHeight="300"
-              style="-fx-background-color: white;
-                     -fx-border-color: #cccccc;
+              style="-fx-background-color: -app-bg;
+                     -fx-border-color: -app-border;
                      -fx-border-radius: 4;
                      -fx-background-radius: 4;"/>
 

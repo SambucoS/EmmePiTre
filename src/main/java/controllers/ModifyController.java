@@ -1,11 +1,9 @@
 package controllers;
 
-import javafx.collections.FXCollections;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.stage.Stage;
-import models.Tag;
 import models.Track;
 
 /**
@@ -39,10 +37,7 @@ public class ModifyController {
     private TextField txtYear;
 
     @FXML
-    private Button AggiungiTag;
-
-    @FXML
-    private ComboBox<Tag> choisetTag;
+    private CheckBox chkNewRelease;
 
     private Track track;
     private Runnable onModifyDone;
@@ -61,7 +56,6 @@ public class ModifyController {
         cmbGenre.getItems().addAll(
                 "Pop", "Rock", "Rap", "Jazz", "Classical", "EDM"
         );
-        choisetTag.setItems(FXCollections.observableArrayList(Tag.values()).sorted());
     }
 
     /**
@@ -88,6 +82,7 @@ public class ModifyController {
 
         chkExplicit.setSelected(track.isExplicit());
         chkFavourite.setSelected(track.isFavourite());
+        chkNewRelease.setSelected(track.isNewRelease());
 
         cmbGenre.setValue(track.getGenre());
     }
@@ -110,6 +105,8 @@ public class ModifyController {
 
         track.setExplicit(chkExplicit.isSelected());
         track.setFavourite(chkFavourite.isSelected());
+
+        track.setNewRelease(chkNewRelease.isSelected());
 
         track.setYear(Integer.parseInt(txtYear.getText()));
         track.setDuration(Integer.parseInt(txtDuration.getText()));
@@ -201,53 +198,6 @@ public class ModifyController {
             alert.setContentText(errorMessage);
             alert.showAndWait();
             return false;
-        }
-    }
-
-
-
-    @FXML
-    void onaggiuntaTag(ActionEvent event) {
-        Tag selected = choisetTag.getValue();
-
-        if (selected != null && track != null) {
-
-            // CONTROLLO DI SICUREZZA: Confrontiamo il valore in formato testo (.toString())
-            // Questo funziona sia se getTags() restituisce una lista di String, sia di oggetti Tag!
-            boolean giaPresente = track.getTags().stream()
-                    .anyMatch(t -> t.toString().equalsIgnoreCase(selected.toString()));
-
-            if (giaPresente) {
-
-                System.out.println(
-                        "ERRORE: Il tag " + selected +
-                                " è già presente nella traccia " + track.getName() + "!"
-                );
-                System.out.println("Tag attuali immutati: " + track.getTags());
-
-                // Mostra l'alert di errore se il tag c'è già
-                Alert alert = new Alert(Alert.AlertType.ERROR);
-                alert.setTitle("Errore di Aggiunta");
-                alert.setHeaderText("Tag già presente!");
-                alert.setContentText("Il tag '" + selected + "' è già stato assegnato alla traccia " + track.getName());
-
-                alert.showAndWait();
-                return; // Blocca l'aggiunta duplicata
-            }
-
-            track.addTag(selected);
-
-            System.out.println(
-                    "Tag " + selected +
-                            " aggiunto alla traccia " +
-                            track.getName()
-            );
-
-            System.out.println(
-                    "Tag correnti: " +
-                            track.getTags()
-            );
-
         }
     }
 }
