@@ -22,7 +22,6 @@
               <Label fx:id="tnameLbl" prefWidth="150.0" text="Nome Traccia.mp3" />
          </children>
       </VBox>
-      <Button mnemonicParsing="false" prefHeight="27.0" prefWidth="27.0" style="-fx-background-color: transparent;" />
       <Button fx:id="shufflebutton" mnemonicParsing="false" onAction="#onhandleshuffle" style="-fx-background-color: transparent;">
          <graphic>
             <ImageView fitHeight="21.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
@@ -62,7 +61,6 @@
             </ImageView>
          </graphic>
       </Button>
-      <Button mnemonicParsing="false" style="-fx-background-color: transparent;" />
         <HBox alignment="CENTER" prefWidth="200.0"><Label alignment="CENTER_RIGHT" prefWidth="150.0" text="Volume" /> <Slider /></HBox>
       <Separator orientation="VERTICAL" prefHeight="200.0" />
 
