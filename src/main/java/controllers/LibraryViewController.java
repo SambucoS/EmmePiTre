@@ -743,4 +743,5 @@ public class LibraryViewController implements LibraryObserver {
             modifyTrack(selectedTrack);
         }
     }
+
 }

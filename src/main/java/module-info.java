@@ -12,6 +12,7 @@ module emmepitre.com.emmepitre {
     requires com.fasterxml.jackson.databind;
     requires atlantafx.base;
     requires javafx.media;
+    requires java.desktop;
 
     opens controllers to javafx.fxml;
     opens emmepitre.com.emmepitre to javafx.fxml;

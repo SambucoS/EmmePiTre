@@ -2,7 +2,11 @@ package models;
 // ========== CLASSE TRACK ================
 // versione 2.0 ( Aggiunta identificativi )
 
+import com.fasterxml.jackson.annotation.JsonProperty;
 import util.IdGenerator;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class Track {
 
@@ -17,6 +21,9 @@ public class Track {
     private boolean explicit;
     private int duration; // in secondi
     private int timesListened;
+
+
+    private List<String> tags = new ArrayList<>();
 
     // Costruttore vuoto
     public Track() {}
@@ -36,6 +43,7 @@ public class Track {
         this.explicit = explicit;
         this.duration = duration;
         this.timesListened = 0;
+        this.tags = new ArrayList<>();
     }
 
     // Getters e Setters
@@ -115,6 +123,40 @@ public class Track {
     public int getTimesListened(){ return timesListened; };
 
     public void setTimesListened(){ this.timesListened++;}
+
+    // 2. Getter standard
+    public List<String> getTags() {
+        return tags;
+    }
+
+    // 3. Setter (necessario per il caricamento da JSON)
+    public void setTags(List<String> tags) {
+        this.tags = tags;
+    }
+
+    // 4. Metodo per aggiungere un tag (con controllo duplicati)
+    public void addTag(String tag) {
+
+        if (tag != null && !this.tags.contains(tag)) {
+            this.tags.add(tag);
+        }
+
+    }
+
+    public void addTag(Tag tag) {
+        if (tags == null) {
+            tags = new ArrayList<>();
+        }
+
+        if (!tags.contains(tag)) {
+            tags.add(String.valueOf(tag));
+        }
+    }
+
+    // 5. Metodo per rimuovere un tag (utile per deselezionare il tag nell'UI)
+    public void removeTag(String tag) {
+        this.tags.remove(tag);
+    }
 
 
     /** viene usato Objects.equals(...) per gestire automaticamente i null

@@ -9,7 +9,8 @@
   "favourite" : true,
   "explicit" : true,
   "duration" : 326,
-  "timesListened" : 66
+  "timesListened" : 69,
+  "tags" : [ "CLASSIC", "LIVE" ]
 }, {
   "id" : "b12d3e4f-5a6b-4c7d-8e9f-0a1b2c3d4e31",
   "pathname" : null,
@@ -21,7 +22,8 @@
   "favourite" : true,
   "explicit" : false,
   "duration" : 354,
-  "timesListened" : 48
+  "timesListened" : 51,
+  "tags" : null
 }, {
   "id" : "d34f5a6b-7c8d-4e9f-0123-2b3c4d5e6f51",
   "pathname" : null,
@@ -33,7 +35,8 @@
   "favourite" : true,
   "explicit" : true,
   "duration" : 301,
-  "timesListened" : 32
+  "timesListened" : 35,
+  "tags" : null
 }, {
   "id" : "e45a6b7c-8d9e-4f01-1234-3c4d5e6f7a61",
   "pathname" : null,
@@ -45,7 +48,8 @@
   "favourite" : false,
   "explicit" : true,
   "duration" : 270,
-  "timesListened" : 21
+  "timesListened" : 23,
+  "tags" : null
 }, {
   "id" : "f56b7c8d-9e0f-4123-2345-4d5e6f7a8b71",
   "pathname" : null,
@@ -57,7 +61,8 @@
   "favourite" : true,
   "explicit" : true,
   "duration" : 228,
-  "timesListened" : 1
+  "timesListened" : 1,
+  "tags" : null
 }, {
   "id" : "0a6c7d8e-1f2a-4b34-3456-5e6f7a8b9c81",
   "pathname" : null,
@@ -69,7 +74,8 @@
   "favourite" : true,
   "explicit" : true,
   "duration" : 198,
-  "timesListened" : 3
+  "timesListened" : 5,
+  "tags" : null
 }, {
   "id" : "1b7d8e9f-2a3b-4c45-4567-6f7a8b9c0d91",
   "pathname" : null,
@@ -81,7 +87,8 @@
   "favourite" : true,
   "explicit" : false,
   "duration" : 285,
-  "timesListened" : 2
+  "timesListened" : 4,
+  "tags" : null
 }, {
   "id" : "2c8e9f0a-3b4c-4d56-5678-7a8b9c0d1ea1",
   "pathname" : null,
@@ -93,7 +100,8 @@
   "favourite" : false,
   "explicit" : false,
   "duration" : 391,
-  "timesListened" : 2
+  "timesListened" : 3,
+  "tags" : null
 }, {
   "id" : "3d9f0a1b-4c5d-4e67-6789-8b9c0d1ea2b1",
   "pathname" : null,
@@ -105,7 +113,8 @@
   "favourite" : true,
   "explicit" : true,
   "duration" : 177,
-  "timesListened" : 3
+  "timesListened" : 5,
+  "tags" : null
 }, {
   "id" : "4e0a1b2c-5d6e-4f78-789a-9c0d1ea2b3c1",
   "pathname" : null,
@@ -117,7 +126,8 @@
   "favourite" : false,
   "explicit" : false,
   "duration" : 203,
-  "timesListened" : 2
+  "timesListened" : 2,
+  "tags" : null
 }, {
   "id" : "5f1b2c3d-6e7f-4a89-89ab-0d1ea2b3c4d1",
   "pathname" : null,
@@ -129,7 +139,8 @@
   "favourite" : false,
   "explicit" : false,
   "duration" : 292,
-  "timesListened" : 1
+  "timesListened" : 1,
+  "tags" : null
 }, {
   "id" : "6a2c3d4e-7f8a-4b9c-9abc-1ea2b3c4d5e1",
   "pathname" : null,
@@ -141,7 +152,8 @@
   "favourite" : true,
   "explicit" : false,
   "duration" : 186,
-  "timesListened" : 2
+  "timesListened" : 2,
+  "tags" : null
 }, {
   "id" : "7b3d4e5f-8a9b-4c0d-abcd-2b3c4d5e6f71",
   "pathname" : null,
@@ -153,7 +165,8 @@
   "favourite" : false,
   "explicit" : false,
   "duration" : 229,
-  "timesListened" : 1
+  "timesListened" : 1,
+  "tags" : null
 }, {
   "id" : "8c4e5f6a-9b0c-4d1e-bcde-3c4d5e6f7a81",
   "pathname" : null,
@@ -165,7 +178,8 @@
   "favourite" : true,
   "explicit" : false,
   "duration" : 482,
-  "timesListened" : 1
+  "timesListened" : 1,
+  "tags" : null
 }, {
   "id" : "9d5f6a7b-0c1d-4e2f-cdef-4d5e6f7a8b91",
   "pathname" : null,
@@ -177,7 +191,8 @@
   "favourite" : false,
   "explicit" : true,
   "duration" : 312,
-  "timesListened" : 1
+  "timesListened" : 1,
+  "tags" : null
 }, {
   "id" : "0e6a7b8c-1d2e-4f30-def0-5e6f7a8b9c01",
   "pathname" : null,
@@ -189,7 +204,8 @@
   "favourite" : false,
   "explicit" : false,
   "duration" : 141,
-  "timesListened" : 0
+  "timesListened" : 0,
+  "tags" : null
 }, {
   "id" : "1f7b8c9d-2e3f-4041-ef01-6f7a8b9c0d11",
   "pathname" : null,
@@ -201,7 +217,8 @@
   "favourite" : true,
   "explicit" : false,
   "duration" : 247,
-  "timesListened" : 0
+  "timesListened" : 0,
+  "tags" : null
 }, {
   "id" : "2a8c9d0e-3f40-4152-0f12-7a8b9c0d1e21",
   "pathname" : null,
@@ -213,7 +230,8 @@
   "favourite" : false,
   "explicit" : false,
   "duration" : 204,
-  "timesListened" : 0
+  "timesListened" : 0,
+  "tags" : null
 }, {
   "id" : "3b9d0e1f-4051-4263-1f23-8b9c0d1ea231",
   "pathname" : null,
@@ -225,7 +243,8 @@
   "favourite" : false,
   "explicit" : true,
   "duration" : 157,
-  "timesListened" : 0
+  "timesListened" : 0,
+  "tags" : null
 }, {
   "id" : "4c0e1f2a-5162-4374-2f34-9c0d1ea2b341",
   "pathname" : null,
@@ -237,7 +256,8 @@
   "favourite" : false,
   "explicit" : false,
   "duration" : 165,
-  "timesListened" : 0
+  "timesListened" : 0,
+  "tags" : null
 }, {
   "id" : "5d1f2a3b-6273-4485-3f45-0d1ea2b3c451",
   "pathname" : null,
@@ -249,7 +269,8 @@
   "favourite" : true,
   "explicit" : false,
   "duration" : 228,
-  "timesListened" : 0
+  "timesListened" : 0,
+  "tags" : null
 }, {
   "id" : "6e2a3b4c-7384-4596-4f56-1ea2b3c4d561",
   "pathname" : null,
@@ -261,7 +282,8 @@
   "favourite" : true,
   "explicit" : false,
   "duration" : 216,
-  "timesListened" : 1
+  "timesListened" : 1,
+  "tags" : null
 }, {
   "id" : "7c2c1c7a-2f8a-4c2a-9c0e-0c9c6c8a1a01",
   "pathname" : null,
@@ -273,7 +295,8 @@
   "favourite" : true,
   "explicit" : true,
   "duration" : 200,
-  "timesListened" : 0
+  "timesListened" : 0,
+  "tags" : null
 }, {
   "id" : "c23e4f5a-6b7c-4d8e-9f01-1a2b3c4d5e41",
   "pathname" : null,
@@ -285,5 +308,45 @@
   "favourite" : false,
   "explicit" : false,
   "duration" : 194,
-  "timesListened" : 1
+  "timesListened" : 1,
+  "tags" : null
+}, {
+  "id" : "8aecbd9d-911f-43ac-80c3-d10ad9a19d6d",
+  "pathname" : "gev",
+  "name" : "evf",
+  "artist" : "gvfd",
+  "album" : "vgf",
+  "genre" : "vgf",
+  "year" : 1990,
+  "favourite" : false,
+  "explicit" : false,
+  "duration" : 12,
+  "timesListened" : 0,
+  "tags" : null
+}, {
+  "id" : "4fe63325-07b9-47ff-b2ff-6fd1fd2d7af5",
+  "pathname" : "cs<x",
+  "name" : "sx",
+  "artist" : "csd",
+  "album" : "dcs",
+  "genre" : "cds",
+  "year" : 1990,
+  "favourite" : false,
+  "explicit" : false,
+  "duration" : 12,
+  "timesListened" : 0,
+  "tags" : [ ]
+}, {
+  "id" : "c40b07a4-4bb0-4fde-b9ff-0b362aa1c0b5",
+  "pathname" : "sdvf",
+  "name" : "s",
+  "artist" : "s",
+  "album" : "sf",
+  "genre" : "pop",
+  "year" : 1234,
+  "favourite" : false,
+  "explicit" : false,
+  "duration" : 1,
+  "timesListened" : 0,
+  "tags" : [ ]
 } ]

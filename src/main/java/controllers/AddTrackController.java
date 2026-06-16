@@ -9,6 +9,7 @@ import javafx.scene.control.CheckBox;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import models.Library;
+import models.Tag;
 import models.Track;
 import commands.AddTrackCommand;
 import commands.Command;
@@ -34,6 +35,7 @@ public class AddTrackController {
     @FXML private CheckBox chkExplicit;
     @FXML private Button btnCancel;
     @FXML private Button btnSave;
+
 
     private Track trackAdded = null; // Rappresenta la nuova traccia
 
@@ -200,4 +202,5 @@ public class AddTrackController {
             return false;
         }
     }
+
 }
