@@ -579,14 +579,20 @@ public class LibraryViewController implements LibraryObserver {
             stage.setTitle("Modify Track");
             stage.show();
             controller.setOnModifyDone(() -> {
-                List<Track> list = Library.getInstance().getTracks();
+                // Aggiorna la tabella per mostrare le modifiche (es. nuovo tag)
+                refreshTrackList();
 
-                Track found = list.stream()
-                        .filter(t -> t.getId().equals(currentPlayingTrack.get().getId()))
-                        .findFirst()
-                        .orElse(null);
-
-                openPlayerView(found);
+                // Riapre il player solo se c'è davvero una traccia in riproduzione
+                Track playing = currentPlayingTrack.get();
+                if (playing != null) {
+                    Track found = Library.getInstance().getTracks().stream()
+                            .filter(t -> t.getId().equals(playing.getId()))
+                            .findFirst()
+                            .orElse(null);
+                    if (found != null) {
+                        openPlayerView(found);
+                    }
+                }
             });
         } catch (IOException e) {
             e.printStackTrace();
