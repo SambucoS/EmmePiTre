@@ -10,6 +10,7 @@
     "year" : 1991,
     "favourite" : true,
     "explicit" : true,
+    "newRelease" : false,
     "duration" : 301,
     "timesListened" : 19
   }, {
@@ -22,10 +23,11 @@
     "year" : 1975,
     "favourite" : true,
     "explicit" : false,
+    "newRelease" : false,
     "duration" : 354,
     "timesListened" : 42
   } ],
-  "timesListened" : 17,
+  "timesListened" : 20,
   "size" : 2
 }, {
   "name" : "dhayad",
@@ -39,6 +41,7 @@
     "year" : 1975,
     "favourite" : true,
     "explicit" : false,
+    "newRelease" : false,
     "duration" : 354,
     "timesListened" : 0
   }, {
@@ -51,6 +54,7 @@
     "year" : 1991,
     "favourite" : true,
     "explicit" : true,
+    "newRelease" : false,
     "duration" : 301,
     "timesListened" : 0
   }, {
@@ -63,10 +67,11 @@
     "year" : 2002,
     "favourite" : true,
     "explicit" : true,
+    "newRelease" : false,
     "duration" : 326,
     "timesListened" : 0
   } ],
-  "timesListened" : 0,
+  "timesListened" : 1,
   "size" : 3
 }, {
   "name" : "provaprovaprova",
@@ -80,10 +85,11 @@
     "year" : 1991,
     "favourite" : true,
     "explicit" : true,
+    "newRelease" : false,
     "duration" : 301,
     "timesListened" : 19
   } ],
-  "timesListened" : 10,
+  "timesListened" : 11,
   "size" : 1
 }, {
   "name" : "SAD",
@@ -102,6 +108,7 @@
     "year" : 2002,
     "favourite" : true,
     "explicit" : true,
+    "newRelease" : false,
     "duration" : 326,
     "timesListened" : 0
   }, {
@@ -114,6 +121,7 @@
     "year" : 1975,
     "favourite" : true,
     "explicit" : false,
+    "newRelease" : false,
     "duration" : 354,
     "timesListened" : 0
   }, {
@@ -126,6 +134,7 @@
     "year" : 2014,
     "favourite" : false,
     "explicit" : true,
+    "newRelease" : false,
     "duration" : 270,
     "timesListened" : 0
   }, {
@@ -138,6 +147,7 @@
     "year" : 2018,
     "favourite" : true,
     "explicit" : true,
+    "newRelease" : false,
     "duration" : 198,
     "timesListened" : 0
   } ],
@@ -190,120 +200,130 @@
     "pathname" : null,
     "name" : "Lose Yourself",
     "artist" : "Eminem",
-    "album" : null,
+    "album" : "8 Mile (Soundtrack)",
     "genre" : "Hip Hop",
     "year" : 2002,
     "favourite" : true,
     "explicit" : true,
+    "newRelease" : false,
     "duration" : 326,
-    "timesListened" : 66
+    "timesListened" : 83
   }, {
     "id" : "b12d3e4f-5a6b-4c7d-8e9f-0a1b2c3d4e31",
     "pathname" : null,
     "name" : "Bohemian Rhapsody",
     "artist" : "Queen",
-    "album" : null,
+    "album" : "A Night at the Opera",
     "genre" : "Rock",
     "year" : 1975,
     "favourite" : true,
     "explicit" : false,
+    "newRelease" : false,
     "duration" : 354,
-    "timesListened" : 49
-  }, {
-    "id" : "d34f5a6b-7c8d-4e9f-0123-2b3c4d5e6f51",
-    "pathname" : null,
-    "name" : "Smells Like Teen Spirit",
-    "artist" : "Nirvana",
-    "album" : null,
-    "genre" : "Rock",
-    "year" : 1991,
-    "favourite" : true,
-    "explicit" : true,
-    "duration" : 301,
-    "timesListened" : 32
+    "timesListened" : 55
   }, {
     "id" : "e45a6b7c-8d9e-4f01-1234-3c4d5e6f7a61",
     "pathname" : null,
     "name" : "Uptown Funk",
     "artist" : "Mark Ronson ft. Bruno Mars",
-    "album" : null,
+    "album" : "Uptown Special",
     "genre" : "Funk",
     "year" : 2014,
     "favourite" : false,
     "explicit" : true,
+    "newRelease" : false,
     "duration" : 270,
-    "timesListened" : 21
+    "timesListened" : 27
+  }, {
+    "id" : "d34f5a6b-7c8d-4e9f-0123-2b3c4d5e6f51",
+    "pathname" : null,
+    "name" : "Smells Like Teen Spirit",
+    "artist" : "Nirvana",
+    "album" : "Nevermind",
+    "genre" : "Rock",
+    "year" : 1991,
+    "favourite" : true,
+    "explicit" : true,
+    "newRelease" : false,
+    "duration" : 301,
+    "timesListened" : 39
   }, {
     "id" : "0a6c7d8e-1f2a-4b34-3456-5e6f7a8b9c81",
     "pathname" : null,
     "name" : "God's Plan",
     "artist" : "Drake",
-    "album" : null,
+    "album" : "Scorpion",
     "genre" : "Hip Hop",
     "year" : 2018,
     "favourite" : true,
     "explicit" : true,
+    "newRelease" : false,
     "duration" : 198,
-    "timesListened" : 3
-  }, {
-    "id" : "3d9f0a1b-4c5d-4e67-6789-8b9c0d1ea2b1",
-    "pathname" : null,
-    "name" : "HUMBLE.",
-    "artist" : "Kendrick Lamar",
-    "album" : null,
-    "genre" : "Hip Hop",
-    "year" : 2017,
-    "favourite" : true,
-    "explicit" : true,
-    "duration" : 177,
-    "timesListened" : 3
+    "timesListened" : 6
   }, {
     "id" : "1b7d8e9f-2a3b-4c45-4567-6f7a8b9c0d91",
     "pathname" : null,
     "name" : "Someone Like You",
     "artist" : "Adele",
-    "album" : null,
+    "album" : "21",
     "genre" : "Pop",
     "year" : 2011,
     "favourite" : true,
     "explicit" : false,
+    "newRelease" : false,
     "duration" : 285,
-    "timesListened" : 2
+    "timesListened" : 8
   }, {
     "id" : "2c8e9f0a-3b4c-4d56-5678-7a8b9c0d1ea1",
     "pathname" : null,
     "name" : "Hotel California",
     "artist" : "Eagles",
-    "album" : null,
+    "album" : "Hotel California",
     "genre" : "Rock",
     "year" : 1976,
     "favourite" : false,
     "explicit" : false,
+    "newRelease" : false,
     "duration" : 391,
-    "timesListened" : 2
+    "timesListened" : 5
   }, {
-    "id" : "4e0a1b2c-5d6e-4f78-789a-9c0d1ea2b3c1",
+    "id" : "3d9f0a1b-4c5d-4e67-6789-8b9c0d1ea2b1",
     "pathname" : null,
-    "name" : "Levitating",
-    "artist" : "Dua Lipa",
-    "album" : null,
-    "genre" : "Pop",
-    "year" : 2020,
-    "favourite" : false,
-    "explicit" : false,
-    "duration" : 203,
-    "timesListened" : 2
+    "name" : "HUMBLE.",
+    "artist" : "Kendrick Lamar",
+    "album" : "DAMN.",
+    "genre" : "Hip Hop",
+    "year" : 2017,
+    "favourite" : true,
+    "explicit" : true,
+    "newRelease" : false,
+    "duration" : 177,
+    "timesListened" : 5
   }, {
     "id" : "6a2c3d4e-7f8a-4b9c-9abc-1ea2b3c4d5e1",
     "pathname" : null,
     "name" : "Radioactive",
     "artist" : "Imagine Dragons",
-    "album" : null,
+    "album" : "Night Visions",
     "genre" : "Alternative",
     "year" : 2012,
     "favourite" : true,
     "explicit" : false,
+    "newRelease" : false,
     "duration" : 186,
+    "timesListened" : 3
+  }, {
+    "id" : "f56b7c8d-9e0f-4123-2345-4d5e6f7a8b71",
+    "pathname" : null,
+    "name" : "Rolling in the Deep",
+    "artist" : "Adele",
+    "album" : "21",
+    "genre" : "Pop",
+    "year" : 2010,
+    "favourite" : true,
+    "explicit" : true,
+    "newRelease" : false,
+    "duration" : 228,
     "timesListened" : 2
   } ],
   "timesListened" : 1,
@@ -330,6 +350,7 @@
     "year" : 1975,
     "favourite" : true,
     "explicit" : false,
+    "newRelease" : false,
     "duration" : 354,
     "timesListened" : 48
   }, {
@@ -342,6 +363,7 @@
     "year" : 1991,
     "favourite" : true,
     "explicit" : true,
+    "newRelease" : false,
     "duration" : 301,
     "timesListened" : 32
   }, {
@@ -354,6 +376,7 @@
     "year" : 1976,
     "favourite" : false,
     "explicit" : false,
+    "newRelease" : false,
     "duration" : 391,
     "timesListened" : 2
   }, {
@@ -366,6 +389,7 @@
     "year" : 1990,
     "favourite" : false,
     "explicit" : false,
+    "newRelease" : false,
     "duration" : 292,
     "timesListened" : 1
   }, {
@@ -378,6 +402,7 @@
     "year" : 1971,
     "favourite" : true,
     "explicit" : false,
+    "newRelease" : false,
     "duration" : 482,
     "timesListened" : 1
   }, {
@@ -390,6 +415,7 @@
     "year" : 2000,
     "favourite" : true,
     "explicit" : false,
+    "newRelease" : false,
     "duration" : 216,
     "timesListened" : 0
   } ],
@@ -407,6 +433,7 @@
     "year" : 2000,
     "favourite" : true,
     "explicit" : false,
+    "newRelease" : false,
     "duration" : 216,
     "timesListened" : 0
   } ],
@@ -424,6 +451,7 @@
     "year" : 2002,
     "favourite" : true,
     "explicit" : true,
+    "newRelease" : false,
     "duration" : 326,
     "timesListened" : 65
   }, {
@@ -436,6 +464,7 @@
     "year" : 1975,
     "favourite" : true,
     "explicit" : false,
+    "newRelease" : false,
     "duration" : 354,
     "timesListened" : 48
   }, {
@@ -448,6 +477,7 @@
     "year" : 1991,
     "favourite" : true,
     "explicit" : true,
+    "newRelease" : false,
     "duration" : 301,
     "timesListened" : 32
   }, {
@@ -460,6 +490,7 @@
     "year" : 2010,
     "favourite" : true,
     "explicit" : true,
+    "newRelease" : false,
     "duration" : 228,
     "timesListened" : 1
   }, {
@@ -472,6 +503,7 @@
     "year" : 2018,
     "favourite" : true,
     "explicit" : true,
+    "newRelease" : false,
     "duration" : 198,
     "timesListened" : 3
   }, {
@@ -484,6 +516,7 @@
     "year" : 2011,
     "favourite" : true,
     "explicit" : false,
+    "newRelease" : false,
     "duration" : 285,
     "timesListened" : 2
   }, {
@@ -496,6 +529,7 @@
     "year" : 2017,
     "favourite" : true,
     "explicit" : true,
+    "newRelease" : false,
     "duration" : 177,
     "timesListened" : 3
   }, {
@@ -508,6 +542,7 @@
     "year" : 2012,
     "favourite" : true,
     "explicit" : false,
+    "newRelease" : false,
     "duration" : 186,
     "timesListened" : 1
   }, {
@@ -520,6 +555,7 @@
     "year" : 1971,
     "favourite" : true,
     "explicit" : false,
+    "newRelease" : false,
     "duration" : 482,
     "timesListened" : 1
   }, {
@@ -532,6 +568,7 @@
     "year" : 2013,
     "favourite" : true,
     "explicit" : false,
+    "newRelease" : false,
     "duration" : 247,
     "timesListened" : 0
   }, {
@@ -544,6 +581,7 @@
     "year" : 2010,
     "favourite" : true,
     "explicit" : false,
+    "newRelease" : false,
     "duration" : 228,
     "timesListened" : 0
   }, {
@@ -556,6 +594,7 @@
     "year" : 2000,
     "favourite" : true,
     "explicit" : false,
+    "newRelease" : false,
     "duration" : 216,
     "timesListened" : 1
   }, {
@@ -568,6 +607,7 @@
     "year" : 2019,
     "favourite" : true,
     "explicit" : true,
+    "newRelease" : false,
     "duration" : 200,
     "timesListened" : 0
   } ],
@@ -585,6 +625,7 @@
     "year" : 2002,
     "favourite" : true,
     "explicit" : true,
+    "newRelease" : false,
     "duration" : 326,
     "timesListened" : 66
   }, {
@@ -597,6 +638,7 @@
     "year" : 1991,
     "favourite" : true,
     "explicit" : true,
+    "newRelease" : false,
     "duration" : 301,
     "timesListened" : 32
   }, {
@@ -609,6 +651,7 @@
     "year" : 2014,
     "favourite" : false,
     "explicit" : true,
+    "newRelease" : false,
     "duration" : 270,
     "timesListened" : 21
   }, {
@@ -621,6 +664,7 @@
     "year" : 2010,
     "favourite" : true,
     "explicit" : true,
+    "newRelease" : false,
     "duration" : 228,
     "timesListened" : 1
   }, {
@@ -633,6 +677,7 @@
     "year" : 2018,
     "favourite" : true,
     "explicit" : true,
+    "newRelease" : false,
     "duration" : 198,
     "timesListened" : 3
   }, {
@@ -645,6 +690,7 @@
     "year" : 2017,
     "favourite" : true,
     "explicit" : true,
+    "newRelease" : false,
     "duration" : 177,
     "timesListened" : 3
   }, {
@@ -657,6 +703,7 @@
     "year" : 2018,
     "favourite" : false,
     "explicit" : true,
+    "newRelease" : false,
     "duration" : 312,
     "timesListened" : 1
   }, {
@@ -669,6 +716,7 @@
     "year" : 2019,
     "favourite" : false,
     "explicit" : true,
+    "newRelease" : false,
     "duration" : 157,
     "timesListened" : 0
   }, {
@@ -681,6 +729,7 @@
     "year" : 2019,
     "favourite" : true,
     "explicit" : true,
+    "newRelease" : false,
     "duration" : 200,
     "timesListened" : 0
   } ],
@@ -698,6 +747,7 @@
     "year" : 2010,
     "favourite" : true,
     "explicit" : true,
+    "newRelease" : false,
     "duration" : 228,
     "timesListened" : 1
   }, {
@@ -710,6 +760,7 @@
     "year" : 2011,
     "favourite" : true,
     "explicit" : false,
+    "newRelease" : false,
     "duration" : 285,
     "timesListened" : 2
   }, {
@@ -722,6 +773,7 @@
     "year" : 2020,
     "favourite" : false,
     "explicit" : false,
+    "newRelease" : false,
     "duration" : 203,
     "timesListened" : 2
   }, {
@@ -734,6 +786,7 @@
     "year" : 2021,
     "favourite" : false,
     "explicit" : false,
+    "newRelease" : false,
     "duration" : 141,
     "timesListened" : 0
   }, {
@@ -746,6 +799,7 @@
     "year" : 2010,
     "favourite" : true,
     "explicit" : false,
+    "newRelease" : false,
     "duration" : 228,
     "timesListened" : 0
   }, {
@@ -758,6 +812,7 @@
     "year" : 2019,
     "favourite" : true,
     "explicit" : true,
+    "newRelease" : false,
     "duration" : 200,
     "timesListened" : 0
   }, {
@@ -770,6 +825,7 @@
     "year" : 2019,
     "favourite" : false,
     "explicit" : false,
+    "newRelease" : false,
     "duration" : 194,
     "timesListened" : 1
   } ],
@@ -792,6 +848,7 @@
     "year" : 1975,
     "favourite" : true,
     "explicit" : false,
+    "newRelease" : false,
     "duration" : 354,
     "timesListened" : 48
   }, {
@@ -804,6 +861,7 @@
     "year" : 2014,
     "favourite" : false,
     "explicit" : true,
+    "newRelease" : false,
     "duration" : 270,
     "timesListened" : 21
   }, {
@@ -816,6 +874,7 @@
     "year" : 2018,
     "favourite" : true,
     "explicit" : true,
+    "newRelease" : false,
     "duration" : 198,
     "timesListened" : 3
   } ],
@@ -833,6 +892,7 @@
     "year" : 2012,
     "favourite" : true,
     "explicit" : false,
+    "newRelease" : false,
     "duration" : 186,
     "timesListened" : 2
   }, {
@@ -845,6 +905,7 @@
     "year" : 2017,
     "favourite" : false,
     "explicit" : false,
+    "newRelease" : false,
     "duration" : 204,
     "timesListened" : 0
   } ],
@@ -857,13 +918,14 @@
     "pathname" : null,
     "name" : "Lose Yourself",
     "artist" : "Eminem",
-    "album" : null,
+    "album" : "8 Mile (Soundtrack)",
     "genre" : "Hip Hop",
     "year" : 2002,
     "favourite" : true,
     "explicit" : true,
+    "newRelease" : false,
     "duration" : 326,
-    "timesListened" : 66
+    "timesListened" : 71
   }, {
     "id" : "0a6c7d8e-1f2a-4b34-3456-5e6f7a8b9c81",
     "pathname" : null,
@@ -874,6 +936,7 @@
     "year" : 2018,
     "favourite" : true,
     "explicit" : true,
+    "newRelease" : false,
     "duration" : 198,
     "timesListened" : 3
   }, {
@@ -886,23 +949,38 @@
     "year" : 2017,
     "favourite" : true,
     "explicit" : true,
+    "newRelease" : false,
     "duration" : 177,
     "timesListened" : 3
   }, {
-    "id" : "9d5f6a7b-0c1d-4e2f-cdef-4d5e6f7a8b91",
+    "id" : "c23e4f5a-6b7c-4d8e-9f01-1a2b3c4d5e41",
     "pathname" : null,
-    "name" : "Sicko Mode",
-    "artist" : "Travis Scott",
-    "album" : null,
-    "genre" : "Hip Hop",
-    "year" : 2018,
+    "name" : "Bad Guy",
+    "artist" : "Billie Eilish",
+    "album" : "When We All Fall Asleep, Where Do We Go?",
+    "genre" : "Pop",
+    "year" : 2019,
     "favourite" : false,
-    "explicit" : true,
-    "duration" : 312,
+    "explicit" : false,
+    "newRelease" : false,
+    "duration" : 194,
     "timesListened" : 1
+  }, {
+    "id" : "4c0e1f2a-5162-4374-2f34-9c0d1ea2b341",
+    "pathname" : null,
+    "name" : "Lose Control",
+    "artist" : "Meduza",
+    "album" : "Loose Control EP",
+    "genre" : "EDM",
+    "year" : 2019,
+    "favourite" : false,
+    "explicit" : false,
+    "newRelease" : false,
+    "duration" : 165,
+    "timesListened" : 0
   } ],
   "timesListened" : 0,
-  "size" : 4
+  "size" : 5
 }, {
   "name" : "Playlist EDM",
   "tracks" : [ {
@@ -915,6 +993,7 @@
     "year" : 2013,
     "favourite" : true,
     "explicit" : false,
+    "newRelease" : false,
     "duration" : 247,
     "timesListened" : 0
   }, {
@@ -927,6 +1006,7 @@
     "year" : 2019,
     "favourite" : false,
     "explicit" : false,
+    "newRelease" : false,
     "duration" : 165,
     "timesListened" : 0
   } ],
@@ -949,6 +1029,7 @@
     "year" : 2017,
     "favourite" : false,
     "explicit" : false,
+    "newRelease" : false,
     "duration" : 229,
     "timesListened" : 1
   } ],
@@ -966,6 +1047,7 @@
     "year" : 1975,
     "favourite" : true,
     "explicit" : false,
+    "newRelease" : false,
     "duration" : 354,
     "timesListened" : 48
   } ],
@@ -983,6 +1065,7 @@
     "year" : 2014,
     "favourite" : false,
     "explicit" : true,
+    "newRelease" : false,
     "duration" : 270,
     "timesListened" : 21
   } ],
@@ -1000,6 +1083,7 @@
     "year" : 1990,
     "favourite" : false,
     "explicit" : false,
+    "newRelease" : false,
     "duration" : 292,
     "timesListened" : 1
   } ],

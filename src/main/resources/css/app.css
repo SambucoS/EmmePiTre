@@ -10,7 +10,7 @@
     -app-bg: #ffffff;
     -app-surface: #f7f8fa;
     -app-sidebar: #f0f2f5;
-    -app-accent: #6c5ce7;
+    -app-accent: #6b20ec;
     -app-accent-text: #ffffff;
     -app-text: #1a1a2e;
     -app-muted: #6b7280;
@@ -20,20 +20,25 @@
     -app-sel-bar: #ece9fb;
 
     -fx-background-color: -app-bg;
+
+    -fx-font-family: "Inter";
+    -fx-font-size: 16px;
 }
 
 .root.dark {
     -app-bg: #121212;
     -app-surface: #181818;
     -app-sidebar: #0a0a0a;
-    -app-accent: #1DB954;
-    -app-accent-text: #04140a;
+    -app-accent: #6b20ec;
+    -app-accent-text: #230155;
     -app-text: #ffffff;
     -app-muted: #b3b3b3;
     -app-border: #2a2a2a;
-    -app-row-highlight: #283b2e;
+    -app-row-highlight: #270063;
     -app-surface-active: #333333;
     -app-sel-bar: #2a2a2a;
+
+    -fx-font-color: -app-muted
 }
 
 /* ---- Testi e controlli base ---- */
@@ -74,13 +79,39 @@
     -fx-table-cell-border-color: transparent;
 }
 
-.table-view .column-header-background,
-.table-view .filler {
+/*
+ * FIX DARK MODE HEADER
+ * Modena definisce l'header con una paint-chain a più layer
+ * (gradiente + highlight + base). Un singolo valore non sovrascrive
+ * tutti i layer: bisogna dichiararne tre identici per azzerare
+ * la chain originale e forzare il colore piatto in entrambi i temi.
+ * .column-header, .column-header-background e .filler
+ * vanno puntati separatamente perché Modena ha regole distinte per ognuno.
+ */
+.table-view .column-header-background {
     -fx-background-color: -app-surface;
+}
+
+.table-view .column-header,
+.table-view .filler {
+    -fx-background-color: -app-surface, -app-surface, -app-surface;
+    -fx-background-insets: 0, 0, 0;
+    -fx-size: 32px;
+}
+
+.table-view .column-header {
+    -fx-border-color: transparent transparent -app-border transparent;
+    -fx-border-width: 0 0 1 0;
+}
+
+.table-view .filler {
+    -fx-border-color: transparent transparent -app-border transparent;
+    -fx-border-width: 0 0 1 0;
 }
 
 .table-view .column-header .label {
     -fx-text-fill: -app-muted;
+    -fx-background-color: transparent;
 }
 
 .table-view .table-row-cell {
@@ -164,13 +195,13 @@
 
 .sidebar-title {
     -fx-text-fill: -app-text;
-    -fx-font-size: 18px;
+    -fx-font-size: 20px;
     -fx-font-weight: bold;
 }
 
 .home-button {
     -fx-alignment: CENTER_LEFT;
-    -fx-font-size: 13px;
+    -fx-font-size: 20px;
     -fx-padding: 6 10 6 10;
 }
 
