@@ -33,10 +33,6 @@ public class Library implements TrackList {
         this.observers.add(observer);
     }
 
-    public void removeObserver(LibraryObserver observer) {
-        this.observers.remove(observer);
-    }
-
     public void notifyObservers() {
         for (LibraryObserver observer : observers) {
             observer.onLibraryChanged();

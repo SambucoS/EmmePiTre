@@ -12,11 +12,17 @@ import models.Track;
 /**
  * Cella della colonna "azioni" (tre puntini): mostra/nasconde il menu
  * contestuale della riga al click sinistro, con effetto toggle.
+ *
+ * @version 1.0
  */
 public class ActionsCell extends TableCell<Track, Void> {
 
     private final Label dotsLabel = new Label("⋮");
 
+    /**
+     * Crea la cella e registra sull'etichetta "⋮" il gestore che apre o
+     * chiude il menu contestuale della riga corrispondente.
+     */
     public ActionsCell() {
         dotsLabel.setCursor(Cursor.HAND);
         dotsLabel.setStyle("-fx-font-size: 18px; -fx-font-weight: bold; -fx-text-fill: -app-muted; -fx-padding: 0 5 0 5;");
@@ -40,6 +46,13 @@ public class ActionsCell extends TableCell<Track, Void> {
         });
     }
 
+    /**
+     * Ridisegna la cella mostrando l'icona "⋮" solo se la riga corrisponde
+     * a una traccia effettiva.
+     *
+     * @param item  sempre {@code null} (la colonna non e' associata ad alcun valore)
+     * @param empty {@code true} se la cella non corrisponde ad alcuna riga di dati
+     */
     @Override
     protected void updateItem(Void item, boolean empty) {
         super.updateItem(item, empty);

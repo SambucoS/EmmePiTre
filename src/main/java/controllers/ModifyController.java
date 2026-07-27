@@ -16,8 +16,6 @@ import models.Track;
 public class ModifyController {
 
     @FXML
-    private Button btnAnnulla;
-    @FXML
     private Button btnSalva;
     @FXML
     private CheckBox chkExplicit;

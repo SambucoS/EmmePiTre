@@ -7,7 +7,7 @@ import java.util.List;
  * Rappresenta il contratto per la gestione di una collezione di tracce musicali.
  * Qualsiasi classe che implementa questa interfaccia deve fornire la logica per
  * inserire, rimuovere, visualizzare e contare i brani in essa contenuti.
- * * @author GRUPPO_14_SAD
+ *
  * @version 1.0
  */
 public interface TrackList {

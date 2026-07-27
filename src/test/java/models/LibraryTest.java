@@ -4,6 +4,12 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Test unitari del Singleton {@link Library}: aggiunta e rimozione di
+ * tracce e robustezza nel caso di rimozione di una traccia non presente.
+ *
+ * @version 1.0
+ */
 class LibraryTest {
 
     private Library library;

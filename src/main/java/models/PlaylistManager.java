@@ -66,14 +66,6 @@ public class PlaylistManager {
         return this.playlists; // Restituisce la lista in RAM
     }
 
-    public void createPlaylist(String name) {
-        checkPlaylistNameAvailable(name, null);
-
-        Playlist newPlaylist = new Playlist(name);
-        this.playlists.add(newPlaylist);
-        this.sync();
-    }
-
     /**
      * Crea una playlist automatica selezionando dalla libreria le tracce che
      * soddisfano il criterio dato (Strategy/Composite pattern). Il criterio puo'

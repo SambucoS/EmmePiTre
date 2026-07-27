@@ -19,6 +19,14 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Controller della modale "Aggiungi a playlist": mostra l'elenco di tutte le
+ * playlist come checklist (precaricando quelle che gia' contengono la
+ * traccia) e, al salvataggio, applica le modifiche tramite un unico
+ * {@link ManageTrackPlaylistsCommand} cosi' che l'operazione sia annullabile.
+ *
+ * @version 1.0
+ */
 public class AddToPlaylistsModalController {
 
     @FXML
@@ -30,6 +38,13 @@ public class AddToPlaylistsModalController {
     private Track track;
     private final Map<Playlist, BooleanProperty> checkStates = new LinkedHashMap<>();
 
+    /**
+     * Imposta la traccia da assegnare alle playlist e popola la ListView con
+     * tutte le playlist esistenti, precaricando lo stato dei checkbox in base
+     * a quelle che gia' contengono la traccia.
+     *
+     * @param track la {@link Track} da gestire nella modale
+     */
     public void setTrack(Track track) {
         this.track = track;
         trackInfoLabel.setText(track.getName() + "  —  " + track.getArtist());
@@ -58,6 +73,11 @@ public class AddToPlaylistsModalController {
         ));
     }
 
+    /**
+     * Calcola la differenza tra lo stato dei checkbox e le playlist che gia'
+     * contenevano la traccia, quindi esegue un {@link ManageTrackPlaylistsCommand}
+     * con le sole playlist da aggiungere/rimuovere e chiude la finestra.
+     */
     @FXML
     private void onSave() {
         List<Playlist> toAdd = new ArrayList<>();
@@ -83,11 +103,17 @@ public class AddToPlaylistsModalController {
         closeStage();
     }
 
+    /**
+     * Chiude la finestra senza applicare alcuna modifica.
+     */
     @FXML
     private void onCancel() {
         closeStage();
     }
 
+    /**
+     * Recupera lo stage corrente a partire da un elemento della scena e lo chiude.
+     */
     private void closeStage() {
         Stage stage = (Stage) playlistListView.getScene().getWindow();
         stage.close();

@@ -13,6 +13,8 @@ import javafx.stage.Stage;
  * Helper per il caricamento di finestre modali da file FXML.
  * Centralizza il boilerplate ripetuto (FXMLLoader + Stage modale + Scene +
  * showAndWait), così i controller chiamanti restano concisi.
+ *
+ * @version 1.0
  */
 public final class DialogLoader {
 

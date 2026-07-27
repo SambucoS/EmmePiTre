@@ -19,6 +19,14 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+/**
+ * Controller della modale "Gestisci Playlist": permette di rinominare una
+ * playlist e di scegliere, tramite checklist, quali tracce della libreria
+ * devono farne parte. Al salvataggio le modifiche vengono applicate in
+ * un'unica operazione annullabile tramite {@link ManagePlaylistCommand}.
+ *
+ * @version 1.0
+ */
 public class ManagePlaylistModalController {
 
     @FXML
@@ -31,6 +39,13 @@ public class ManagePlaylistModalController {
     private final Map<Track, BooleanProperty> checkStates = new LinkedHashMap<>();
     private boolean saved = false;
 
+    /**
+     * Imposta la playlist da gestire, precompila il campo del nome e popola
+     * la ListView con tutte le tracce della libreria, spuntando quelle gia'
+     * presenti nella playlist.
+     *
+     * @param playlist la {@link Playlist} da modificare
+     */
     public void setPlaylist(Playlist playlist) {
         this.playlist = playlist;
         renameField.setText(playlist.getName());
@@ -59,6 +74,11 @@ public class ManagePlaylistModalController {
         ));
     }
 
+    /**
+     * Calcola l'eventuale rinomina e la differenza tra lo stato dei checkbox
+     * e le tracce gia' presenti, quindi esegue un unico {@link ManagePlaylistCommand}
+     * con tutte le modifiche e chiude la finestra.
+     */
     @FXML
     private void onSave() {
         String newName = renameField.getText().trim();
@@ -96,15 +116,26 @@ public class ManagePlaylistModalController {
         closeStage();
     }
 
+    /**
+     * Chiude la finestra senza applicare alcuna modifica.
+     */
     @FXML
     private void onCancel() {
         closeStage();
     }
 
+    /**
+     * Indica se le modifiche sono state confermate con "Salva".
+     *
+     * @return {@code true} se l'utente ha salvato, {@code false} se ha annullato
+     */
     public boolean isSaved() {
         return saved;
     }
 
+    /**
+     * Recupera lo stage corrente a partire da un elemento della scena e lo chiude.
+     */
     private void closeStage() {
         Stage stage = (Stage) renameField.getScene().getWindow();
         stage.close();

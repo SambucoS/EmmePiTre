@@ -8,10 +8,8 @@ import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
-import javafx.scene.control.TableColumn;
 import javafx.util.Duration;
 import models.Track;
-import org.w3c.dom.events.MouseEvent;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -19,9 +17,6 @@ import java.util.Random;
 import java.util.function.Consumer;
 
 public class PlayerController {
-    @FXML
-    private TableColumn<Track, Void> actionsColumn;
-
     @FXML
     private Button loopbutton;
 

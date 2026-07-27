@@ -4,6 +4,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Test unitari della classe {@link Playlist}: costruzione e validazione del
+ * nome, gestione delle tracce (aggiunta, rimozione, riordino), incapsulamento
+ * della lista restituita e identita' basata sul nome (equals/hashCode).
+ *
+ * @version 1.0
+ */
 public class PlaylistTest {
 
     private Playlist playlistTest;
