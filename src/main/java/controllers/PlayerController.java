@@ -41,8 +41,6 @@ public class PlayerController implements PlaylistObserver {
     private Label currentTime;
 
     // Modifica per shuffle
-
-    // Aggiungi questo tra le variabili della tua classe (es. vicino a currentIndex)
     private List<Integer> playbackHistory = new ArrayList<>();
 
 
