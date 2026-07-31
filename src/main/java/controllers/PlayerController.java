@@ -9,14 +9,16 @@ import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
 import javafx.util.Duration;
+import models.Playlist;
 import models.Track;
+import observer.PlaylistObserver;
 
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 import java.util.function.Consumer;
 
-public class PlayerController {
+public class PlayerController implements PlaylistObserver {
     @FXML
     private Button loopbutton;
 
@@ -50,6 +52,11 @@ public class PlayerController {
     private java.util.List<Track> currentPlaylist; // Lista delle canzoni
     private int currentIndex; // Posizione della canzone attuale
 
+    // Playlist di dominio effettivamente osservata (null se si riproduce dalla libreria,
+    // che non supporta il riordino delle tracce). Permette al player di restare sincronizzato
+    // con l'ordine reale anche se la playlist viene modificata mentre è in riproduzione.
+    private Playlist sourcePlaylist;
+
     private boolean isLoopActive = false;
     private boolean isShuffleActive = false;
 
@@ -63,6 +70,32 @@ public class PlayerController {
         if (track != null && currentPlaylist != null) {
             int idx = currentPlaylist.indexOf(track);
             if (idx >= 0) currentIndex = idx;
+        }
+    }
+
+    /**
+     * Notificato da {@link Playlist} quando il suo contenuto cambia (aggiunta,
+     * rimozione o riordino di tracce). Riallinea l'indice della traccia
+     * attualmente in riproduzione, così che i comandi di skip restino coerenti
+     * con l'ordine reale della playlist anche se questa è stata modificata
+     * mentre era in riproduzione.
+     *
+     * @param playlist la playlist osservata che è cambiata
+     */
+    @Override
+    public void onPlaylistChanged(Playlist playlist) {
+        syncCurrentIndex();
+    }
+
+    /**
+     * Smette di osservare la playlist di dominio eventualmente registrata,
+     * per evitare che questo controller resti agganciato come osservatore
+     * dopo che la view del player è stata sostituita.
+     */
+    public void stopObserving() {
+        if (sourcePlaylist != null) {
+            sourcePlaylist.removeObserver(this);
+            sourcePlaylist = null;
         }
     }
 
@@ -132,6 +165,25 @@ public class PlayerController {
      * * @param track la traccia corrente
      * @param playlist l'intera lista delle tracce visualizzata nella tabella
      */
+    /**
+     * Come {@link #setTrack(Track, List)}, ma registra il controller come
+     * osservatore della playlist di dominio da cui proviene la riproduzione,
+     * così da restare sincronizzato se questa viene modificata (es. riordino
+     * delle tracce) mentre è in riproduzione.
+     *
+     * @param track la traccia corrente
+     * @param playlist l'intera lista delle tracce visualizzata nella tabella
+     * @param sourcePlaylist la playlist di dominio da osservare, null se si riproduce dalla libreria
+     */
+    public void setTrack(Track track, java.util.List<Track> playlist, Playlist sourcePlaylist) {
+        stopObserving();
+        this.sourcePlaylist = sourcePlaylist;
+        if (sourcePlaylist != null) {
+            sourcePlaylist.addObserver(this);
+        }
+        setTrack(track, playlist);
+    }
+
     public void setTrack(Track track, java.util.List<Track> playlist) {
         this.track = track;
         this.currentPlaylist = playlist;
