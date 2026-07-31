@@ -10,6 +10,9 @@ import javafx.scene.control.TextField;
 import javafx.stage.Stage;
 import models.Library;
 import models.Track;
+import commands.AddTrackCommand;
+import commands.Command;
+import commands.CommandManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -30,7 +33,7 @@ public class AddTrackController {
     @FXML private CheckBox chkFavourite;
     @FXML private CheckBox chkExplicit;
     @FXML private Button btnCancel;
-    @FXML private Button btnSave;
+
 
     private Track trackAdded = null; // Rappresenta la nuova traccia
 
@@ -56,7 +59,7 @@ public class AddTrackController {
         if (isInputValid()) {
 
             // Vengono estratti i dati dai campi del form
-            String pathname = txtPathname.getText();
+            String pathname = txtPathname.getText().trim();
             String name = txtName.getText();
             String artist = txtArtist.getText();
             String album = txtAlbum.getText();
@@ -65,14 +68,15 @@ public class AddTrackController {
             boolean explicit = chkExplicit.isSelected();
 
             // Viene convertito il contenuto nei campi year e duration da String a Integer
-            int year = Integer.parseInt(txtYear.getText());
-            int duration = Integer.parseInt(txtDuration.getText());
+            int year = Integer.parseInt(txtYear.getText().trim());
+            int duration = Integer.parseInt(txtDuration.getText().trim());
 
             // Creazione della nuova traccia
             trackAdded = new Track(pathname, name, artist, album, genre, year, favourite, explicit, duration);
 
             // Aggiunta alla libreria
-            Library.getInstance().addTrack(trackAdded);
+            Command addCmd = new AddTrackCommand(Library.getInstance(), trackAdded);
+            CommandManager.getInstance().executeCommand(addCmd);
 
             // Chiusura della modale
             closeStage();
@@ -179,6 +183,7 @@ public class AddTrackController {
                 removeBorderRed(txtDuration);
             } catch (NumberFormatException e) {
                 errorMessages.add("La durata deve essere un numero intero (in secondi)!\n");
+                setBorderRed(txtDuration);
             }
         }
 
@@ -195,4 +200,5 @@ public class AddTrackController {
             return false;
         }
     }
+
 }

@@ -1,16 +1,30 @@
 package controllers;
 
+import javafx.animation.Animation;
+import javafx.animation.KeyFrame;
+import javafx.animation.Timeline;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.Slider;
-import javafx.scene.control.TableColumn;
+import javafx.util.Duration;
+import models.Playlist;
 import models.Track;
+import observer.PlaylistObserver;
 
-public class PlayerController {
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Random;
+import java.util.function.Consumer;
+
+public class PlayerController implements PlaylistObserver {
     @FXML
-    private TableColumn<Track, Void> actionsColumn;
+    private Button loopbutton;
+
+    @FXML
+    private Button shufflebutton;
+
     @FXML
     private Button statusButton;
 
@@ -21,11 +35,127 @@ public class PlayerController {
     private Label tnameLbl;
 
     @FXML
-    private Label durationLbl;;
+    private Label durationLbl;
 
+    @FXML
+    private Label currentTime;
+
+    // Modifica per shuffle
+    private List<Integer> playbackHistory = new ArrayList<>();
+
+
+    private Timeline timeline;
+    private int seconds = 0;
     private Track track;
     private java.util.List<Track> currentPlaylist; // Lista delle canzoni
     private int currentIndex; // Posizione della canzone attuale
+
+    // Playlist di dominio effettivamente osservata (null se si riproduce dalla libreria,
+    // che non supporta il riordino delle tracce). Permette al player di restare sincronizzato
+    // con l'ordine reale anche se la playlist viene modificata mentre è in riproduzione.
+    private Playlist sourcePlaylist;
+
+    private boolean isLoopActive = false;
+    private boolean isShuffleActive = false;
+
+    private Consumer<Track> onTrackChanged;
+
+    public void setOnTrackChanged(Consumer<Track> callback) {
+        this.onTrackChanged = callback;
+    }
+
+    public void syncCurrentIndex() {
+        if (track != null && currentPlaylist != null) {
+            int idx = currentPlaylist.indexOf(track);
+            if (idx >= 0) currentIndex = idx;
+        }
+    }
+
+    /**
+     * Notificato da {@link Playlist} quando il suo contenuto cambia (aggiunta,
+     * rimozione o riordino di tracce). Riallinea l'indice della traccia
+     * attualmente in riproduzione, così che i comandi di skip restino coerenti
+     * con l'ordine reale della playlist anche se questa è stata modificata
+     * mentre era in riproduzione.
+     *
+     * @param playlist la playlist osservata che è cambiata
+     */
+    @Override
+    public void onPlaylistChanged(Playlist playlist) {
+        syncCurrentIndex();
+    }
+
+    /**
+     * Smette di osservare la playlist di dominio eventualmente registrata,
+     * per evitare che questo controller resti agganciato come osservatore
+     * dopo che la view del player è stata sostituita.
+     */
+    public void stopObserving() {
+        if (sourcePlaylist != null) {
+            sourcePlaylist.removeObserver(this);
+            sourcePlaylist = null;
+        }
+    }
+
+    /**
+     * Per il {@link PlayerController} viene inizializzata una Timeline, al
+     * fine di gestire la riproduzione simulata della traccia selezionata
+     */
+    @FXML
+    public void initialize() {
+
+            timeline = new Timeline(
+                    new KeyFrame(Duration.seconds(1), new javafx.event.EventHandler<javafx.event.ActionEvent>() {
+                        @Override
+                        public void handle(javafx.event.ActionEvent event) {
+                            // 1. Aggiorna i secondi
+                            seconds++;
+                            currentTime.setText(durationFormatter(seconds));
+                            progressSlider.setValue(seconds);
+
+                            // 2. LOGICA FINE CANZONE AUTOMATICA
+                            if (track != null && seconds >= track.getDuration()) {
+
+                                if (isLoopActive) {
+                                    // Caso 1: Il LOOP è attivo -> La canzone ricomincia da capo
+                                    seconds = 0;
+                                    currentTime.setText("00:00");
+                                    progressSlider.setValue(0);
+                                    System.out.println("Loop attivo: la canzone ricomincia da capo.");
+                                } else {
+                                    // Caso 2: Il LOOP NON è attivo -> Passa alla prossima
+                                    System.out.println("Canzone finita, passo alla traccia successiva.");
+                                    handleNext(null);
+                                }
+                            }
+                        }
+                    })
+            );
+            timeline.setCycleCount(Animation.INDEFINITE);
+            progressSlider.valueProperty().addListener((obs, oldVal, newVal) -> {
+            updateUI(newVal.doubleValue());
+            seconds=newVal.intValue();
+
+        });
+        progressSlider.setOnMousePressed(e -> {
+            timeline.pause();
+        });
+
+        progressSlider.setOnMouseReleased(e -> {
+            seconds = (int) progressSlider.getValue();
+            timeline.play();
+        });
+
+
+        }
+
+    private void updateUI(double v) {
+        progressSlider.setValue(v);
+        currentTime.setText(durationFormatter((int) v));
+
+
+    }
+
 
     /**
      * Serve a impostare i parametri da visualizzare durante la riproduzione,
@@ -33,48 +163,157 @@ public class PlayerController {
      * * @param track la traccia corrente
      * @param playlist l'intera lista delle tracce visualizzata nella tabella
      */
+    /**
+     * Come {@link #setTrack(Track, List)}, ma registra il controller come
+     * osservatore della playlist di dominio da cui proviene la riproduzione,
+     * così da restare sincronizzato se questa viene modificata (es. riordino
+     * delle tracce) mentre è in riproduzione.
+     *
+     * @param track la traccia corrente
+     * @param playlist l'intera lista delle tracce visualizzata nella tabella
+     * @param sourcePlaylist la playlist di dominio da osservare, null se si riproduce dalla libreria
+     */
+    public void setTrack(Track track, java.util.List<Track> playlist, Playlist sourcePlaylist) {
+        stopObserving();
+        this.sourcePlaylist = sourcePlaylist;
+        if (sourcePlaylist != null) {
+            sourcePlaylist.addObserver(this);
+        }
+        setTrack(track, playlist);
+    }
+
     public void setTrack(Track track, java.util.List<Track> playlist) {
         this.track = track;
         this.currentPlaylist = playlist;
         this.currentIndex = playlist.indexOf(track); // Trova in che posizione siamo
-
-        this.tnameLbl.setText(track.getName());
+        this.tnameLbl.setText("🎵   " + track.getName());
         this.durationLbl.setText(durationFormatter(track.getDuration()));
-        this.statusButton.setText("Play"); // Resetta il bottone se cambia la canzone
+        this.statusButton.setText("⏸"); // Resetta il bottone se cambia la canzone
+        seconds = 0;
+        currentTime.setText("00:00");
+        progressSlider.setMin(0);
+        progressSlider.setMax(track.getDuration());
+        timeline.play();
+        if (onTrackChanged != null) {
+            onTrackChanged.accept(track);
+        }
     }
 
     @FXML
     public void handlePrev(ActionEvent event) {
-        if (currentPlaylist != null && !currentPlaylist.isEmpty()) {
-            currentIndex--;
-            if (currentIndex < 0) {
-                currentIndex = currentPlaylist.size() - 1; // Se sei alla prima, riparti dall'ultima
+        timeline.stop();
+        progressSlider.setValue(0);
+
+        // Modifica Francesca per shuffle all'indietro
+
+        // RIPRODUZIONE CASUALE DELLE CANZONI (francesca)
+        if (isShuffleActive) {
+            // Controlliamo se c'è effettivamente una canzone precedente nella cronologia
+            if (!playbackHistory.isEmpty()) {
+                // Prendi l'ultimo indice salvato nella cronologia e rimuovilo
+                currentIndex = playbackHistory.remove(playbackHistory.size() - 1);
+            } else {
+                // Se la cronologia è vuota, significa che siamo all'inizio dello shuffle.
+                // Possiamo generare un indice a caso o semplicemente dire che siamo all'inizio.
+                Random random = new Random();
+                currentIndex = random.nextInt(currentPlaylist.size());
             }
-            // Richiama setTrack con la nuova canzone per aggiornare la UI
-            setTrack(currentPlaylist.get(currentIndex), currentPlaylist);
+        } else {
+            // RIPRODUZIONE NORMALE: Va alla traccia precedente
+            currentIndex--;
+
+            // Se scendiamo sotto l'inizio della playlist (indice minore di 0) vado all'ultima canzone della playlist
+            if (currentIndex < 0) {
+                    currentIndex = currentPlaylist.size() - 1;
+
+            }
         }
+
+        setTrack(currentPlaylist.get(currentIndex), currentPlaylist);
     }
+
+        /*
+        // RIPRODUZIONE CASUALE DELLE CANZONI (francesca)
+
+        if (isShuffleActive) {
+            // RIPRODUZIONE CASUALE: Anche andando indietro, genera un indice a caso
+            Random random = new Random();
+            currentIndex = random.nextInt(currentPlaylist.size());
+        } else {
+
+            // RIPRODUZIONE NORMALE: Va alla traccia precedente
+            currentIndex--;
+
+            // Se scendiamo sotto l'inizio della playlist (indice minore di 0)...
+            if (currentIndex < 0) {
+                if (isLoopActive) {
+                    // Se il LOOP è attivo, ricomincia dall'ultima canzone della playlist
+                    currentIndex = currentPlaylist.size() - 1;
+                } else {
+                    // Altrimenti si ferma alla prima canzone (indice 0) o resetta
+                    currentIndex = 0;
+                    System.out.println("Sei già all'inizio della playlist.");
+                    return;
+                }
+            }
+        }
+
+        setTrack(currentPlaylist.get(currentIndex), currentPlaylist);
+
+    }*/
 
     @FXML
     public void handleNext(ActionEvent event) {
-        if (currentPlaylist != null && !currentPlaylist.isEmpty()) {
+        timeline.stop(); // viene fermata la Timeline
+
+        progressSlider.setValue(0);
+
+
+        // RIPRODUZIONE CASUALE DELLE CANZONI (francesca)
+
+        if (isShuffleActive) {
+
+            // Cambio per shuffle all'indietro
+
+            // PRIMA di cambiare traccia, salviamo quella attuale nella cronologia
+            playbackHistory.add(currentIndex);
+
+            // RIPRODUZIONE CASUALE: Genera un indice a caso tra 0 e la fine della playlist
+            Random random = new Random();
+            currentIndex = random.nextInt(currentPlaylist.size());
+        } else {
+
+            // RIPRODUZIONE NORMALE: Va alla traccia successiva
             currentIndex++;
+
+            // Se arriviamo alla fine della playlist...
             if (currentIndex >= currentPlaylist.size()) {
-                currentIndex = 0; // Se sei all'ultima, riparti dalla prima
+                currentIndex = 0;
+                /*if (isLoopActive) {
+                    // Se il LOOP è attivo, ricomincia dalla prima canzone (indice 0)
+                    currentIndex = 0;
+                } else {
+                    // Altrimenti si ferma all'ultima canzone o resetta senza riprodurre
+                    currentIndex = currentPlaylist.size() - 1;
+                    System.out.println("Playlist terminata.");
+                    return;
+                }*/
             }
-            // Richiama setTrack con la nuova canzone per aggiornare la UI
-            setTrack(currentPlaylist.get(currentIndex), currentPlaylist);
         }
+
+        setTrack(currentPlaylist.get(currentIndex), currentPlaylist);
     }
     /**
      * Attualmente serve per cambiare visivamente lo stato del bottone
      * @param actionEvent è l'evento che genera il cambio di stato (la pressione del pulsante "Play"|"Pause")
      */
     public void handleStatus(ActionEvent actionEvent) {
-        if (statusButton.getText().equals("Play")){
-            statusButton.setText("Pause");
-        } else if (statusButton.getText().equals("Pause")) {
-            statusButton.setText("Play");
+        if (statusButton.getText().equals("▶")){
+            statusButton.setText("⏸");
+            timeline.play();
+        } else if (statusButton.getText().equals("⏸")) {
+            statusButton.setText("▶");
+            timeline.pause();
         }
     }
 
@@ -87,6 +326,34 @@ public class PlayerController {
     public String durationFormatter(int seconds) {
         int minutes = seconds / 60; // corrisponde al lato dei minuti "'MM':SS"
         int secondsLeft = seconds % 60; // corrsisponde al lato dei secondi "MM:'SS'"
-        return String.format("%d:%02d", minutes, secondsLeft);
+        return String.format("%02d:%02d", minutes, secondsLeft);
     }
+
+    // Francesca
+    @FXML
+    void onhandleloop(ActionEvent event) {
+        isLoopActive = !isLoopActive;
+
+        if (isLoopActive) {
+            // Colore quando è SELEZIONATO
+            loopbutton.setStyle("-fx-background-color: -app-surface-active; -fx-background-radius: 5;");
+        } else {
+            // Torna TRASPARENTE quando viene deselezionato
+            loopbutton.setStyle("-fx-background-color: transparent;");
+        }
+    }
+
+
+    // Francesca
+    @FXML
+    void onhandleshuffle(ActionEvent event) {
+        isShuffleActive = !isShuffleActive;
+
+        if (isShuffleActive) {
+            shufflebutton.setStyle("-fx-background-color: -app-surface-active; -fx-background-radius: 5;");
+        } else {
+            shufflebutton.setStyle("-fx-background-color: transparent;");
+        }
+    }
+
 }

@@ -4,6 +4,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Test unitari della classe {@link Track}: inizializzazione tramite
+ * costruttore, mutazione tramite setter e identita' basata sull'id generato
+ * (equals/hashCode), inclusa la robustezza con campi nulli.
+ *
+ * @version 1.0
+ */
 public class TrackTest {
 
     private Track trackBase;
@@ -34,6 +41,16 @@ public class TrackTest {
     }
 
     @Test
+    public void constructor_ShouldGenerateNonNullId() {
+        assertNotNull(trackBase.getId(), "Il costruttore deve generare un id non nullo");
+    }
+
+    @Test
+    public void constructor_ShouldStartWithZeroTimesListened() {
+        assertEquals(0, trackBase.getTimesListened(), "Una nuova traccia parte da 0 ascolti");
+    }
+
+    @Test
     public void setters_ShouldModifyStateCorrectly_WhenNewValuesArePassed() {
         trackBase.setName("Nuovo Titolo");
         trackBase.setYear(2026);
@@ -47,41 +64,63 @@ public class TrackTest {
     }
 
     @Test
-    public void equals_ShouldReturnTrue_WhenTracksAreLogicallyIdentical() {
-        Track trackIdentica = new Track("C:/music/song1.mp3", "Canzone Figa", "Artista Famoso", "Album1", "Pop", 2023, true, true, 215);
-        assertTrue(trackBase.equals(trackIdentica), "Due tracce con gli stessi identici campi devono essere uguali");
+    public void setTimesListened_ShouldIncrementByOne() {
+        trackBase.setTimesListened();
+        trackBase.setTimesListened();
+        assertEquals(2, trackBase.getTimesListened(), "Ogni chiamata incrementa il contatore di 1");
     }
 
     // =========================================================================
-    // 2. EXCEPTION & ROBUSTEZZA TESTS (Cammini alternativi e Valori Limite)
+    // 2. IDENTITÀ (equals/hashCode basati sull'id univoco della traccia)
     // =========================================================================
+    // Nota: il costruttore genera un id UUID univoco e non esiste un setter per
+    // l'id, quindi due tracce costruite separatamente non sono mai uguali.
+    // L'uguaglianza coincide di fatto con l'identità (stesso id).
 
     @Test
-    public void equals_ShouldReturnFalse_WhenYearIsDifferent() {
-        // Valore limite (BVA): stessa traccia ma anno modificato di 1 unità
-        Track trackModificata = new Track("C:/music/song1.mp3", "Canzone Figa", "Artista Famoso", "Album1", "Pop", 2024, true, true, 215);
-        assertFalse(trackBase.equals(trackModificata), "L'anno differente deve rendere le tracce disuguali");
+    public void equals_ShouldReturnTrue_WhenSameInstance() {
+        assertTrue(trackBase.equals(trackBase), "Una traccia deve essere uguale a se stessa (riflessività)");
     }
 
     @Test
-    public void equals_ShouldReturnFalse_WhenDurationIsDifferent() {
-        // Valore limite (BVA): stessa traccia ma durata modificata di 1 secondo
-        Track trackModificata = new Track("C:/music/song1.mp3", "Canzone Figa", "Artista Famoso", "Album1", "Pop", 2023, true, true, 216);
-        assertFalse(trackBase.equals(trackModificata), "La durata differente deve rendere le tracce disuguali");
+    public void equals_ShouldReturnFalse_WhenDistinctInstancesEvenWithSameFields() {
+        // Stessi campi ma id diverso (generato dal costruttore) => non uguali
+        Track trackGemella = new Track("C:/music/song1.mp3", "Canzone Figa", "Artista Famoso", "Album1", "Pop", 2023, true, true, 215);
+        assertNotEquals(trackBase, trackGemella, "Due tracce distinte hanno id diversi e non devono essere uguali");
     }
 
     @Test
-    public void equals_ShouldReturnFalse_WhenStringsAreDifferent() {
-        // Classe di equivalenza input non valido per il confronto
-        Track trackModificata = new Track("C:/music/song1.mp3", "Canzone Diversa", "Artista Famoso", "Album1", "Pop", 2023, true, true, 215);
-        assertFalse(trackBase.equals(trackModificata), "Il nome differente deve rendere le tracce disuguali");
+    public void equals_ShouldReturnFalse_WhenComparedToNull() {
+        assertNotEquals(null, trackBase, "Una traccia non deve mai essere uguale a null");
     }
 
     @Test
-    public void equals_ShouldNotCrash_WhenFieldsAreNull() {
-        // Gestione della robustezza in caso di valori nulli latenti (No crash atteso)
+    public void equals_ShouldReturnFalse_WhenComparedToDifferentType() {
+        assertNotEquals("non una traccia", trackBase, "Una traccia non deve essere uguale a un oggetto di altro tipo");
+    }
+
+    @Test
+    public void equals_ShouldNotThrow_WhenFieldsAreNull() {
+        // Robustezza: i campi null non devono causare NullPointerException nel confronto
         Track trackNull1 = new Track(null, null, null, null, null, 2023, true, true, 215);
         Track trackNull2 = new Track(null, null, null, null, null, 2023, true, true, 215);
-        assertTrue(trackNull1.equals(trackNull2), "Il metodo deve gestire i campi null senza sollevare NullPointerException");
+        assertAll("Il confronto con campi null non deve sollevare eccezioni",
+                () -> assertDoesNotThrow(() -> trackNull1.equals(trackNull2)),
+                () -> assertTrue(trackNull1.equals(trackNull1), "Riflessività valida anche con campi null"),
+                () -> assertNotEquals(trackNull1, trackNull2, "id diversi => non uguali anche con campi null")
+        );
+    }
+
+    @Test
+    public void hashCode_ShouldBeConsistent_AcrossMultipleCalls() {
+        assertEquals(trackBase.hashCode(), trackBase.hashCode(), "hashCode deve essere stabile per la stessa istanza");
+    }
+
+    @Test
+    public void hashCode_ShouldBeConsistentWithEquals_ForSameInstance() {
+        Track stessoRiferimento = trackBase;
+        assertTrue(trackBase.equals(stessoRiferimento));
+        assertEquals(trackBase.hashCode(), stessoRiferimento.hashCode(),
+                "Oggetti uguali devono avere lo stesso hashCode");
     }
 }

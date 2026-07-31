@@ -11,12 +11,15 @@ module emmepitre.com.emmepitre {
     requires com.almasb.fxgl.all;
     requires com.fasterxml.jackson.databind;
     requires atlantafx.base;
+    requires javafx.media;
+    requires java.desktop;
 
     opens controllers to javafx.fxml;
     opens emmepitre.com.emmepitre to javafx.fxml;
 
     // LA RIGA CORRETTA: Apre il pacchetto models sia a Jackson che a JavaFX in un colpo solo
     opens models to com.fasterxml.jackson.databind, javafx.base;
+
 
     exports emmepitre.com.emmepitre;
 }

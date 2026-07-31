@@ -15,18 +15,34 @@ import models.Track;
  */
 public class ModifyController {
 
-    @FXML private Button btnAnnulla;
-    @FXML private Button btnSalva;
-    @FXML private CheckBox chkExplicit;
-    @FXML private CheckBox chkFavourite;
-    @FXML private ComboBox<String> cmbGenre;
-    @FXML private TextField txtAlbum;
-    @FXML private TextField txtArtist;
-    @FXML private TextField txtDuration;
-    @FXML private TextField txtName;
-    @FXML private TextField txtYear;
+    @FXML
+    private Button btnSalva;
+    @FXML
+    private CheckBox chkExplicit;
+    @FXML
+    private CheckBox chkFavourite;
+    @FXML
+    private ComboBox<String> cmbGenre;
+    @FXML
+    private TextField txtAlbum;
+    @FXML
+    private TextField txtArtist;
+    @FXML
+    private TextField txtDuration;
+    @FXML
+    private TextField txtName;
+    @FXML
+    private TextField txtYear;
+
+    @FXML
+    private CheckBox chkNewRelease;
 
     private Track track;
+    private Runnable onModifyDone;
+
+    public void setOnModifyDone(Runnable onModifyDone) {
+        this.onModifyDone = onModifyDone;
+    }
 
     /**
      * Inizializza il controller. Questo metodo viene chiamato automaticamente
@@ -64,6 +80,7 @@ public class ModifyController {
 
         chkExplicit.setSelected(track.isExplicit());
         chkFavourite.setSelected(track.isFavourite());
+        chkNewRelease.setSelected(track.isNewRelease());
 
         cmbGenre.setValue(track.getGenre());
     }
@@ -87,13 +104,17 @@ public class ModifyController {
         track.setExplicit(chkExplicit.isSelected());
         track.setFavourite(chkFavourite.isSelected());
 
+        track.setNewRelease(chkNewRelease.isSelected());
+
         track.setYear(Integer.parseInt(txtYear.getText()));
         track.setDuration(Integer.parseInt(txtDuration.getText()));
 
         models.Library.getInstance().sync();
 
         models.Library.getInstance().notifyObservers();
-
+        if (onModifyDone != null) {
+            onModifyDone.run();
+        }
         closeWindow();
     }
 
@@ -178,4 +199,6 @@ public class ModifyController {
         }
     }
 }
+
+
 

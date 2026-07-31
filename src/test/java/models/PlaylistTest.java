@@ -4,6 +4,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Test unitari della classe {@link Playlist}: costruzione e validazione del
+ * nome, gestione delle tracce (aggiunta, rimozione, riordino), incapsulamento
+ * della lista restituita e identita' basata sul nome (equals/hashCode).
+ *
+ * @version 1.0
+ */
 public class PlaylistTest {
 
     private Playlist playlistTest;
@@ -105,5 +112,72 @@ public class PlaylistTest {
         assertThrows(UnsupportedOperationException.class, () -> {
             playlistTest.getTracks().add(new Track());
         }, "La lista restituita deve essere rigidamente non modificabile per mantenere l'incapsulamento");
+    }
+
+    @Test
+    public void containsTrack_ShouldReturnFalse_WhenTrackNotPresent() {
+        assertFalse(playlistTest.containsTrack(tracciaValida),
+                "Una playlist vuota non contiene la traccia");
+    }
+
+    // =========================================================================
+    // TEST RIORDINO TRACCE (reorderTracks)
+    // =========================================================================
+
+    @Test
+    public void reorderTracks_ShouldChangeOrder_WhenNewOrderProvided() {
+        Track a = new Track("p1", "A", "Art", "Alb", "Pop", 2020, false, false, 100);
+        Track b = new Track("p2", "B", "Art", "Alb", "Pop", 2020, false, false, 100);
+        Track c = new Track("p3", "C", "Art", "Alb", "Pop", 2020, false, false, 100);
+        playlistTest.addTrack(a);
+        playlistTest.addTrack(b);
+        playlistTest.addTrack(c);
+
+        // Inverte l'ordine: [a, b, c] -> [c, b, a]
+        playlistTest.reorderTracks(java.util.List.of(c, b, a));
+
+        assertAll("Verifica nuovo ordine e integrità",
+                () -> assertEquals(3, playlistTest.getSize()),
+                () -> assertEquals(c, playlistTest.getTracks().get(0)),
+                () -> assertEquals(b, playlistTest.getTracks().get(1)),
+                () -> assertEquals(a, playlistTest.getTracks().get(2))
+        );
+    }
+
+    @Test
+    public void reorderTracks_ShouldReplaceContent_WithProvidedList() {
+        playlistTest.addTrack(tracciaValida);
+        Track altra = new Track("p9", "Altra", "Art", "Alb", "Rock", 2021, false, false, 200);
+
+        playlistTest.reorderTracks(java.util.List.of(altra));
+
+        assertAll("La lista interna riflette esattamente il nuovo ordine passato",
+                () -> assertEquals(1, playlistTest.getSize()),
+                () -> assertTrue(playlistTest.containsTrack(altra)),
+                () -> assertFalse(playlistTest.containsTrack(tracciaValida))
+        );
+    }
+
+    // =========================================================================
+    // TEST IDENTITÀ PLAYLIST (equals/hashCode basati sul nome)
+    // =========================================================================
+
+    @Test
+    public void equals_ShouldReturnTrue_WhenNamesAreEqual() {
+        Playlist stessoNome = new Playlist("Hit del Momento");
+        assertEquals(playlistTest, stessoNome, "Due playlist con lo stesso nome sono uguali");
+    }
+
+    @Test
+    public void equals_ShouldReturnFalse_WhenNamesDiffer() {
+        Playlist altroNome = new Playlist("Relax");
+        assertNotEquals(playlistTest, altroNome, "Nomi diversi rendono le playlist disuguali");
+    }
+
+    @Test
+    public void hashCode_ShouldMatch_WhenNamesAreEqual() {
+        Playlist stessoNome = new Playlist("Hit del Momento");
+        assertEquals(playlistTest.hashCode(), stessoNome.hashCode(),
+                "Playlist uguali (stesso nome) devono avere lo stesso hashCode");
     }
 }

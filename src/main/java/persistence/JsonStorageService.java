@@ -1,4 +1,4 @@
-package services;
+package persistence;
 
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
@@ -10,6 +10,13 @@ import java.util.ArrayList;
 import java.util.List;
 import com.fasterxml.jackson.databind.DeserializationFeature;
 
+/**
+ * Servizio di persistenza che legge e scrive tracce e playlist su file JSON
+ * tramite Jackson. La classe non mantiene alcuno stato interno oltre al
+ * mapper: ogni chiamata legge o scrive direttamente sui file di destinazione.
+ *
+ * @version 1.0
+ */
 public class JsonStorageService {
 
     private final String FILE_PATH = "jsonfiles/tracks.json";
@@ -19,6 +26,12 @@ public class JsonStorageService {
             .configure(DeserializationFeature.FAIL_ON_UNKNOWN_PROPERTIES, false);
     // Nessuna variabile "cache" interna. Il service non ha "stato".
 
+    /**
+     * Carica l'elenco delle tracce dal file JSON della libreria.
+     *
+     * @return la {@link List} di {@link Track} lette dal file, oppure una lista
+     *         vuota se il file non esiste o si verifica un errore di lettura
+     */
     public List<Track> loadFromFile() {
         try {
             File file = new File(FILE_PATH);
@@ -38,6 +51,11 @@ public class JsonStorageService {
         }
     }
 
+    /**
+     * Sovrascrive il file JSON della libreria con l'elenco di tracce fornito.
+     *
+     * @param tracksToSave la {@link List} di {@link Track} da salvare su file
+     */
     public void saveToFile(List<Track> tracksToSave) {
         try {
             mapper.writerWithDefaultPrettyPrinter()
@@ -50,6 +68,12 @@ public class JsonStorageService {
     // SEZIONE PLAYLIST
     // ==========================================
 
+    /**
+     * Carica l'elenco delle playlist dal relativo file JSON.
+     *
+     * @return la {@link List} di {@link Playlist} lette dal file, oppure una lista
+     *         vuota se il file non esiste o si verifica un errore di lettura
+     */
     public List<Playlist> loadPlaylistsFromFile() {
         try {
             File file = new File(PLAYLISTS_FILE);
@@ -70,6 +94,11 @@ public class JsonStorageService {
         }
     }
 
+    /**
+     * Sovrascrive il file JSON delle playlist con l'elenco fornito.
+     *
+     * @param playlistsToSave la {@link List} di {@link Playlist} da salvare su file
+     */
     public void savePlaylistsToFile(List<Playlist> playlistsToSave) {
         try {
             mapper.writerWithDefaultPrettyPrinter()

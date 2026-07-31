@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.VBox?>
+
+<VBox xmlns="http://javafx.com/javafx/21"
+      xmlns:fx="http://javafx.com/fxml/1"
+      fx:controller="controllers.AddToPlaylistsModalController"
+      spacing="14"
+      prefWidth="400"
+      prefHeight="440"
+      style="-fx-background-color: -app-bg;">
+
+    <padding>
+        <Insets top="20" right="20" bottom="20" left="20"/>
+    </padding>
+
+    <!-- Titolo -->
+    <Label text="Aggiungi a playlist"
+           style="-fx-font-size: 22px; -fx-font-weight: bold;"/>
+
+    <!-- Info traccia -->
+    <Label fx:id="trackInfoLabel"
+           text=""
+           style="-fx-font-size: 13px; -fx-font-style: italic; -fx-text-fill: #555555;
+                  -fx-padding: 0 0 4 0;"/>
+
+    <Label text="Seleziona le playlist:"
+           style="-fx-font-weight: bold; -fx-font-size: 13px;"/>
+
+    <!-- Lista playlist con checkbox -->
+    <ListView fx:id="playlistListView"
+              VBox.vgrow="ALWAYS"
+              prefHeight="300"
+              style="-fx-background-color: -app-bg;
+                     -fx-border-color: -app-border;
+                     -fx-border-radius: 4;
+                     -fx-background-radius: 4;"/>
+
+    <!-- Pulsanti -->
+    <HBox spacing="10" alignment="CENTER_RIGHT">
+        <Button text="Annulla"
+                onAction="#onCancel"
+                prefWidth="100"
+                style="-fx-background-color: #aaaaaa; -fx-text-fill: white; -fx-cursor: hand;"/>
+        <Button text="Salva"
+                onAction="#onSave"
+                prefWidth="100"
+                style="-fx-background-color: #1DB954; -fx-text-fill: white;
+                       -fx-font-weight: bold; -fx-cursor: hand;"/>
+    </HBox>
+
+</VBox>

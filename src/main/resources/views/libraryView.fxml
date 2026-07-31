@@ -2,54 +2,191 @@
 
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.ListView?>
 <?import javafx.scene.control.TableColumn?>
 <?import javafx.scene.control.TableView?>
 <?import javafx.scene.control.TextField?>
 <?import javafx.scene.layout.AnchorPane?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Region?>
+<?import javafx.scene.layout.StackPane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 
-<?import javafx.scene.layout.StackPane?>
-<AnchorPane maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="600.0" prefWidth="800.0" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.LibraryViewController">
-    <VBox maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" minHeight="-Infinity" minWidth="-Infinity" prefHeight="600.0" prefWidth="800.0" AnchorPane.bottomAnchor="0.0" AnchorPane.leftAnchor="0.0" AnchorPane.rightAnchor="0.0" AnchorPane.topAnchor="0.0">
-        <HBox fx:id="mainBar" alignment="CENTER_LEFT" prefHeight="25.0" prefWidth="200.0" spacing="10.0">
-            <Label fx:id="titleBar" alignment="CENTER" prefHeight="36.0" prefWidth="219.0" text="EmmePiTre" wrapText="true">
+<AnchorPane maxHeight="1.7976931348623157E308"
+            maxWidth="1.7976931348623157E308"
+            prefHeight="600.0"
+            prefWidth="800.0"
+            xmlns="http://javafx.com/javafx/21"
+            xmlns:fx="http://javafx.com/fxml/1"
+            fx:controller="controllers.LibraryViewController">
+
+    <VBox maxHeight="1.7976931348623157E308"
+          maxWidth="1.7976931348623157E308"
+          minHeight="-Infinity"
+          minWidth="-Infinity"
+          prefHeight="600.0"
+          prefWidth="800.0"
+          AnchorPane.bottomAnchor="0.0"
+          AnchorPane.leftAnchor="0.0"
+          AnchorPane.rightAnchor="0.0"
+          AnchorPane.topAnchor="0.0">
+
+        <!-- Barra superiore dell'applicazione -->
+        <HBox fx:id="mainBar"
+              alignment="CENTER_LEFT"
+              prefHeight="55.0"
+              spacing="10.0"
+              styleClass="top-bar">
+
+            <Label fx:id="titleBar"
+                   alignment="CENTER"
+                   prefHeight="36.0"
+                   prefWidth="150.0"
+                   text="EmmePiTre"
+                   styleClass="app-title"
+                   wrapText="true">
                 <font>
                     <Font name="System Bold Italic" size="25.0" />
                 </font>
             </Label>
-            <Region prefHeight="36.0" prefWidth="100.0" HBox.hgrow="ALWAYS" />
-            <TextField fx:id="researchBar" prefHeight="35.0" prefWidth="178.0" promptText="What vibes are we looking for?" />
-            <Button fx:id="createPlaylistButton" mnemonicParsing="false" onAction="#onCreatePlaylist" prefHeight="46.0" prefWidth="110.0" text="Create Playlist" />
 
-            <Button fx:id="addButton" mnemonicParsing="false" onAction="#onAddTrack" prefHeight="46.0" prefWidth="79.0" text="Add a Track" />
+            <Button fx:id="playCurrentButton"
+                    mnemonicParsing="false"
+                    onAction="#onPlayCurrent"
+                    prefHeight="36.0"
+                    styleClass="accent-button"
+                    text="▶ Play" />
+
+            <Region prefHeight="36.0"
+                    prefWidth="70.0"
+                    HBox.hgrow="ALWAYS" />
+
+            <Button fx:id="themeButton"
+                    mnemonicParsing="false"
+                    onAction="#onToggleTheme"
+                    prefHeight="35.0"
+                    text="🌙 Scuro" />
+
+            <Button fx:id="undoButton"
+                    disable="true"
+                    mnemonicParsing="false"
+                    onAction="#onUndo"
+                    prefHeight="35.0"
+                    text="↶ Undo" />
+
+            <Button fx:id="redoButton"
+                    disable="true"
+                    mnemonicParsing="false"
+                    onAction="#onRedo"
+                    prefHeight="35.0"
+                    text="Redo ↷" />
+
+            <TextField fx:id="researchBar"
+                       prefHeight="35.0"
+                       prefWidth="250.0"
+                       promptText="What vibes are we looking for?" />
+
+            <Button fx:id="createPlaylistButton"
+                    mnemonicParsing="false"
+                    onAction="#onCreatePlaylist"
+                    prefHeight="46.0"
+                    prefWidth="110.0"
+                    styleClass="accent-outline"
+                    text="Create Playlist" />
+
+            <Button fx:id="addButton"
+                    mnemonicParsing="false"
+                    onAction="#onAddTrack"
+                    prefHeight="46.0"
+                    prefWidth="140.0"
+                    styleClass="accent-button"
+                    text="Add a Track" />
         </HBox>
-        <TableView fx:id="trackList" prefHeight="200.0" prefWidth="200.0" VBox.vgrow="ALWAYS">
 
-            <columns>
-                <TableColumn fx:id="favouriteColumn" maxWidth="40.0" minWidth="40.0" prefWidth="40.0" />
+        <!-- Area principale: sidebar playlist + tabella tracce -->
+        <HBox VBox.vgrow="ALWAYS">
 
-                <TableColumn fx:id="titleColumn" prefWidth="75.0" text="Title" />
+            <!-- Sidebar laterale sinistra per le playlist -->
+            <VBox fx:id="playlistSidebar"
+                  prefWidth="200.0"
+                  minWidth="180.0"
+                  spacing="10.0"
+                  styleClass="sidebar">
 
-                <TableColumn fx:id="explicitColumn" maxWidth="40.0" minWidth="40.0" prefWidth="40.0" />
+                <Button text="🏠 Libreria"
+                        onAction="#onGoHome"
+                        prefWidth="176.0"
+                        styleClass="home-button" />
 
-                <TableColumn fx:id="authorColumn" prefWidth="75.0" text="Author" />
-                <TableColumn fx:id="albumColumn" prefWidth="75.0" text="Album" />
+                <Label text="Playlist"
+                       styleClass="sidebar-title" />
 
-                <TableColumn fx:id="yearColumn" prefWidth="60.0" text="Year" />
 
-                <TableColumn fx:id="genreColumn" prefWidth="75.0" text="Genre" />
-                <TableColumn fx:id="lengthColumn" prefWidth="75.0" text="Length" />
-                <TableColumn fx:id="actionsColumn" maxWidth="40.0" minWidth="40.0" prefWidth="40.0" resizable="false" />
-            </columns>
-            <columnResizePolicy>
-                <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
-            </columnResizePolicy>
-        </TableView>
-        <StackPane fx:id="rootPane"
-                   xmlns:fx="http://javafx.com/fxml">
-        </StackPane>
+                <ListView fx:id="sidebarPlaylistListView"
+                          prefWidth="180.0"
+                          prefHeight="500.0"
+                          VBox.vgrow="ALWAYS" />
+
+            </VBox>
+
+            <!-- Tabella principale della libreria -->
+            <TableView fx:id="trackList"
+                       prefHeight="200.0"
+                       prefWidth="600.0"
+                       HBox.hgrow="ALWAYS">
+
+                <columns>
+                    <TableColumn fx:id="favouriteColumn"
+                                 maxWidth="40.0"
+                                 minWidth="40.0"
+                                 prefWidth="40.0" />
+
+                    <TableColumn fx:id="titleColumn"
+                                 prefWidth="75.0"
+                                 text="Title" />
+
+                    <TableColumn fx:id="explicitColumn"
+                                 maxWidth="40.0"
+                                 minWidth="40.0"
+                                 prefWidth="40.0" />
+
+                    <TableColumn fx:id="authorColumn"
+                                 prefWidth="75.0"
+                                 text="Author" />
+
+                    <TableColumn fx:id="albumColumn"
+                                 prefWidth="75.0"
+                                 text="Album" />
+
+                    <TableColumn fx:id="yearColumn"
+                                 prefWidth="60.0"
+                                 text="Year" />
+
+                    <TableColumn fx:id="genreColumn"
+                                 prefWidth="75.0"
+                                 text="Genre" />
+
+                    <TableColumn fx:id="lengthColumn"
+                                 prefWidth="75.0"
+                                 text="Length" />
+
+                    <TableColumn fx:id="actionsColumn"
+                                 maxWidth="40.0"
+                                 minWidth="40.0"
+                                 prefWidth="40.0"
+                                 resizable="false" />
+                </columns>
+
+                <columnResizePolicy>
+                    <TableView fx:constant="CONSTRAINED_RESIZE_POLICY" />
+                </columnResizePolicy>
+            </TableView>
+
+        </HBox>
+
+        <!-- Pane usato per eventuali modali o contenuti sovrapposti -->
+        <StackPane fx:id="rootPane" />
+
     </VBox>
 </AnchorPane>

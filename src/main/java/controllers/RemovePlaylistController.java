@@ -5,6 +5,9 @@ import javafx.scene.control.Label;
 import javafx.stage.Stage;
 import models.Playlist;
 import models.PlaylistManager;
+import commands.Command;
+import commands.CommandManager;
+import commands.RemovePlaylistCommand;
 
 /**
  * Controller JavaFX della modale di conferma eliminazione playlist.
@@ -49,7 +52,6 @@ public class RemovePlaylistController {
      * Se è presente una playlist selezionata, chiede al PlaylistManager
      * di eliminarla dalla collezione delle playlist e poi chiude la finestra.
      *
-     * @param nessun parametro in ingresso.
      * @return nessun valore di ritorno.
      * @throws IllegalArgumentException può essere lanciata da PlaylistManager.deletePlaylist(...)
      *                                  se la playlist da eliminare non è valida.
@@ -57,9 +59,11 @@ public class RemovePlaylistController {
     @FXML
     private void handleConfirmDelete() {
         if (playlistToRemove != null) {
-            // Elimina definitivamente la playlist selezionata.
-            // Le tracce contenute nella playlist non vengono eliminate dalla libreria principale.
-            PlaylistManager.getInstance().deletePlaylist(playlistToRemove);
+            // 1. Creiamo il comando passando la playlist da rimuovere
+            Command removePlaylistCmd = new RemovePlaylistCommand(playlistToRemove);
+
+            // 2. Chiediamo al CommandManager di eseguirlo e metterlo in cronologia
+            CommandManager.getInstance().executeCommand(removePlaylistCmd);
         }
 
         // Dopo la conferma, la modale viene chiusa.
@@ -72,7 +76,6 @@ public class RemovePlaylistController {
      * L'operazione di eliminazione viene annullata e la finestra viene chiusa
      * senza modificare lo stato delle playlist.
      *
-     * @param nessun parametro in ingresso.
      * @return nessun valore di ritorno.
      * @throws nessuna eccezione prevista.
      */
@@ -88,7 +91,6 @@ public class RemovePlaylistController {
      * Recupera lo Stage partendo dalla label presente nella scena e chiude
      * la finestra associata.
      *
-     * @param nessun parametro in ingresso.
      * @return nessun valore di ritorno.
      * @throws NullPointerException può verificarsi se playlistNameLabel o la scena associata sono null.
      */

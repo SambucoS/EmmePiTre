@@ -6,6 +6,7 @@ import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.stage.Stage;
+import util.Theme;
 public class PlayerLauncher extends Application{
 
     @Override
@@ -15,10 +16,12 @@ public class PlayerLauncher extends Application{
                     getClass().getResource("/views/libraryView.fxml")
             );
 
-            Scene scene = new Scene(root, 600, 400);
+            Scene scene = new Scene(root, 800, 600);
+            Theme.apply(scene); // applica tema e stylesheet prima del primo render
 
             primaryStage.setTitle("Media Player");
             primaryStage.setScene(scene);
+            primaryStage.setMaximized(true); // avvio a schermo intero
             primaryStage.show();
         }
 

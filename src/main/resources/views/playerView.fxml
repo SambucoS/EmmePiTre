@@ -3,41 +3,66 @@
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.Label?>
+<?import javafx.scene.control.Separator?>
 <?import javafx.scene.control.Slider?>
-<?import javafx.scene.layout.Region?>
+<?import javafx.scene.image.Image?>
+<?import javafx.scene.image.ImageView?>
 <?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Region?>
 <?import javafx.scene.layout.VBox?>
 
-<HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="700.0" spacing="15.0" xmlns="http://javafx.com/javafx/21"
-      style="-fx-border-color: black; -fx-border-width: 1px;" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.PlayerController">
+<HBox alignment="CENTER_LEFT" prefHeight="50.0" prefWidth="700.0" spacing="15.0" styleClass="player-bar" xmlns="http://javafx.com/javafx/21" xmlns:fx="http://javafx.com/fxml/1" fx:controller="controllers.PlayerController">
     <padding>
         <Insets bottom="10.0" left="15.0" right="15.0" top="10.0" />
     </padding>
     <children>
-
-        <Label fx:id="tnameLbl" text="Nome Traccia.mp3" prefWidth="150.0" />
+      <VBox>
+         <children>
+      
+              <Label fx:id="tnameLbl" prefWidth="150.0" text="Nome Traccia.mp3" />
+         </children>
+      </VBox>
+      <Button fx:id="shufflebutton" mnemonicParsing="false" onAction="#onhandleshuffle" style="-fx-background-color: transparent;">
+         <graphic>
+            <ImageView fitHeight="21.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/simple-shuffle-loop-icons-260nw-1432236425.jpg" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
 
         <Region HBox.hgrow="ALWAYS" />
 
-        <VBox alignment="CENTER" spacing="8.0" prefWidth="350.0">
+        <VBox alignment="CENTER" prefWidth="350.0" spacing="8.0">
             <children>
                 <HBox alignment="CENTER" spacing="15.0">
                     <Button fx:id="prevButton" onAction="#handlePrev" text="⏮ Prev" />
-                    <Button fx:id="statusButton" onAction="#handleStatus" text="Play" />
+                    <Button fx:id="statusButton" onAction="#handleStatus" text="⏸" />
                     <Button fx:id="nextButton" onAction="#handleNext" text="Next ⏭" />
                 </HBox>
                 <HBox alignment="CENTER" spacing="8.0">
                     <children>
-                        <Label text="00:00" />
+                        <Label fx:id="currentTime" text="00:00" />
                         <Slider fx:id="progressSlider" HBox.hgrow="ALWAYS" />
-                        <Label fx:id="durationLbl"/>
+                        <Label fx:id="durationLbl" />
                     </children>
                 </HBox>
             </children>
         </VBox>
 
         <Region HBox.hgrow="ALWAYS" />
-        <HBox alignment="CENTER" prefWidth="200.0"><Label text="Volume" alignment="CENTER_RIGHT" prefWidth="150.0" /> <Slider></Slider></HBox>
+      <Button fx:id="loopbutton" mnemonicParsing="false" onAction="#onhandleloop" prefHeight="19.0" prefWidth="12.0" style="-fx-background-color: transparent;">
+         <graphic>
+            <ImageView fitHeight="21.0" fitWidth="21.0" pickOnBounds="true" preserveRatio="true">
+               <image>
+                  <Image url="@../images/simple-shuffle-loop-icons-260nw-1432236425loop.jpg" />
+               </image>
+            </ImageView>
+         </graphic>
+      </Button>
+        <HBox alignment="CENTER" prefWidth="200.0"><Label alignment="CENTER_RIGHT" prefWidth="150.0" text="Volume" /> <Slider /></HBox>
+      <Separator orientation="VERTICAL" prefHeight="200.0" />
 
 
     </children>

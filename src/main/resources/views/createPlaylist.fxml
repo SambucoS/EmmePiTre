@@ -14,7 +14,7 @@
       alignment="CENTER"
       prefWidth="400"
       prefHeight="250"
-      style="-fx-background-color: #f7f7f7;">
+      style="-fx-background-color: -app-bg;">
 
     <padding>
         <Insets top="25" right="25" bottom="25" left="25"/>
@@ -28,7 +28,8 @@
 
     <TextField fx:id="playlistNameField"
                promptText="Nome playlist"
-               maxWidth="300"/>
+               maxWidth="300"
+               onAction="#handleCreatePlaylist"/>
 
     <Label fx:id="messageLabel"
            text=""
@@ -42,7 +43,13 @@
         <Button text="Crea"
                 onAction="#handleCreatePlaylist"
                 prefWidth="100"
+                defaultButton="true"
                 style="-fx-background-color: #6c5ce7; -fx-text-fill: white; -fx-font-weight: bold;"/>
+
+        <Button text="Playlist automatica"
+                onAction="#handleAutomaticPlaylist"
+                prefWidth="150"
+                style="-fx-background-color: #1DB954; -fx-text-fill: white; -fx-font-weight: bold;"/>
     </HBox>
 
 </VBox>

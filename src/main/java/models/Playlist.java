@@ -1,6 +1,5 @@
 package models;
 
-import interfaces.TrackList;
 
 import java.util.ArrayList;
 import java.util.Collections;
@@ -8,6 +7,7 @@ import java.util.List;
 import java.util.Objects;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonSetter;
+import observer.PlaylistObserver;
 
 /**
  * Classe modello che rappresenta una singola playlist.
@@ -27,6 +27,15 @@ public class Playlist implements TrackList {
      * Lista delle tracce contenute nella playlist.
      */
     private final List<Track> tracks;
+
+    private int timesListened;
+
+    /**
+     * Osservatori registrati per essere notificati quando cambia il contenuto
+     * della playlist (aggiunta, rimozione o riordino di tracce). Non viene
+     * serializzato su JSON: è uno stato puramente a runtime.
+     */
+    private final List<PlaylistObserver> observers = new ArrayList<>();
 
     /**
      * Costruttore vuoto obbligatorio per la deserializzazione JSON tramite Jackson.
@@ -53,6 +62,7 @@ public class Playlist implements TrackList {
     public Playlist(String name) {
         setName(name);
         this.tracks = new ArrayList<>(); // Crea una lista vuota di tracce
+        this.timesListened = 0;
     }
 
     /**
@@ -105,6 +115,40 @@ public class Playlist implements TrackList {
         this.name = name.trim(); // Salva il nome ripulito dagli spazi inutili
     }
 
+    public int getTimesListened(){ return this.timesListened;}
+    public void setTimesListened(){ this.timesListened ++;}
+
+    /**
+     * Registra un osservatore che verrà notificato ad ogni cambiamento
+     * del contenuto di questa playlist.
+     *
+     * @param observer osservatore da registrare.
+     */
+    @JsonIgnore
+    public void addObserver(PlaylistObserver observer) {
+        observers.add(observer);
+    }
+
+    /**
+     * Rimuove un osservatore precedentemente registrato, così da non
+     * riceverne più le notifiche.
+     *
+     * @param observer osservatore da rimuovere.
+     */
+    public void removeObserver(PlaylistObserver observer) {
+        observers.remove(observer);
+    }
+
+    /**
+     * Notifica tutti gli osservatori registrati che il contenuto della
+     * playlist è cambiato.
+     */
+    private void notifyObservers() {
+        for (PlaylistObserver observer : observers) {
+            observer.onPlaylistChanged(this);
+        }
+    }
+
     /**
      * Aggiunge una traccia alla playlist.
      *
@@ -119,6 +163,7 @@ public class Playlist implements TrackList {
         }
 
         tracks.add(track);
+        notifyObservers();
     }
 
     /**
@@ -138,6 +183,7 @@ public class Playlist implements TrackList {
         }
 
         tracks.remove(track);
+        notifyObservers();
     }
 
     /**
@@ -178,6 +224,12 @@ public class Playlist implements TrackList {
      */
     public boolean containsTrack(Track track) {
         return tracks.contains(track);
+    }
+
+    public void reorderTracks(List<Track> newOrder) {
+        tracks.clear();
+        tracks.addAll(newOrder);
+        notifyObservers();
     }
 
     /**
