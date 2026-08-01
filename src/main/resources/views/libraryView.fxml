@@ -109,7 +109,7 @@
 
             <!-- Sidebar laterale sinistra per le playlist -->
             <VBox fx:id="playlistSidebar"
-                  prefWidth="200.0"
+                  prefWidth="250.0"
                   minWidth="180.0"
                   spacing="10.0"
                   styleClass="sidebar">
@@ -124,7 +124,7 @@
 
 
                 <ListView fx:id="sidebarPlaylistListView"
-                          prefWidth="180.0"
+                          prefWidth="250.0"
                           prefHeight="500.0"
                           VBox.vgrow="ALWAYS" />
 

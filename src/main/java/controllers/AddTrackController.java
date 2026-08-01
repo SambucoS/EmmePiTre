@@ -24,6 +24,7 @@ di una nuova traccia nella libreria ( file tracks.json )*/
 public class AddTrackController {
 
     @FXML private TextField txtPathname;
+    @FXML private CheckBox chkNewRelease;
     @FXML private TextField txtName;
     @FXML private TextField txtArtist;
     @FXML private TextField txtAlbum;
@@ -66,6 +67,7 @@ public class AddTrackController {
             String genre = txtGenre.getText();
             boolean favourite = chkFavourite.isSelected();
             boolean explicit = chkExplicit.isSelected();
+            boolean newRelease = chkNewRelease.isSelected();
 
             // Viene convertito il contenuto nei campi year e duration da String a Integer
             int year = Integer.parseInt(txtYear.getText().trim());

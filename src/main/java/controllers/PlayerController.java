@@ -35,6 +35,9 @@ public class PlayerController implements PlaylistObserver {
     private Label tnameLbl;
 
     @FXML
+    private Label artistLbl;
+
+    @FXML
     private Label durationLbl;
 
     @FXML
@@ -186,7 +189,8 @@ public class PlayerController implements PlaylistObserver {
         this.track = track;
         this.currentPlaylist = playlist;
         this.currentIndex = playlist.indexOf(track); // Trova in che posizione siamo
-        this.tnameLbl.setText("🎵   " + track.getName());
+        this.tnameLbl.setText(track.getName());
+        this.artistLbl.setText(track.getArtist());
         this.durationLbl.setText(durationFormatter(track.getDuration()));
         this.statusButton.setText("⏸"); // Resetta il bottone se cambia la canzone
         seconds = 0;
