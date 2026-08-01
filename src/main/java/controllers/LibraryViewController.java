@@ -520,14 +520,27 @@ public class LibraryViewController implements LibraryObserver {
             // Caricamento del contenuto del file fxml, l'albero dei nodi
             Parent playerView = loader.load();
 
+            // L'istanza precedente del player (se presente) smette di osservare la sua playlist,
+            // altrimenti resterebbe agganciata come osservatore anche dopo essere stata sostituita
+            if (playerController != null) {
+                playerController.stopObserving();
+            }
+
             // Caricamento del controller associato alla view del Player (PlayerController).
             playerController = loader.getController();
 
             // Registra il callback PRIMA di setTrack, così il primo aggiornamento viene catturato
             playerController.setOnTrackChanged(currentPlayingTrack::set);
 
-            // Passaggio dell'oggetto 'Track' selezionato E dell'intera lista in tabella al controller del player
-            playerController.setTrack(track, new ArrayList<>(trackList.getItems()));
+            // Passaggio dell'oggetto 'Track' selezionato E dell'intera lista in tabella al controller del player.
+            // Se si riproduce da una playlist, viene passata la lista live (non una copia) e la playlist stessa
+            // viene registrata come soggetto osservato, così il player resta sincronizzato se viene modificata
+            // (es. riordino delle tracce) mentre è in riproduzione.
+            if (currentPlaylist != null) {
+                playerController.setTrack(track, currentPlaylist.getTracks(), currentPlaylist);
+            } else {
+                playerController.setTrack(track, new ArrayList<>(trackList.getItems()), null);
+            }
 
             // Per rimuovere eventuali istanze di player aperti in precedenza, viene pulito il contenitore principale
             // per evitare sovrapposizioni

@@ -11,6 +11,8 @@ import javafx.scene.Scene;
  *
  * Lo stato (chiaro/scuro) e' condiviso da tutta l'app, cosi' anche le finestre
  * modali e il player aperti dopo lo switch rispettano il tema corrente.
+ *
+ * @version 1.0
  */
 public final class Theme {
 
@@ -22,11 +24,22 @@ public final class Theme {
     private Theme() {
     }
 
+    /**
+     * Indica il tema attualmente attivo per l'intera applicazione.
+     *
+     * @return {@code true} se il tema scuro e' attivo, {@code false} se e' attivo quello chiaro
+     */
     public static boolean isDark() {
         return dark;
     }
 
-    /** Applica a una scena il foglio di stile e la classe del tema corrente. */
+    /**
+     * Applica a una scena il foglio di stile globale e la classe del tema
+     * corrente. Va invocato su ogni nuova scena (finestra principale, modali,
+     * player) cosi' che segua sempre il tema attivo.
+     *
+     * @param scene la {@link Scene} a cui applicare lo stylesheet e il tema
+     */
     public static void apply(Scene scene) {
         if (scene == null) {
             return;
@@ -38,13 +51,24 @@ public final class Theme {
         applyClass(scene);
     }
 
-    /** Inverte il tema su una scena e restituisce true se ora e' scuro. */
+    /**
+     * Inverte il tema corrente (chiaro/scuro) e lo applica alla scena indicata.
+     *
+     * @param scene la {@link Scene} su cui aggiornare la classe del tema
+     * @return {@code true} se il tema risultante e' quello scuro
+     */
     public static boolean toggle(Scene scene) {
         dark = !dark;
         applyClass(scene);
         return dark;
     }
 
+    /**
+     * Aggiunge o rimuove la classe CSS del tema scuro sul nodo root della
+     * scena, in base allo stato corrente di {@link #dark}.
+     *
+     * @param scene la {@link Scene} il cui root va aggiornato
+     */
     private static void applyClass(Scene scene) {
         if (scene == null || scene.getRoot() == null) {
             return;

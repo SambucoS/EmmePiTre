@@ -9,9 +9,20 @@ import models.Track;
 /**
  * Cella della colonna "Explicit": mostra un badge "E" attivo/disattivo e
  * permette di alternare lo stato explicit della traccia con un click.
+ *
+ * @version 1.0
  */
 public class ExplicitCell extends TableCell<Track, Boolean> {
 
+    /**
+     * Ridisegna la cella in base allo stato explicit della traccia di riga,
+     * mostrando il badge "E" evidenziato o sbiadito e registrando il click
+     * per alternarlo.
+     *
+     * @param isExplicit valore della colonna per la riga corrente (non usato direttamente:
+     *                   lo stato reale viene letto dalla {@link Track} associata alla riga)
+     * @param empty      {@code true} se la cella non corrisponde ad alcuna riga di dati
+     */
     @Override
     protected void updateItem(Boolean isExplicit, boolean empty) {
         super.updateItem(isExplicit, empty);

@@ -4,6 +4,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Test unitari della classe {@link Track}: inizializzazione tramite
+ * costruttore, mutazione tramite setter e identita' basata sull'id generato
+ * (equals/hashCode), inclusa la robustezza con campi nulli.
+ *
+ * @version 1.0
+ */
 public class TrackTest {
 
     private Track trackBase;

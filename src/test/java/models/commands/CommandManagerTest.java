@@ -6,6 +6,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Test unitari di {@link CommandManager}: verifica esecuzione, undo e redo
+ * di un comando fittizio, con svuotamento manuale dello stato residuo del
+ * Singleton prima di ogni test.
+ *
+ * @version 1.0
+ */
 class CommandManagerTest {
 
     private CommandManager manager;

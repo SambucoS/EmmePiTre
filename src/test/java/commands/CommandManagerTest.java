@@ -10,6 +10,8 @@ import static org.junit.jupiter.api.Assertions.*;
  * le asserzioni sono scritte per essere indipendenti dall'ordine di esecuzione,
  * basandosi su contatori per-istanza dei comandi fittizi e su invarianti sempre
  * vere (es. executeCommand svuota sempre lo stack di redo).
+ *
+ * @version 1.0
  */
 public class CommandManagerTest {
 

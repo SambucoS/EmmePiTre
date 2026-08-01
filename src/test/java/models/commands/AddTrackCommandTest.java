@@ -7,6 +7,13 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
+/**
+ * Test unitari di {@link AddTrackCommand} usando il Singleton {@link Library}
+ * come receiver: verifica l'aggiunta della traccia in execute() e il suo
+ * ripristino in undo().
+ *
+ * @version 1.0
+ */
 class AddTrackCommandTest {
 
     private Library library;

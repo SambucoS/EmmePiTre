@@ -7,6 +7,12 @@ import java.util.HashSet;
 import java.util.Set;
 import java.util.UUID;
 
+/**
+ * Test unitari di {@link IdGenerator}: valida che gli id generati siano
+ * valorizzati, in formato UUID e univoci su un numero elevato di chiamate.
+ *
+ * @version 1.0
+ */
 public class IdGeneratorTest {
 
     @Test

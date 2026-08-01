@@ -13,6 +13,8 @@ import models.Track;
  * Come receiver {@link models.TrackList} si usa una {@link Playlist}: è un
  * TrackList puro, in memoria, senza I/O su disco (a differenza di Library),
  * quindi il comando è testabile in isolamento.
+ *
+ * @version 1.0
  */
 public class AddTrackCommandTest {
 

@@ -34,7 +34,6 @@ public class AddTrackController {
     @FXML private CheckBox chkFavourite;
     @FXML private CheckBox chkExplicit;
     @FXML private Button btnCancel;
-    @FXML private Button btnSave;
 
 
     private Track trackAdded = null; // Rappresenta la nuova traccia
