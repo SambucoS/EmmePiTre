@@ -74,8 +74,8 @@
 
                 <HBox alignment="CENTER_RIGHT" spacing="15.0">
                     <children>
-                        <Button fx:id="btnAnnulla" cancelButton="true" mnemonicParsing="false" onAction="#handleAnnulla" prefWidth="100.0" text="✖ Annulla" />
-                        <Button fx:id="btnSalva" defaultButton="true" mnemonicParsing="false" onAction="#handleSalva" prefWidth="100.0" text="✔ Salva" />
+                        <Button fx:id="btnAnnulla" cancelButton="true" mnemonicParsing="false" onAction="#handleAnnulla" minWidth="-Infinity" text="✖ Annulla" />
+                        <Button fx:id="btnSalva" defaultButton="true" mnemonicParsing="false" onAction="#handleSalva" minWidth="-Infinity" text="✔ Salva" />
                     </children>
                 </HBox>
 

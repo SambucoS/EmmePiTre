@@ -45,7 +45,7 @@ public class PlaylistController {
                     "/views/automaticPlaylist.fxml",
                     "Playlist automatica",
                     420,
-                    430,
+                    500,
                     null,
                     "/images/icons/auto_playlist_icon.png"
             );

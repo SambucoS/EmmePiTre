@@ -388,7 +388,7 @@ public class LibraryViewController implements LibraryObserver {
             return;
         }
 
-        DialogLoader.showModal("/views/addTrackModal.fxml", "Form Aggiunta", 600, 450, null,
+        DialogLoader.showModal("/views/addTrackModal.fxml", "Form Aggiunta", 650, 450, null,
                 "/images/icons/add_track_icon.png");
         updateUndoRedoButtons();
     }

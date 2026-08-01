@@ -50,13 +50,13 @@
     <HBox spacing="10" alignment="CENTER_RIGHT">
         <Button text="✖ Annulla"
                 onAction="#onCancel"
-                prefWidth="100"
-                style="-fx-background-color: #aaaaaa; -fx-text-fill: white; -fx-cursor: hand;"/>
+                minWidth="-Infinity"
+                style="-fx-background-color: #aaaaaa; -fx-text-fill: white; -fx-cursor: hand; -fx-padding: 6 16 6 16;"/>
         <Button text="✔ Salva"
                 onAction="#onSave"
-                prefWidth="100"
+                minWidth="-Infinity"
                 style="-fx-background-color: #1DB954; -fx-text-fill: white;
-                       -fx-font-weight: bold; -fx-cursor: hand;"/>
+                       -fx-font-weight: bold; -fx-cursor: hand; -fx-padding: 6 16 6 16;"/>
     </HBox>
 
 </VBox>

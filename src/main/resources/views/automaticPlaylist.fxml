@@ -14,7 +14,7 @@
       fx:controller="controllers.AutomaticPlaylistController"
       spacing="12"
       prefWidth="420"
-      prefHeight="430"
+      prefHeight="500"
       style="-fx-background-color: -app-bg;">
 
     <padding>
@@ -51,13 +51,13 @@
     <HBox spacing="10" alignment="CENTER_RIGHT">
         <Button text="✖ Annulla"
                 onAction="#handleCancel"
-                prefWidth="100"/>
+                minWidth="-Infinity"/>
 
         <Button text="⚡ Genera"
                 onAction="#handleGenerate"
-                prefWidth="100"
+                minWidth="-Infinity"
                 defaultButton="true"
-                style="-fx-background-color: #1DB954; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                style="-fx-background-color: #1DB954; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 6 16 6 16;"/>
     </HBox>
 
 </VBox>

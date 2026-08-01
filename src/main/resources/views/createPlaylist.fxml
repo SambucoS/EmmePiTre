@@ -38,18 +38,18 @@
     <HBox spacing="10" alignment="CENTER">
         <Button text="✖ Annulla"
                 onAction="#handleCancel"
-                prefWidth="100"/>
+                minWidth="-Infinity"/>
 
         <Button text="✔ Crea"
                 onAction="#handleCreatePlaylist"
-                prefWidth="100"
+                minWidth="-Infinity"
                 defaultButton="true"
-                style="-fx-background-color: #6c5ce7; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                style="-fx-background-color: #6c5ce7; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 6 16 6 16;"/>
 
         <Button text="⚡ Playlist automatica"
                 onAction="#handleAutomaticPlaylist"
-                prefWidth="170"
-                style="-fx-background-color: #1DB954; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                minWidth="-Infinity"
+                style="-fx-background-color: #1DB954; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 6 16 6 16;"/>
     </HBox>
 
 </VBox>

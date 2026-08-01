@@ -19,7 +19,7 @@
         <Insets top="25" right="25" bottom="25" left="25"/>
     </padding>
 
-    <Label text="⚠️" style="-fx-font-size: 30px;"/>
+    <Label text="⚠" style="-fx-font-size: 30px; -fx-text-fill: #d63031;"/>
 
     <Label text="Sei sicuro di voler eliminare questa playlist?"
            wrapText="true"
@@ -32,12 +32,13 @@
     <HBox spacing="10" alignment="CENTER">
         <Button text="✖ Annulla"
                 onAction="#handleCancel"
-                prefWidth="100"/>
+                minWidth="-Infinity"
+                style="-fx-padding: 6 16 6 16;"/>
 
         <Button text="🗑 Elimina"
                 onAction="#handleConfirmDelete"
-                prefWidth="100"
-                style="-fx-background-color: #d63031; -fx-text-fill: white; -fx-font-weight: bold;"/>
+                minWidth="-Infinity"
+                style="-fx-background-color: #d63031; -fx-text-fill: white; -fx-font-weight: bold; -fx-padding: 6 16 6 16;"/>
     </HBox>
 
 </VBox>
