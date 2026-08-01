@@ -20,7 +20,7 @@
     </padding>
 
     <!-- Titolo -->
-    <Label text="Aggiungi a playlist"
+    <Label text="📁 Aggiungi a playlist"
            style="-fx-font-size: 22px; -fx-font-weight: bold;"/>
 
     <!-- Info traccia -->
@@ -43,11 +43,11 @@
 
     <!-- Pulsanti -->
     <HBox spacing="10" alignment="CENTER_RIGHT">
-        <Button text="Annulla"
+        <Button text="✖ Annulla"
                 onAction="#onCancel"
                 prefWidth="100"
                 style="-fx-background-color: #aaaaaa; -fx-text-fill: white; -fx-cursor: hand;"/>
-        <Button text="Salva"
+        <Button text="✔ Salva"
                 onAction="#onSave"
                 prefWidth="100"
                 style="-fx-background-color: #1DB954; -fx-text-fill: white;

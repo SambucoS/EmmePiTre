@@ -5,6 +5,7 @@ import javafx.application.Application;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Stage;
 import util.Theme;
 public class PlayerLauncher extends Application{
@@ -20,6 +21,7 @@ public class PlayerLauncher extends Application{
             Theme.apply(scene); // applica tema e stylesheet prima del primo render
 
             primaryStage.setTitle("Media Player");
+            primaryStage.getIcons().add(new Image(getClass().getResourceAsStream("/images/icons/app_icon.png")));
             primaryStage.setScene(scene);
             primaryStage.setMaximized(true); // avvio a schermo intero
             primaryStage.show();

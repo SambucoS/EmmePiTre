@@ -19,6 +19,8 @@
         <Insets top="25" right="25" bottom="25" left="25"/>
     </padding>
 
+    <Label text="⚠️" style="-fx-font-size: 30px;"/>
+
     <Label text="Sei sicuro di voler eliminare questa playlist?"
            wrapText="true"
            style="-fx-font-size: 16px; -fx-font-weight: bold;"/>
@@ -28,11 +30,11 @@
            style="-fx-font-size: 14px;"/>
 
     <HBox spacing="10" alignment="CENTER">
-        <Button text="Annulla"
+        <Button text="✖ Annulla"
                 onAction="#handleCancel"
                 prefWidth="100"/>
 
-        <Button text="Elimina"
+        <Button text="🗑 Elimina"
                 onAction="#handleConfirmDelete"
                 prefWidth="100"
                 style="-fx-background-color: #d63031; -fx-text-fill: white; -fx-font-weight: bold;"/>

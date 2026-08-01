@@ -10,6 +10,7 @@ import javafx.scene.Parent;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.control.cell.PropertyValueFactory;
+import javafx.scene.image.Image;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
 import javafx.scene.input.KeyCode;
@@ -387,7 +388,8 @@ public class LibraryViewController implements LibraryObserver {
             return;
         }
 
-        DialogLoader.showModal("/views/addTrackModal.fxml", "Form Aggiunta", 600, 450, null);
+        DialogLoader.showModal("/views/addTrackModal.fxml", "Form Aggiunta", 600, 450, null,
+                "/images/icons/add_track_icon.png");
         updateUndoRedoButtons();
     }
 
@@ -402,7 +404,7 @@ public class LibraryViewController implements LibraryObserver {
     private void openManagePlaylistModal(Playlist playlist) {
         ManagePlaylistModalController controller = DialogLoader.showModal(
                 "/views/managePlaylistModal.fxml", "Gestisci Playlist", 500, 560,
-                c -> c.setPlaylist(playlist));
+                c -> c.setPlaylist(playlist), "/images/icons/playlist_icon.png");
 
         if (controller != null && controller.isSaved()) {
             refreshSidebarPlaylists();
@@ -433,8 +435,8 @@ public class LibraryViewController implements LibraryObserver {
         trackList.getSelectionModel().select(track);
 
         DeleteTrackController dialogController = DialogLoader.showModal(
-                "/views/deleteTrack.fxml", title, 600, 150,
-                c -> c.setContext(fromLibrary));
+                "/views/deleteTrack.fxml", title, 600, 190,
+                c -> c.setContext(fromLibrary), "/images/icons/delete_icon.png");
 
         if (dialogController != null && dialogController.isConfirmed()) {
             CommandManager.getInstance().executeCommand(removeCmd);
@@ -449,9 +451,9 @@ public class LibraryViewController implements LibraryObserver {
     private ContextMenu createLibraryContextMenu(TableRow<Track> row) {
         ContextMenu contextMenu = newStyledContextMenu();
 
-        MenuItem editItem = new MenuItem("Modifica traccia");
-        MenuItem addToPlaylistItem = new MenuItem("Aggiungi a una playlist");
-        MenuItem deleteItem = new MenuItem("Elimina traccia");
+        MenuItem editItem = new MenuItem("✏ Modifica traccia");
+        MenuItem addToPlaylistItem = new MenuItem("📁 Aggiungi a una playlist");
+        MenuItem deleteItem = new MenuItem("🗑 Elimina traccia");
 
         editItem.setOnAction(event -> onEdit(row.getItem()));
         addToPlaylistItem.setOnAction(event -> openAddToPlaylistsModal(row.getItem()));
@@ -469,8 +471,8 @@ public class LibraryViewController implements LibraryObserver {
     private ContextMenu createPlaylistContextMenu(TableRow<Track> row) {
         ContextMenu contextMenu = newStyledContextMenu();
 
-        MenuItem addToOtherPlaylistItem = new MenuItem("Aggiungi ad un'altra playlist");
-        MenuItem removeFromPlaylistItem = new MenuItem("Rimuovi dalla playlist");
+        MenuItem addToOtherPlaylistItem = new MenuItem("📁 Aggiungi ad un'altra playlist");
+        MenuItem removeFromPlaylistItem = new MenuItem("➖ Rimuovi dalla playlist");
 
         addToOtherPlaylistItem.setOnAction(event -> openAddToPlaylistsModal(row.getItem()));
         removeFromPlaylistItem.setOnAction(event -> {
@@ -498,7 +500,8 @@ public class LibraryViewController implements LibraryObserver {
                     PlaylistManager.getInstance().getPlaylists().forEach(p ->
                             System.out.println("- " + p.getName())
                     );
-                })
+                }),
+                "/images/icons/playlist_icon.png"
         );
     }
 
@@ -585,6 +588,7 @@ public class LibraryViewController implements LibraryObserver {
             Theme.apply(modifyScene);
             stage.setScene(modifyScene);
             stage.setTitle("Modify Track");
+            stage.getIcons().add(new Image(getClass().getResourceAsStream("/images/icons/edit_icon.png")));
             stage.show();
             controller.setOnModifyDone(() -> {
                 // Aggiorna la tabella per mostrare le modifiche (es. nuovo tag)
@@ -728,8 +732,8 @@ public class LibraryViewController implements LibraryObserver {
      */
     private void openRemovePlaylistModal(Playlist playlist) {
         DialogLoader.<RemovePlaylistController>showModal(
-                "/views/removePlaylist.fxml", "Conferma eliminazione playlist", 400, 200,
-                c -> c.setPlaylistToRemove(playlist));
+                "/views/removePlaylist.fxml", "Conferma eliminazione playlist", 400, 240,
+                c -> c.setPlaylistToRemove(playlist), "/images/icons/delete_icon.png");
 
         // Dopo la chiusura ricarichiamo sidebar e tabella: se la playlist è stata
         // eliminata sparisce dall'elenco e le sue tracce non restano visibili.
@@ -740,7 +744,7 @@ public class LibraryViewController implements LibraryObserver {
     private void openAddToPlaylistsModal(Track track) {
         DialogLoader.<AddToPlaylistsModalController>showModal(
                 "/views/addToPlaylistsModal.fxml", "Aggiungi a playlist", 400, 440,
-                c -> c.setTrack(track));
+                c -> c.setTrack(track), "/images/icons/playlist_icon.png");
 
         updateUndoRedoButtons();
 

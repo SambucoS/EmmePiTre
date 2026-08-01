@@ -21,7 +21,7 @@
         <Insets top="25" right="25" bottom="25" left="25"/>
     </padding>
 
-    <Label text="Playlist automatica"
+    <Label text="⚡ Playlist automatica"
            style="-fx-font-size: 22px; -fx-font-weight: bold;"/>
 
     <Label text="Nome della playlist:"/>
@@ -49,11 +49,11 @@
            style="-fx-font-size: 12px;"/>
 
     <HBox spacing="10" alignment="CENTER_RIGHT">
-        <Button text="Annulla"
+        <Button text="✖ Annulla"
                 onAction="#handleCancel"
                 prefWidth="100"/>
 
-        <Button text="Genera"
+        <Button text="⚡ Genera"
                 onAction="#handleGenerate"
                 prefWidth="100"
                 defaultButton="true"

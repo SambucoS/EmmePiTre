@@ -20,7 +20,7 @@
         <Insets top="25" right="25" bottom="25" left="25"/>
     </padding>
 
-    <Label text="Crea nuova playlist"
+    <Label text="📁 Crea nuova playlist"
            style="-fx-font-size: 22px; -fx-font-weight: bold;"/>
 
     <Label text="Inserisci il nome della playlist:"
@@ -36,19 +36,19 @@
            style="-fx-font-size: 12px;"/>
 
     <HBox spacing="10" alignment="CENTER">
-        <Button text="Annulla"
+        <Button text="✖ Annulla"
                 onAction="#handleCancel"
                 prefWidth="100"/>
 
-        <Button text="Crea"
+        <Button text="✔ Crea"
                 onAction="#handleCreatePlaylist"
                 prefWidth="100"
                 defaultButton="true"
                 style="-fx-background-color: #6c5ce7; -fx-text-fill: white; -fx-font-weight: bold;"/>
 
-        <Button text="Playlist automatica"
+        <Button text="⚡ Playlist automatica"
                 onAction="#handleAutomaticPlaylist"
-                prefWidth="150"
+                prefWidth="170"
                 style="-fx-background-color: #1DB954; -fx-text-fill: white; -fx-font-weight: bold;"/>
     </HBox>
 

@@ -22,7 +22,7 @@
             </padding>
             <children>
 
-                <Label text="Modifica Dati Traccia" textFill="#2c3e50">
+                <Label text="✏ Modifica Dati Traccia" textFill="#2c3e50">
                     <font>
                         <Font name="System Bold" size="18.0" />
                     </font>
@@ -74,8 +74,8 @@
 
                 <HBox alignment="CENTER_RIGHT" spacing="15.0">
                     <children>
-                        <Button fx:id="btnAnnulla" cancelButton="true" mnemonicParsing="false" onAction="#handleAnnulla" prefWidth="100.0" text="Annulla" />
-                        <Button fx:id="btnSalva" defaultButton="true" mnemonicParsing="false" onAction="#handleSalva" prefWidth="100.0" text="Salva" />
+                        <Button fx:id="btnAnnulla" cancelButton="true" mnemonicParsing="false" onAction="#handleAnnulla" prefWidth="100.0" text="✖ Annulla" />
+                        <Button fx:id="btnSalva" defaultButton="true" mnemonicParsing="false" onAction="#handleSalva" prefWidth="100.0" text="✔ Salva" />
                     </children>
                 </HBox>
 

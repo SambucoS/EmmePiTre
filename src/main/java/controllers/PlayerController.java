@@ -204,8 +204,6 @@ public class PlayerController implements PlaylistObserver {
         timeline.stop();
         progressSlider.setValue(0);
 
-        // Modifica Francesca per shuffle all'indietro
-
         // RIPRODUZIONE CASUALE DELLE CANZONI (francesca)
         if (isShuffleActive) {
             // Controlliamo se c'è effettivamente una canzone precedente nella cronologia
@@ -232,35 +230,6 @@ public class PlayerController implements PlaylistObserver {
         setTrack(currentPlaylist.get(currentIndex), currentPlaylist);
     }
 
-        /*
-        // RIPRODUZIONE CASUALE DELLE CANZONI (francesca)
-
-        if (isShuffleActive) {
-            // RIPRODUZIONE CASUALE: Anche andando indietro, genera un indice a caso
-            Random random = new Random();
-            currentIndex = random.nextInt(currentPlaylist.size());
-        } else {
-
-            // RIPRODUZIONE NORMALE: Va alla traccia precedente
-            currentIndex--;
-
-            // Se scendiamo sotto l'inizio della playlist (indice minore di 0)...
-            if (currentIndex < 0) {
-                if (isLoopActive) {
-                    // Se il LOOP è attivo, ricomincia dall'ultima canzone della playlist
-                    currentIndex = currentPlaylist.size() - 1;
-                } else {
-                    // Altrimenti si ferma alla prima canzone (indice 0) o resetta
-                    currentIndex = 0;
-                    System.out.println("Sei già all'inizio della playlist.");
-                    return;
-                }
-            }
-        }
-
-        setTrack(currentPlaylist.get(currentIndex), currentPlaylist);
-
-    }*/
 
     @FXML
     public void handleNext(ActionEvent event) {
@@ -289,15 +258,6 @@ public class PlayerController implements PlaylistObserver {
             // Se arriviamo alla fine della playlist...
             if (currentIndex >= currentPlaylist.size()) {
                 currentIndex = 0;
-                /*if (isLoopActive) {
-                    // Se il LOOP è attivo, ricomincia dalla prima canzone (indice 0)
-                    currentIndex = 0;
-                } else {
-                    // Altrimenti si ferma all'ultima canzone o resetta senza riprodurre
-                    currentIndex = currentPlaylist.size() - 1;
-                    System.out.println("Playlist terminata.");
-                    return;
-                }*/
             }
         }
 

@@ -6,6 +6,7 @@ import java.util.function.Consumer;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
+import javafx.scene.image.Image;
 import javafx.stage.Modality;
 import javafx.stage.Stage;
 
@@ -35,6 +36,19 @@ public final class DialogLoader {
      */
     public static <C> C showModal(String fxmlPath, String title, double width, double height,
                                   Consumer<C> initializer) {
+        return showModal(fxmlPath, title, width, height, initializer, null);
+    }
+
+    /**
+     * Come {@link #showModal(String, String, double, double, Consumer)}, ma permette
+     * di impostare anche l'icona della finestra (titolo/taskbar), coerente con lo scopo
+     * della modale (es. un cestino per le finestre di eliminazione).
+     *
+     * @param iconPath percorso della risorsa immagine (es. "/images/icons/delete_icon.png"),
+     *                 può essere null se non si vuole un'icona specifica
+     */
+    public static <C> C showModal(String fxmlPath, String title, double width, double height,
+                                  Consumer<C> initializer, String iconPath) {
         try {
             FXMLLoader loader = new FXMLLoader(DialogLoader.class.getResource(fxmlPath));
             Parent root = loader.load();
@@ -46,6 +60,9 @@ public final class DialogLoader {
 
             Stage dialogStage = new Stage();
             dialogStage.setTitle(title);
+            if (iconPath != null) {
+                dialogStage.getIcons().add(new Image(DialogLoader.class.getResourceAsStream(iconPath)));
+            }
             dialogStage.initModality(Modality.APPLICATION_MODAL);
             dialogStage.setResizable(false);
             Scene scene = new Scene(root, width, height);

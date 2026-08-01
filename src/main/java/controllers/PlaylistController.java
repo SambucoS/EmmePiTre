@@ -46,7 +46,8 @@ public class PlaylistController {
                     "Playlist automatica",
                     420,
                     430,
-                    null
+                    null,
+                    "/images/icons/auto_playlist_icon.png"
             );
 
             if (controller != null && controller.isCreated()) {
